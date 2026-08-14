@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+!.env.example
+
+# local database (regenerate with `npx prisma migrate dev && npx prisma db seed`)
+*.db
+*.db-journal
+
+# local machine settings
+.claude/settings.local.json

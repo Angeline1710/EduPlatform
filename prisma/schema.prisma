@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Role: "ADMIN" | "STUDENT" (SQLite has no native enum support in Prisma)
+// PaymentStatus: "PENDING" | "PAID" | "FAILED"
+
+model User {
+  id           String       @id @default(cuid())
+  name         String
+  email        String       @unique
+  passwordHash String
+  role         String       @default("STUDENT")
+  createdAt    DateTime     @default(now())
+
+  coursesCreated Course[]     @relation("CourseCreatedBy")
+  enrollments    Enrollment[]
+  payments       Payment[]
+}
+
+model Course {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  price        Int      // stored in cents
+  thumbnailUrl String?
+  published    Boolean  @default(false)
+  createdBy    User     @relation("CourseCreatedBy", fields: [createdById], references: [id])
+  createdById  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  lessons     Lesson[]
+  enrollments Enrollment[]
+  payments    Payment[]
+}
+
+model Lesson {
+  id       String @id @default(cuid())
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title    String
+  content  String // video URL or text/markdown content
+  order    Int
+}
+
+model Enrollment {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  courseId     String
+  course       Course   @relation(fields: [courseId], references: [id])
+  purchasedAt  DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  courseId        String
+  course          Course        @relation(fields: [courseId], references: [id])
+  stripeSessionId String        @unique
+  amount          Int
+  status          String        @default("PENDING")
+  createdAt       DateTime      @default(now())
+}

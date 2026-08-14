@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduPlatform
 
-## Getting Started
+An online course platform with two separate logins (admin and student), course purchases via Stripe, and full course/lesson management.
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router) + TypeScript + Tailwind CSS
+- Prisma ORM with SQLite (swap the datasource to PostgreSQL for production)
+- NextAuth (credentials provider, JWT sessions) with `ADMIN` / `STUDENT` roles
+- Stripe Checkout + webhooks
+
+## Getting started
+
+```bash
+npm install
+```
+
+Copy the environment template and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Set up the database and seed sample data:
+
+```bash
+npx prisma migrate dev && npx prisma db seed
+```
+
+Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Seeded accounts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Role    | Email               | Password     |
+| ------- | ------------------- | ------------ |
+| Admin   | admin@edu.local     | admin123     |
+| Student | student@edu.local   | student123   |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Change these before deploying anywhere public.
 
-## Learn More
+## Routes
 
-To learn more about Next.js, take a look at the following resources:
+| Path                        | Who         | Purpose                                  |
+| --------------------------- | ----------- | ---------------------------------------- |
+| `/`                         | Public      | Course catalog                           |
+| `/courses/[id]`             | Public      | Course detail + buy button               |
+| `/login`, `/register`       | Public      | Student auth                             |
+| `/admin/login`              | Public      | Admin auth                               |
+| `/admin`                    | Admin       | Dashboard: courses, enrollments, revenue |
+| `/admin/courses/new`        | Admin       | Create a course                          |
+| `/admin/courses/[id]/edit`  | Admin       | Edit course + manage lessons             |
+| `/dashboard`                | Student     | Purchased courses                        |
+| `/learn/[courseId]`         | Enrolled    | Lesson viewer                            |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Route protection lives in [middleware.ts](middleware.ts); API routes independently re-check the session, so the admin endpoints are not protected by middleware alone.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stripe setup
 
-## Deploy on Vercel
+1. Put your test keys in `.env` (`STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`).
+2. Forward webhooks to your local server:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Copy the `whsec_...` value it prints into `STRIPE_WEBHOOK_SECRET`.
+
+Enrollment is created by the webhook on `checkout.session.completed`, not on the success redirect — so a user closing the tab mid-redirect still gets access.
+
+## Switching to PostgreSQL
+
+In `prisma/schema.prisma`, change the datasource provider to `postgresql`, swap the adapter in [lib/prisma.ts](lib/prisma.ts) for `@prisma/adapter-pg`, point `DATABASE_URL` at your database, and re-run `npx prisma migrate dev`.
