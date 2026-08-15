@@ -74,26 +74,27 @@ export default async function CoursePage({ params }: PageProps<"/courses/[id]">)
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
               {course.title}
             </h1>
+            <div className="mt-3 h-1 w-20 bg-gradient-to-r from-[var(--brand)] to-[var(--glow)] rounded-full opacity-60"></div>
             <p className="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">
-              {course.description}
+              ✨ {course.description}
             </p>
 
             <div className="mt-10">
-              <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
-                Course content
+              <h2 className="mb-4 flex items-center gap-2 text-xl font-bold glow-text">
+                📚 Course content
                 <span className="text-sm font-normal text-[var(--text-muted)]">
                   {course.lessons.length} lessons
                 </span>
               </h2>
 
-              <ol className="card divide-y divide-[var(--border)] overflow-hidden">
+              <ol className="card divide-y divide-[var(--border)] overflow-hidden border-[var(--border)] hover:border-[var(--glow)] transition-all">
                 {course.lessons.map((lesson, i) => (
-                  <li key={lesson.id} className="flex items-center gap-4 px-5 py-4">
-                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-sm font-semibold text-[var(--text-muted)]">
+                  <li key={lesson.id} className="flex items-center gap-4 px-5 py-4 hover:bg-[var(--surface-2)] transition group">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-sm font-semibold text-[var(--text-muted)] group-hover:bg-gradient-to-br group-hover:from-[var(--brand)] group-hover:to-[var(--glow)] group-hover:text-white transition">
                       {i + 1}
                     </span>
-                    <span className="flex-1 font-medium">{lesson.title}</span>
-                    <span className="text-[var(--text-faint)]">
+                    <span className="flex-1 font-medium group-hover:text-[var(--brand)] transition">{lesson.title}</span>
+                    <span className={`transition ${enrolled ? "text-[var(--brand)]" : "text-[var(--text-faint)]"}`}>
                       <Icon name={enrolled ? "play" : "lock"} className="h-4 w-4" />
                     </span>
                   </li>
