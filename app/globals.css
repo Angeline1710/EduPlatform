@@ -7,97 +7,121 @@
    Light Mode: Pastel red + cream + silver + purple glow
    --------------------------------------------------------------- */
 
-/* Light mode (Magical Pastel) - DEFAULT */
+/* ---------------------------------------------------------------
+   Palette sampled from the reference mockup.
+
+   The shell (sidebar, top bar, hero, feature bar) is always the deep
+   plum-and-gold treatment in both themes — that furniture IS the brand.
+   The theme switch changes the *content band*: ivory parchment in light,
+   deep plum in dark.
+   --------------------------------------------------------------- */
+
 :root {
-  --bg: #FFF3F3;
-  --bg-subtle: #FFFBF8;
-  --surface: #FFFBF8;
-  --surface-2: #F5EDED;
-  --border: #E0D5D0;
-  --border-strong: #D4C5C0;
+  /* Fixed shell — identical in both themes */
+  --shell: #1a0d18;
+  --shell-2: #24101f;
+  --shell-line: rgb(212 162 76 / 0.28);
+  --shell-line-soft: rgb(212 162 76 / 0.14);
+  --shell-text: #f2e7dc;
+  --shell-text-muted: #b9a49c;
 
-  --text: #2D1F1F;
-  --text-muted: #7A5F5F;
-  --text-faint: #A89898;
+  --hero-from: #2b1430;
+  --hero-via: #3a1c3c;
+  --hero-to: #241026;
 
-  --brand: #D4679F;
-  --brand-hover: #B84A7F;
-  --brand-soft: #FFE5F1;
-  --brand-contrast: #ffffff;
+  /* Gold ramp */
+  --gold: #d4a24c;
+  --gold-bright: #f0d089;
+  --gold-dim: #a87c33;
+  --gold-soft: rgb(212 162 76 / 0.12);
 
-  --glow: #B8A0FF;
-  --ring: #B8A0FF;
+  /* Light theme content band: warm parchment */
+  --bg: #f4ede0;
+  --bg-subtle: #ece2d2;
+  --surface: #fffdf7;
+  --surface-2: #f7f1e5;
+  --border: #e0d4bf;
+  --border-strong: #cdbb9e;
 
-  /* Magical pastel blobs */
-  --blob-a: linear-gradient(135deg, #FFB3D9 0%, #FFC9E3 100%);
-  --blob-b: linear-gradient(180deg, #FFE8D6 0%, #FFCFB8 100%);
-  --blob-c: linear-gradient(-45deg, #E8D4FF 0%, #F0E5FF 100%);
+  --text: #2a1a26;
+  --text-muted: #6d5a63;
+  --text-faint: #9a8790;
 
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px rgb(0 0 0 / 0.08);
-  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.08), 0 18px 40px rgb(0 0 0 / 0.12);
-  --shadow-panel: 0 4px 12px rgb(0 0 0 / 0.06), 0 32px 64px rgb(0 0 0 / 0.1);
+  --brand: #8a5a2b;
+  --brand-hover: #6f4720;
+  --brand-soft: rgb(212 162 76 / 0.16);
+  --brand-contrast: #1a0d18;
+
+  --glow: #d4a24c;
+  --ring: #a87c33;
+
+  --blob-a: radial-gradient(circle, rgb(212 162 76 / 0.35), transparent 70%);
+  --blob-b: radial-gradient(circle, rgb(139 74 122 / 0.28), transparent 70%);
+  --blob-c: radial-gradient(circle, rgb(90 60 130 / 0.25), transparent 70%);
+
+  --shadow-card: 0 1px 2px rgb(42 26 38 / 0.06), 0 10px 28px rgb(42 26 38 / 0.08);
+  --shadow-lift: 0 2px 6px rgb(42 26 38 / 0.1), 0 22px 48px rgb(42 26 38 / 0.16);
+  --shadow-panel: 0 6px 18px rgb(42 26 38 / 0.08), 0 40px 80px rgb(42 26 38 / 0.14);
 }
 
-/* Dark mode (Magical Luxury) - System preference + explicit toggle */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1A0F1A;
-    --bg-subtle: #2D1A2D;
-    --surface: #3D2A3D;
-    --surface-2: #4A3450;
-    --border: #6B4B6B;
-    --border-strong: #7D5D7D;
+    --bg: #1a0d18;
+    --bg-subtle: #140a13;
+    --surface: #2a1428;
+    --surface-2: #341a31;
+    --border: #4a2a44;
+    --border-strong: #633a5a;
 
-    --text: #F5E6F5;
-    --text-muted: #D4B5D4;
-    --text-faint: #A899A8;
+    --text: #f2e7dc;
+    --text-muted: #bda8b5;
+    --text-faint: #8d7a88;
 
-    --brand: #D4A574;
-    --brand-hover: #E8B88A;
-    --brand-soft: rgb(212 165 116 / 0.15);
-    --brand-contrast: #ffffff;
+    --brand: #d4a24c;
+    --brand-hover: #f0d089;
+    --brand-soft: rgb(212 162 76 / 0.14);
+    --brand-contrast: #1a0d18;
 
-    --glow: #E8C66F;
-    --ring: #D4A574;
+    --glow: #f0d089;
+    --ring: #d4a24c;
 
-    /* Magical dark blobs */
-    --blob-a: linear-gradient(135deg, #6B4B6B 0%, #5D3D5D 100%);
-    --blob-b: linear-gradient(180deg, #8B6B3D 0%, #9B6B2D 100%);
-    --blob-c: linear-gradient(-45deg, #6B3D8B 0%, #5D2D7D 100%);
+    --blob-a: radial-gradient(circle, rgb(212 162 76 / 0.22), transparent 70%);
+    --blob-b: radial-gradient(circle, rgb(139 74 122 / 0.3), transparent 70%);
+    --blob-c: radial-gradient(circle, rgb(90 60 130 / 0.28), transparent 70%);
 
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.35);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 18px 40px rgb(0 0 0 / 0.5);
-    --shadow-panel: 0 4px 12px rgb(0 0 0 / 0.3), 0 32px 64px rgb(0 0 0 / 0.45);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 28px rgb(0 0 0 / 0.42);
+    --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.55);
+    --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.5);
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #1A0F1A;
-  --bg-subtle: #2D1A2D;
-  --surface: #3D2A3D;
-  --surface-2: #4A3450;
-  --border: #6B4B6B;
-  --border-strong: #7D5D7D;
+  --bg: #1a0d18;
+  --bg-subtle: #140a13;
+  --surface: #2a1428;
+  --surface-2: #341a31;
+  --border: #4a2a44;
+  --border-strong: #633a5a;
 
-  --text: #F5E6F5;
-  --text-muted: #D4B5D4;
-  --text-faint: #A899A8;
+  --text: #f2e7dc;
+  --text-muted: #bda8b5;
+  --text-faint: #8d7a88;
 
-  --brand: #D4A574;
-  --brand-hover: #E8B88A;
-  --brand-soft: rgb(212 165 116 / 0.15);
-  --brand-contrast: #ffffff;
+  --brand: #d4a24c;
+  --brand-hover: #f0d089;
+  --brand-soft: rgb(212 162 76 / 0.14);
+  --brand-contrast: #1a0d18;
 
-  --glow: #E8C66F;
-  --ring: #D4A574;
+  --glow: #f0d089;
+  --ring: #d4a24c;
 
-  --blob-a: linear-gradient(135deg, #6B4B6B 0%, #5D3D5D 100%);
-  --blob-b: linear-gradient(180deg, #8B6B3D 0%, #9B6B2D 100%);
-  --blob-c: linear-gradient(-45deg, #6B3D8B 0%, #5D2D7D 100%);
+  --blob-a: radial-gradient(circle, rgb(212 162 76 / 0.22), transparent 70%);
+  --blob-b: radial-gradient(circle, rgb(139 74 122 / 0.3), transparent 70%);
+  --blob-c: radial-gradient(circle, rgb(90 60 130 / 0.28), transparent 70%);
 
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.35);
-  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 18px 40px rgb(0 0 0 / 0.5);
-  --shadow-panel: 0 4px 12px rgb(0 0 0 / 0.3), 0 32px 64px rgb(0 0 0 / 0.45);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 28px rgb(0 0 0 / 0.42);
+  --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.55);
+  --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.5);
 }
 
 @theme inline {
@@ -119,12 +143,20 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-display);
 }
 
 body {
-  background: var(--bg);
   color: var(--text);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* The display serif carries the wordmark, headlines, and prices. Cormorant
+   runs small and light for its point size, so it is nudged up and bolded. */
+.font-serif {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 /* Prevent the toggle from animating every color on first paint */
@@ -132,39 +164,116 @@ body {
   transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
-/* The gradient wordmark / headline treatment */
+/* ---------------------------------------------------------------
+   Ornamental language: gold leaf, hexagons, engraved frames.
+   --------------------------------------------------------------- */
+
 .text-gradient {
-  background: linear-gradient(100deg, var(--brand) 0%, var(--glow) 45%, var(--brand) 100%);
+  background: linear-gradient(100deg, var(--gold) 0%, var(--gold-bright) 45%, var(--gold) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .brand-gradient {
-  background: linear-gradient(135deg, var(--brand) 0%, var(--glow) 50%, var(--brand) 100%);
+  background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold) 50%, var(--gold-bright) 100%);
 }
 
-/* Magical glow effect on text - subtle luminescence */
+/* Gold leaf text with a slow shimmer sweeping across it */
+.gold-leaf {
+  background: linear-gradient(
+    100deg,
+    var(--gold-dim) 0%,
+    var(--gold) 30%,
+    var(--gold-bright) 50%,
+    var(--gold) 70%,
+    var(--gold-dim) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gold-sweep 7s ease-in-out infinite;
+}
+
+/* The magic behind the words: a soft aura, breathing */
 .glow-text {
-  color: var(--text);
-  text-shadow: 0 0 8px var(--glow), 0 0 16px var(--glow, rgba(212, 165, 116, 0.3));
-  font-weight: 600;
+  text-shadow:
+    0 0 14px rgb(212 162 76 / 0.35),
+    0 0 34px rgb(212 162 76 / 0.16);
+  animation: aura-breathe 5s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .glow-text {
-    text-shadow: 0 0 12px rgba(232, 198, 111, 0.4), 0 0 24px rgba(232, 198, 111, 0.2);
-  }
+.glow-soft {
+  text-shadow: 0 0 10px rgb(212 162 76 / 0.28);
 }
 
-:root[data-theme="dark"] .glow-text {
-  text-shadow: 0 0 12px rgba(232, 198, 111, 0.4), 0 0 24px rgba(232, 198, 111, 0.2);
+/* Hexagonal icon tile — the mockup's signature card element */
+.hex {
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.4s ease;
 }
 
-/* Accent text with glow */
-.accent-glow {
-  color: var(--glow);
-  text-shadow: 0 0 8px var(--glow, rgba(184, 160, 255, 0.4));
+.group:hover .hex {
+  transform: rotate(-6deg) scale(1.07);
+  filter: brightness(1.12);
+}
+
+/* Engraved gold frame with corner ticks, as on the hero + stats panel */
+.ornate {
+  position: relative;
+  border: 1px solid var(--shell-line);
+}
+
+.ornate::before,
+.ornate::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--gold);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.ornate::before {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.ornate::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* Thin gold rule that fades out at both ends */
+.rule-fade {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--shell-line) 20%,
+    var(--gold) 50%,
+    var(--shell-line) 80%,
+    transparent
+  );
+}
+
+/* Shell surfaces — brand furniture, identical in both themes */
+.shell-panel {
+  background: var(--shell);
+  color: var(--shell-text);
+}
+
+.hero-panel {
+  background:
+    radial-gradient(ellipse at 70% 40%, rgb(120 70 140 / 0.4), transparent 60%),
+    linear-gradient(135deg, var(--hero-from) 0%, var(--hero-via) 55%, var(--hero-to) 100%);
 }
 
 /* Shared form + button primitives, so pages don't repeat long class lists */
@@ -335,19 +444,40 @@ body {
 }
 
 @keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50%      { opacity: 1; transform: scale(1); }
+  0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+  50%      { opacity: 0.9; transform: scale(1) rotate(180deg); }
 }
 
-@keyframes glow-pulse {
+/* Gold sweeping across leafed text */
+@keyframes gold-sweep {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* The aura behind headings, breathing slowly */
+@keyframes aura-breathe {
   0%, 100% {
-    text-shadow: 0 0 8px var(--glow, rgba(212, 165, 116, 0.3)),
-                 0 0 16px var(--glow, rgba(212, 165, 116, 0.1));
+    text-shadow: 0 0 14px rgb(212 162 76 / 0.3), 0 0 34px rgb(212 162 76 / 0.14);
   }
-  50%      {
-    text-shadow: 0 0 12px var(--glow, rgba(212, 165, 116, 0.6)),
-                 0 0 24px var(--glow, rgba(212, 165, 116, 0.3));
+  50% {
+    text-shadow: 0 0 20px rgb(240 208 137 / 0.5), 0 0 48px rgb(240 208 137 / 0.24);
   }
+}
+
+/* Embers drifting upward through the hero */
+@keyframes ember-rise {
+  0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0.6); }
+  12%  { opacity: 0.8; }
+  80%  { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(-140px) translateX(18px) scale(1.1); }
+}
+
+/* Candlelight in the castle windows */
+@keyframes window-flicker {
+  0%, 100% { opacity: 0.85; }
+  35%      { opacity: 0.55; }
+  60%      { opacity: 1; }
+  78%      { opacity: 0.7; }
 }
 
 @keyframes magical-shimmer {
@@ -360,6 +490,19 @@ body {
   50%      { transform: translateY(-8px); }
 }
 
+/* Slow rotation for the sidebar mandala */
+@keyframes slow-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* A rune-light sliding along a border */
+@keyframes rune-trace {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  35%  { opacity: 1; }
+  100% { transform: translateX(400%); opacity: 0; }
+}
+
 .animate-fade-up { animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-fade-in { animation: fade-in 0.5s ease both; }
 .animate-pop-in  { animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -367,9 +510,36 @@ body {
 .animate-float { animation: float-y 6s ease-in-out infinite; }
 .animate-float-gentle { animation: float-gentle 4s ease-in-out infinite; }
 .animate-pulse-ring { animation: pulse-ring 2s ease-out infinite; }
-.animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
-.animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-sparkle { animation: sparkle 3.5s ease-in-out infinite; }
 .animate-magical-shimmer { animation: magical-shimmer 8s linear infinite; }
+.animate-ember { animation: ember-rise 7s ease-out infinite; }
+.animate-flicker { animation: window-flicker 4s ease-in-out infinite; }
+.animate-slow-spin { animation: slow-spin 90s linear infinite; }
+
+/* Gold light that traces a button's edge on hover */
+.rune-edge {
+  position: relative;
+  overflow: hidden;
+}
+
+.rune-edge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgb(255 255 255 / 0.32) 50%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rune-edge:hover::after {
+  animation: rune-trace 0.9s ease-out;
+}
 
 /* Stagger helper: children animate in sequence. */
 .stagger > * { animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -441,5 +611,16 @@ body {
   .reveal {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  /* Ambient decoration is pure motion — drop it rather than freeze it */
+  .animate-ember,
+  .animate-sparkle {
+    display: none !important;
+  }
+
+  .gold-leaf {
+    animation: none !important;
+    background-position: 50% 50% !important;
   }
 }

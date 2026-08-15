@@ -1,154 +1,102 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
+import Castle from "@/components/Castle";
+import { Diamond, Embers, Star } from "@/components/Ornament";
+
+const STATS = [
+  { icon: "cap", value: "12+", label: "Expert Courses" },
+  { icon: "crown", value: "Lifetime", label: "Access" },
+  { icon: "learners", value: "1000+", label: "Happy Learners" },
+  { icon: "headset", value: "24/7", label: "Support" },
+];
 
 export default function Hero({ courseCount }: { courseCount: number }) {
   return (
-    <section className="relative overflow-hidden">
-      {/* Magical mystical backdrop */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="absolute -left-40 -top-48 h-[32rem] w-[32rem] rounded-full opacity-60 blur-3xl"
-          style={{ background: "var(--blob-a)" }}
-        />
-        <div
-          className="absolute -right-32 top-0 h-[28rem] w-[28rem] rounded-full opacity-50 blur-3xl"
-          style={{ background: "var(--blob-b)" }}
-        />
-        <div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 h-80 w-80 rounded-full opacity-40 blur-3xl"
-          style={{ background: "var(--blob-c)" }}
-        />
-      </div>
+    <section className="hero-panel relative overflow-hidden">
+      <Embers count={16} />
 
-      {/* Decorative magical elements */}
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-10 left-10 text-4xl opacity-10 animate-float">✦</div>
-        <div className="absolute top-32 right-20 text-3xl opacity-15 animate-float-gentle" style={{ animationDelay: "1s" }}>✧</div>
-        <div className="absolute bottom-20 left-1/4 text-3xl opacity-10 animate-float" style={{ animationDelay: "2s" }}>✦</div>
-        <div className="absolute bottom-32 right-1/4 text-2xl opacity-12 animate-float-gentle" style={{ animationDelay: "1.5s" }}>✧</div>
-      </div>
+      {/* Scattered sparkles */}
+      <Star className="left-[6%] top-[18%]" size={16} delay={0} />
+      <Star className="left-[42%] top-[10%]" size={10} delay={1.2} />
+      <Star className="right-[38%] top-[26%]" size={12} delay={2.4} />
+      <Star className="left-[18%] bottom-[18%]" size={11} delay={1.8} />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 pb-32 pt-20 lg:grid-cols-3 lg:pt-28">
-        <div className="lg:col-span-2">
-          <h1 className="text-5xl font-extrabold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
+      <div className="relative mx-auto grid max-w-[1400px] items-center gap-8 px-6 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_auto] lg:gap-6 lg:py-16 xl:px-10">
+        {/* Copy */}
+        <div className="animate-fade-up">
+          <span className="mb-3 block text-[var(--gold)]" aria-hidden="true">
+            ✦
+          </span>
+
+          <div className="mb-4 flex items-center gap-3" aria-hidden="true">
+            <span className="rule-fade w-14" />
+            <Diamond size={5} />
+          </div>
+
+          <h1 className="font-serif text-[44px] font-bold leading-[1.06] tracking-tight text-[var(--shell-text)] sm:text-[54px]">
             Learn something
             <br />
-            <span className="glow-text bg-gradient-to-r from-[var(--brand)] via-[var(--glow)] to-[var(--brand)] bg-clip-text text-transparent animate-glow-pulse">
-              new today
-            </span>
+            <span className="gold-leaf glow-text">new today</span>
           </h1>
 
-          <div className="mt-1 h-1 w-20 bg-gradient-to-r from-[var(--brand)] to-[var(--glow)] rounded-full opacity-60"></div>
+          {/* Ornamental rule under the headline */}
+          <div className="mt-5 flex items-center gap-3" aria-hidden="true">
+            <span className="rule-fade w-10" />
+            <Diamond size={5} />
+            <span className="rule-fade w-24" />
+            <Diamond size={5} />
+            <span className="rule-fade w-10" />
+          </div>
 
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-[var(--text-muted)]">
-            {courseCount} expert-led courses. Buy once, keep lifetime access. Begin your magical learning journey today.
+          <p className="mt-6 max-w-sm text-[17px] leading-relaxed text-[var(--shell-text-muted)]">
+            {courseCount} expert-led courses. Buy once,
+            <br className="hidden sm:block" /> keep lifetime access.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="#courses"
-              className="focus-ring btn-primary group inline-flex items-center gap-3 rounded-full px-7 py-3.5 font-semibold text-white shadow-lg hover:shadow-xl transition transform hover:scale-105 press"
-            >
-              ✨ Explore Courses
-              <span className="grid h-7 w-7 place-items-center rounded-full bg-white/25 transition group-hover:translate-x-1">
-                <Icon name="arrowRight" className="h-4 w-4" />
-              </span>
-            </Link>
-
-            <Link
-              href="/register"
-              className="focus-ring inline-flex items-center gap-2.5 rounded-full px-5 py-3.5 font-semibold text-[var(--text)] border border-[var(--border)] transition hover:text-[var(--brand)] hover:border-[var(--glow)] lift"
-            >
-              <Icon name="play" className="h-5 w-5 text-[var(--brand)]" />
-              Start free
-            </Link>
-          </div>
-
-          <div className="mt-12 flex items-center gap-4">
-            <div className="flex -space-x-3">
-              {["#D4A574", "#B8A0FF", "#E8C66F", "#D4679F"].map((c, i) => (
-                <span
-                  key={c}
-                  className="grid h-10 w-10 place-items-center rounded-full border-2 border-[var(--bg)] text-xs font-bold text-white shadow-sm"
-                  style={{ background: c }}
-                >
-                  {["A", "M", "J", "S"][i]}
-                </span>
-              ))}
-            </div>
-            <p className="text-sm leading-tight text-[var(--text-muted)]">
-              Join <span className="font-semibold text-[var(--text)]">20K+ learners</span>
-              <br />
-              growing their skills
-            </p>
-          </div>
+          <Link
+            href="#courses"
+            className="rune-edge group mt-8 inline-flex items-center gap-3 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3.5 font-semibold text-[#241026] shadow-[0_0_24px_rgb(212_162_76/0.4)] transition hover:brightness-110"
+          >
+            Explore Courses
+            <Icon
+              name="arrowRight"
+              className="h-4 w-4 transition-transform group-hover:translate-x-1"
+            />
+          </Link>
         </div>
 
-        <HeroArt />
+        {/* Academy */}
+        <div className="relative hidden lg:block">
+          <Castle className="h-[330px] w-full animate-float-gentle" />
+        </div>
+
+        {/* Stats panel */}
+        <div className="ornate animate-fade-up rounded-sm bg-black/25 p-5 backdrop-blur-sm lg:w-[248px]">
+          <ul className="space-y-4">
+            {STATS.map((stat, i) => (
+              <li
+                key={stat.label}
+                className="group flex items-center gap-3.5"
+                style={{
+                  animation: `fade-up 0.5s cubic-bezier(0.22,1,0.36,1) ${0.15 + i * 0.09}s both`,
+                }}
+              >
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-[var(--shell-line)] text-[var(--gold)] transition-all duration-300 group-hover:border-[var(--gold)] group-hover:bg-[var(--gold-soft)] group-hover:shadow-[0_0_14px_rgb(212_162_76/0.35)]">
+                  <Icon name={stat.icon} className="h-[22px] w-[22px]" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-serif text-[17px] font-bold leading-tight text-[var(--shell-text)]">
+                    {stat.value}
+                  </span>
+                  <span className="block text-[13px] text-[var(--shell-text-muted)]">
+                    {stat.label}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
-  );
-}
-
-/** Magical stats showcase with glowing effects */
-function HeroArt() {
-  return (
-    <div aria-hidden="true" className="relative mx-auto hidden lg:flex lg:flex-col lg:gap-4">
-      {/* Stat Card 1 */}
-      <div className="animate-fade-up group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-lift)] hover:border-[var(--glow)] hover:shadow-lg transition-all overflow-hidden">
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition bg-gradient-to-br from-[var(--brand)] to-[var(--glow)]" />
-        <div className="relative flex items-center gap-4">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand)] to-[var(--glow)] text-white font-bold text-xl">
-            12+
-          </span>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">Expert Courses</p>
-            <p className="text-sm font-medium text-[var(--text)]">Master-crafted content</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stat Card 2 */}
-      <div className="animate-fade-up group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-lift)] hover:border-[var(--glow)] hover:shadow-lg transition-all overflow-hidden" style={{ animationDelay: "0.1s" }}>
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition bg-gradient-to-br from-[var(--brand)] to-[var(--glow)]" />
-        <div className="relative flex items-center gap-4">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--glow)] to-[var(--brand)] text-white font-bold">
-            ∞
-          </span>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">Lifetime Access</p>
-            <p className="text-sm font-medium text-[var(--text)]">Learn at your pace</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stat Card 3 */}
-      <div className="animate-fade-up group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-lift)] hover:border-[var(--glow)] hover:shadow-lg transition-all overflow-hidden" style={{ animationDelay: "0.2s" }}>
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition bg-gradient-to-br from-[var(--brand)] to-[var(--glow)]" />
-        <div className="relative flex items-center gap-4">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand)] to-[var(--glow)] text-white font-bold text-lg">
-            ♥
-          </span>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">1000+ Happy</p>
-            <p className="text-sm font-medium text-[var(--text)]">Learners worldwide</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stat Card 4 */}
-      <div className="animate-fade-up group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-lift)] hover:border-[var(--glow)] hover:shadow-lg transition-all overflow-hidden" style={{ animationDelay: "0.3s" }}>
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition bg-gradient-to-br from-[var(--brand)] to-[var(--glow)]" />
-        <div className="relative flex items-center gap-4">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--glow)] to-[var(--brand)] text-white font-bold">
-            24/7
-          </span>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">Support</p>
-            <p className="text-sm font-medium text-[var(--text)]">Always here to help</p>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

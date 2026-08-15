@@ -2,6 +2,7 @@ import Link from "next/link";
 import Icon from "@/components/Icon";
 import { categoryTheme } from "@/lib/categories";
 import { formatPrice } from "@/lib/format";
+import { HexTile } from "@/components/Ornament";
 
 type CourseCardProps = {
   id: string;
@@ -25,58 +26,45 @@ export default function CourseCard({
   return (
     <Link
       href={`/courses/${id}`}
-      className="focus-ring group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:border-[var(--glow)] hover:shadow-lg lift"
+      className="group relative flex gap-4 rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold)] hover:shadow-[var(--shadow-lift)]"
     >
-      {/* Magical glow background on hover */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 -z-0"
-        style={{
-          background: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
-        }}
+      {/* Gold corner ticks appear on hover */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t border-[var(--gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[var(--gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       />
 
-      <div className="relative z-10 flex gap-4">
-        {/* Hexagonal-style icon with glow */}
-        <div className="shrink-0 relative">
-          <span
-            className="grid h-16 w-16 place-items-center rounded-2xl text-white shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl"
-            style={{
-              backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
-              boxShadow: `0 0 16px ${theme.from}40, 0 4px 12px ${theme.from}30`,
-            }}
-          >
-            <Icon name={theme.icon} className="h-7 w-7" />
-          </span>
-        </div>
+      <HexTile from={theme.from} to={theme.to} icon={theme.icon} size={58} />
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          <span className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-[var(--text-faint)] group-hover:text-[var(--brand)] transition">
-            {category}
-          </span>
-          <h3 className="mb-2 font-bold leading-snug text-[var(--text)] group-hover:text-[var(--brand)] transition">
-            {title}
-          </h3>
-          <p className="mb-5 line-clamp-2 flex-1 text-sm leading-relaxed text-[var(--text-muted)]">
-            {description}
-          </p>
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* Bookmark sits opposite the title, as in the reference */}
+        <span
+          aria-hidden="true"
+          className="absolute right-4 top-4 text-[var(--text-faint)] transition-colors duration-300 group-hover:text-[var(--gold)]"
+        >
+          <Icon name="bookmark" className="h-[18px] w-[18px]" />
+        </span>
 
-          <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] group-hover:border-[var(--glow)] transition">
-            <span
-              className="text-lg font-bold glow-text"
-              style={
-                {
-                  "--accent-light": theme.text,
-                  "--accent-dark": theme.textDark,
-                } as React.CSSProperties
-              }
-            >
-              {formatPrice(price)}
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-xs text-[var(--text-faint)] group-hover:text-[var(--brand)] transition">
-              <Icon name="clock" className="h-4 w-4" />
-              {lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
-            </span>
-          </div>
+        <h3 className="mb-1.5 max-w-[85%] font-serif text-[17px] font-bold leading-snug text-[var(--text)]">
+          {title}
+        </h3>
+
+        <p className="mb-4 line-clamp-3 flex-1 text-[13.5px] leading-relaxed text-[var(--text-muted)]">
+          {description}
+        </p>
+
+        <div className="flex items-center justify-between">
+          <span className="font-serif text-[19px] font-bold text-[var(--brand)] transition-colors group-hover:text-[var(--gold-dim)]">
+            {formatPrice(price)}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-xs text-[var(--text-faint)]">
+            <Icon name="clock" className="h-3.5 w-3.5" />
+            {lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
+          </span>
         </div>
       </div>
     </Link>

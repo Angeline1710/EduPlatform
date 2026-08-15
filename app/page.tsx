@@ -3,28 +3,30 @@ import { prisma } from "@/lib/prisma";
 import Hero from "@/components/Hero";
 import CourseCard from "@/components/CourseCard";
 import Icon from "@/components/Icon";
+import Reveal from "@/components/Reveal";
+import { DiamondHeading } from "@/components/Ornament";
 import { CATEGORY_NAMES, categoryTheme } from "@/lib/categories";
 
 const FEATURES = [
   {
-    icon: "infinity",
+    icon: "crown",
     title: "Lifetime Access",
-    body: "Learn at your own pace, forever.",
+    body: "Learn at your own pace, anytime, anywhere.",
   },
   {
-    icon: "user",
+    icon: "learners",
     title: "Expert Instructors",
-    body: "Learn from industry professionals.",
+    body: "Industry professionals with real-world experience.",
   },
   {
-    icon: "award",
-    title: "Certificates",
-    body: "Earn certificates to showcase your skills.",
+    icon: "book",
+    title: "Premium Content",
+    body: "High-quality lessons and hands-on projects.",
   },
   {
-    icon: "device",
-    title: "Learn Anywhere",
-    body: "Access on mobile, tablet, or desktop.",
+    icon: "headset",
+    title: "24/7 Support",
+    body: "We're here to help you succeed always.",
   },
 ];
 
@@ -58,38 +60,34 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
   );
 
   return (
-    <div>
+    <>
       {!isFiltered && <Hero courseCount={allPublished.length} />}
 
-      <div className="mx-auto max-w-7xl px-6 pb-20">
-        <section
-          id="courses"
-          className={`rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-panel)] sm:p-10 ${
-            isFiltered ? "mt-10" : "-mt-16"
-          }`}
-        >
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-            <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-              {isFiltered ? "Search results" : "Popular Courses"}
-              <Icon name="sparkle" className="h-5 w-5 text-[var(--brand)]" />
-            </h2>
+      {/* Parchment catalogue band */}
+      <section id="courses" className="bg-[var(--bg)] px-6 py-14 xl:px-10">
+        <div className="mx-auto max-w-[1400px]">
+          <DiamondHeading>
+            {isFiltered ? "Search Results" : "Popular Courses"}
+          </DiamondHeading>
 
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-sm text-[var(--text-muted)]">
             {isFiltered ? (
               <Link
                 href="/"
-                className="focus-ring inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--brand)] hover:underline"
+                className="inline-flex items-center gap-1.5 font-semibold text-[var(--brand)] hover:underline"
               >
                 Clear filters
               </Link>
             ) : (
-              <span className="text-sm text-[var(--text-muted)]">
-                {allPublished.length} courses available
-              </span>
+              <span>{allPublished.length} courses available</span>
             )}
           </div>
 
-          {/* Category filter chips */}
-          <div id="categories" className="mb-8 flex flex-wrap gap-2">
+          {/* Category chips */}
+          <div
+            id="categories"
+            className="mb-9 mt-7 flex flex-wrap justify-center gap-2"
+          >
             <CategoryChip active={!category} href="/" label="All" />
             {usedCategories.map((name) => {
               const theme = categoryTheme(name);
@@ -106,8 +104,8 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
           </div>
 
           {courses.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-[var(--border-strong)] px-6 py-16 text-center">
-              <p className="font-semibold">No courses found</p>
+            <div className="rounded-sm border border-dashed border-[var(--border-strong)] px-6 py-16 text-center">
+              <p className="font-serif text-lg font-bold">No courses found</p>
               <p className="mt-1 text-sm text-[var(--text-muted)]">
                 {isFiltered
                   ? "Try a different search term or category."
@@ -116,40 +114,47 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
             </div>
           ) : (
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {courses.map((course) => (
-                <CourseCard
-                  key={course.id}
-                  id={course.id}
-                  title={course.title}
-                  description={course.description}
-                  price={course.price}
-                  category={course.category}
-                  lessonCount={course._count.lessons}
-                />
+              {courses.map((course, i) => (
+                <Reveal key={course.id} delay={(i % 3) * 0.06}>
+                  <CourseCard
+                    id={course.id}
+                    title={course.title}
+                    description={course.description}
+                    price={course.price}
+                    category={course.category}
+                    lessonCount={course._count.lessons}
+                  />
+                </Reveal>
               ))}
             </div>
           )}
+        </div>
+      </section>
 
-          {/* Features strip */}
-          <div
-            id="why"
-            className="mt-10 grid gap-6 border-t border-[var(--border)] pt-8 sm:grid-cols-2 lg:grid-cols-4"
-          >
-            {FEATURES.map((f) => (
-              <div key={f.title} className="flex items-start gap-3">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)]">
-                  <Icon name={f.icon} className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="font-semibold">{f.title}</p>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">{f.body}</p>
-                </div>
+      {/* Dark feature bar */}
+      <section id="why" className="shell-panel border-t border-[var(--shell-line)]">
+        <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-9 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 xl:px-10">
+          {FEATURES.map((f, i) => (
+            <div
+              key={f.title}
+              className={`group flex items-start gap-3.5 lg:px-7 ${
+                i > 0 ? "lg:border-l lg:border-[var(--shell-line-soft)]" : ""
+              }`}
+            >
+              <span className="mt-0.5 shrink-0 text-[var(--gold)] transition-transform duration-300 group-hover:scale-110">
+                <Icon name={f.icon} className="h-7 w-7" />
+              </span>
+              <div className="min-w-0">
+                <p className="font-serif font-bold text-[var(--shell-text)]">{f.title}</p>
+                <p className="mt-0.5 text-[13px] leading-relaxed text-[var(--shell-text-muted)]">
+                  {f.body}
+                </p>
               </div>
-            ))}
-          </div>
-        </section>
-      </div>
-    </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -167,16 +172,16 @@ function CategoryChip({
   return (
     <Link
       href={href}
-      className={`focus-ring inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
+      className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-all duration-300 ${
         active
-          ? "border-transparent bg-[var(--brand)] text-white shadow-sm"
-          : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--border-strong)] hover:text-[var(--text)]"
+          ? "border-[var(--gold)] bg-[var(--gold-soft)] font-semibold text-[var(--brand)] shadow-[0_0_12px_rgb(212_162_76/0.25)]"
+          : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--text)]"
       }`}
     >
       {color && (
         <span
-          className="h-2 w-2 rounded-full"
-          style={{ background: active ? "rgba(255,255,255,.8)" : color }}
+          className="h-2 w-2 rotate-45"
+          style={{ background: active ? "var(--gold)" : color }}
         />
       )}
       {label}

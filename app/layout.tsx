@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import Nav from "@/components/Nav";
+import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 
 const geistSans = Geist({
@@ -13,6 +14,14 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Display face for the wordmark, headlines, and prices — the mockup's
+// lettering is a high-contrast serif, not the UI sans.
+const displaySerif = Cormorant_Garamond({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -30,17 +39,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${displaySerif.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="flex min-h-full flex-col bg-[var(--bg)] text-[var(--text)]">
+      <body className="bg-[var(--shell)] text-[var(--text)]">
         <Providers>
-          <Nav />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          {/* Rail + column. The rail is its own scroll context so the main
+              column scrolls independently, as in the reference layout. */}
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <Nav />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </div>
         </Providers>
       </body>
     </html>

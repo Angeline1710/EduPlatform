@@ -1,16 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Icon from "@/components/Icon";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Crest } from "@/components/Ornament";
+
+const LINKS = [
+  { href: "/", label: "Courses" },
+  { href: "/#categories", label: "Categories" },
+  { href: "/#why", label: "Why Us" },
+  { href: "/verify", label: "Verify" },
+];
 
 export default function Nav() {
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter();
+  const pathname = usePathname();
   const [query, setQuery] = useState("");
 
   // Seed the field from the URL so a shared /?q=… link shows its term. Read
@@ -26,52 +35,90 @@ export default function Nav() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-xl shadow-sm">
-      <nav className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-3">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5">
-          <span className="brand-gradient grid h-9 w-9 place-items-center rounded-xl text-white shadow-md">
-            <Icon name="logo" className="h-[18px] w-[18px]" />
+    <header className="shell-panel sticky top-0 z-50 border-b border-[var(--shell-line)]">
+      <nav className="flex items-center gap-5 px-5 py-3 xl:px-8">
+        {/* Crest + wordmark */}
+        <Link href="/" className="group flex shrink-0 items-center gap-3">
+          <span className="transition-transform duration-500 group-hover:scale-105">
+            <Crest size={38} />
           </span>
-          <span className="text-xl font-bold tracking-tight">EduPlatform</span>
+          <span className="hidden sm:block">
+            <span className="gold-leaf block font-serif text-[22px] font-bold leading-none tracking-wide">
+              EduPlatform
+            </span>
+            <span className="mt-1 block text-[10px] uppercase tracking-[0.22em] text-[var(--shell-text-muted)]">
+              Learn. Grow. Succeed.
+            </span>
+          </span>
         </Link>
 
-        <div className="hidden flex-1 items-center justify-center gap-1 lg:flex">
-          <NavLink href="/">Courses</NavLink>
-          <NavLink href="/#categories">Categories</NavLink>
-          <NavLink href="/verify">Verify</NavLink>
-          {user?.role === "ADMIN" && <NavLink href="/admin">Admin</NavLink>}
-          {user && user.role !== "ADMIN" && (
-            <NavLink href="/dashboard">My learning</NavLink>
-          )}
+        {/* Centre links with the gold underline. Below 2xl the sidebar rail
+            carries navigation, so these are dropped rather than squeezed. */}
+        <div className="ml-4 hidden min-w-0 flex-1 items-center gap-1 2xl:flex">
+          {LINKS.map((link) => {
+            const base = link.href.split("#")[0] || "/";
+            const active =
+              link.href === "/" ? pathname === "/" : pathname.startsWith(base);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`group relative rounded px-3.5 py-2 text-[15px] transition-colors ${
+                  active
+                    ? "font-semibold text-[var(--gold-bright)]"
+                    : "text-[var(--shell-text)] hover:text-[var(--gold-bright)]"
+                }`}
+              >
+                {link.label}
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-[var(--gold)] transition-all duration-300 ${
+                    active
+                      ? "opacity-100"
+                      : "opacity-0 scale-x-0 group-hover:scale-x-100 group-hover:opacity-60"
+                  }`}
+                  style={{ boxShadow: active ? "0 0 8px var(--gold)" : undefined }}
+                />
+              </Link>
+            );
+          })}
         </div>
 
-        <form onSubmit={onSearch} className="ml-auto hidden md:block lg:ml-0">
-          <label className="relative block">
-            <span className="sr-only">Search courses</span>
-            <Icon
-              name="search"
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-faint)]"
-            />
+        {/* Pill search with gold trim */}
+        <form
+          onSubmit={onSearch}
+          className="ml-auto hidden min-w-0 max-w-[280px] shrink md:block 2xl:ml-0"
+        >
+          <div className="flex items-center gap-2 rounded-full border border-[var(--shell-line)] bg-black/25 py-1.5 pl-4 pr-1.5 transition focus-within:border-[var(--gold)]">
+            <Icon name="search" className="h-4 w-4 shrink-0 text-[var(--gold)]" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search courses..."
-              className="focus-ring w-48 rounded-full border border-[var(--border)] bg-[var(--surface-2)] py-2 pl-9 pr-3 text-sm text-[var(--text)] placeholder:text-[var(--text-faint)] transition focus:w-60"
+              aria-label="Search courses"
+              className="w-full min-w-0 bg-transparent text-sm text-[var(--shell-text)] placeholder:text-[var(--shell-text-muted)] focus:outline-none"
             />
-          </label>
+            <button
+              type="submit"
+              aria-label="Search"
+              className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-[var(--gold)] transition hover:bg-[var(--gold-soft)]"
+            >
+              <Icon name="arrowRight" className="h-3.5 w-3.5" />
+            </button>
+          </div>
         </form>
 
-        <div className="ml-auto flex items-center gap-2 md:ml-0">
+        <div className="ml-auto flex shrink-0 items-center gap-3 md:ml-0">
           <ThemeToggle />
 
           {user ? (
             <>
-              <span className="hidden text-sm text-[var(--text-muted)] sm:inline">
+              <span className="hidden text-sm text-[var(--shell-text-muted)] lg:inline">
                 {user.name}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="focus-ring rounded-full border border-[var(--border)] px-4 py-2 text-sm font-medium transition hover:bg-[var(--surface-2)]"
+                className="rounded-full px-3 py-2 text-sm text-[var(--shell-text)] transition hover:text-[var(--gold-bright)]"
               >
                 Sign out
               </button>
@@ -80,31 +127,21 @@ export default function Nav() {
             <>
               <Link
                 href="/login"
-                className="focus-ring hidden rounded-full border border-[var(--border)] px-4 py-2 text-sm font-medium transition hover:bg-[var(--surface-2)] sm:block"
+                className="hidden px-2 text-sm text-[var(--shell-text)] transition hover:text-[var(--gold-bright)] sm:block"
               >
                 Sign in
               </Link>
               <Link
                 href="/register"
-                className="focus-ring brand-gradient rounded-full px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:opacity-90"
+                className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-4 py-2 text-sm font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110"
               >
-                Get started
+                Get Started
+                <Icon name="sparkle" className="h-3.5 w-3.5" />
               </Link>
             </>
           )}
         </div>
       </nav>
     </header>
-  );
-}
-
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="focus-ring rounded-full px-3 py-2 text-sm font-medium text-[var(--text-muted)] transition hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
-    >
-      {children}
-    </Link>
   );
 }

@@ -97,6 +97,58 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="M5 11v5.5c0 1.4 3.1 3.5 7 3.5s7-2.1 7-3.5V11" />
     </>
   ),
+  /* Line-art set matching the reference mockup's stat panel + feature bar */
+  cap: (
+    <>
+      <path d="M12 3 2 8.5 12 14l10-5.5L12 3z" />
+      <path d="M6 10.7v5c0 1.3 2.7 3 6 3s6-1.7 6-3v-5" />
+      <path d="M21 9v5" />
+    </>
+  ),
+  crown: (
+    <>
+      <path d="M3 8l3.5 3L12 5l5.5 6L21 8l-1.6 10H4.6L3 8z" />
+      <path d="M4.6 18h14.8" />
+    </>
+  ),
+  headset: (
+    <>
+      <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
+      <rect x="2" y="13" width="4.5" height="7" rx="1.6" />
+      <rect x="17.5" y="13" width="4.5" height="7" rx="1.6" />
+      <path d="M20 20v.5a2.5 2.5 0 0 1-2.5 2.5H14" />
+    </>
+  ),
+  learners: (
+    <>
+      <circle cx="9" cy="8" r="3.2" />
+      <path d="M2.5 20c0-3.4 2.9-6 6.5-6s6.5 2.6 6.5 6" />
+      <path d="M16.5 6.2a3.2 3.2 0 0 1 0 6M18 14.4c2.2.7 3.8 2.6 3.8 5.1" />
+    </>
+  ),
+  bookmark: <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1z" />,
+  sun: (
+    <>
+      <circle cx="12" cy="12" r="4.2" />
+      <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" />
+    </>
+  ),
+  moon: <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />,
+  home: (
+    <>
+      <path d="M3 10.5 12 3l9 7.5" />
+      <path d="M5.5 9.5V20h13V9.5" />
+      <path d="M10 20v-5.5h4V20" />
+    </>
+  ),
+  grid: (
+    <>
+      <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
+      <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" />
+      <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" />
+      <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" />
+    </>
+  ),
 };
 
 export default function Icon({ name, className = "h-5 w-5" }: IconProps) {

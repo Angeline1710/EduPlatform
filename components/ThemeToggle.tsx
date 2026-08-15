@@ -32,7 +32,9 @@ export default function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-      className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] transition hover:text-[var(--text)]"
+      // Lives on the dark shell in both themes, so it is styled against the
+      // shell tokens rather than the theme-flipping content tokens.
+      className="grid h-9 w-9 place-items-center rounded-full border border-[var(--shell-line)] text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-[var(--gold-soft)]"
     >
       {/* Render both and swap with CSS so the button is stable before hydration */}
       <svg
