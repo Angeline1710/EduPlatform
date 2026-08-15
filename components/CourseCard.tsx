@@ -25,40 +25,58 @@ export default function CourseCard({
   return (
     <Link
       href={`/courses/${id}`}
-      className="focus-ring group relative flex gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] transition duration-200 hover:-translate-y-1 hover:border-[var(--border-strong)] hover:shadow-[var(--shadow-lift)]"
+      className="focus-ring group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:border-[var(--glow)] hover:shadow-lg lift"
     >
-      <span
-        className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white shadow-md transition duration-200 group-hover:scale-105"
-        style={{ backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}
-      >
-        <Icon name={theme.icon} className="h-6 w-6" />
-      </span>
+      {/* Magical glow background on hover */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 -z-0"
+        style={{
+          background: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+        }}
+      />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <span className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-[var(--text-faint)]">
-          {category}
-        </span>
-        <h3 className="mb-1.5 font-bold leading-snug text-[var(--text)]">{title}</h3>
-        <p className="mb-4 line-clamp-2 flex-1 text-sm leading-relaxed text-[var(--text-muted)]">
-          {description}
-        </p>
-
-        <div className="flex items-center justify-between">
+      <div className="relative z-10 flex gap-4">
+        {/* Hexagonal-style icon with glow */}
+        <div className="shrink-0 relative">
           <span
-            className="accent text-lg font-bold"
-            style={
-              {
-                "--accent-light": theme.text,
-                "--accent-dark": theme.textDark,
-              } as React.CSSProperties
-            }
+            className="grid h-16 w-16 place-items-center rounded-2xl text-white shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl"
+            style={{
+              backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+              boxShadow: `0 0 16px ${theme.from}40, 0 4px 12px ${theme.from}30`,
+            }}
           >
-            {formatPrice(price)}
+            <Icon name={theme.icon} className="h-7 w-7" />
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs text-[var(--text-faint)]">
-            <Icon name="clock" className="h-3.5 w-3.5" />
-            {lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col">
+          <span className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-[var(--text-faint)] group-hover:text-[var(--brand)] transition">
+            {category}
           </span>
+          <h3 className="mb-2 font-bold leading-snug text-[var(--text)] group-hover:text-[var(--brand)] transition">
+            {title}
+          </h3>
+          <p className="mb-5 line-clamp-2 flex-1 text-sm leading-relaxed text-[var(--text-muted)]">
+            {description}
+          </p>
+
+          <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] group-hover:border-[var(--glow)] transition">
+            <span
+              className="text-lg font-bold glow-text"
+              style={
+                {
+                  "--accent-light": theme.text,
+                  "--accent-dark": theme.textDark,
+                } as React.CSSProperties
+              }
+            >
+              {formatPrice(price)}
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-xs text-[var(--text-faint)] group-hover:text-[var(--brand)] transition">
+              <Icon name="clock" className="h-4 w-4" />
+              {lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
+            </span>
+          </div>
         </div>
       </div>
     </Link>

@@ -26,7 +26,7 @@ export default function Nav() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/85 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-xl shadow-sm">
       <nav className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-3">
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <span className="brand-gradient grid h-9 w-9 place-items-center rounded-xl text-white shadow-md">

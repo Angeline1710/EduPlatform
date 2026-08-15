@@ -98,18 +98,19 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
 
         {/* Greeting */}
         <header className="animate-fade-up mb-10">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[var(--brand)]">
-            {greeting(new Date())}
+          <p className="text-sm font-semibold uppercase tracking-widest text-[var(--brand)] glow-text">
+            ✨ {greeting(new Date())}
           </p>
           <h1 className="mt-1.5 text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Welcome back, <span className="text-gradient">{firstName}</span>
+            Welcome back, <span className="bg-gradient-to-r from-[var(--brand)] via-[var(--glow)] to-[var(--brand)] bg-clip-text text-transparent animate-glow-pulse">{firstName}</span>
           </h1>
+          <div className="mt-2 h-1 w-32 bg-gradient-to-r from-[var(--brand)] to-[var(--glow)] rounded-full opacity-60"></div>
           <p className="mt-3 text-lg text-[var(--text-muted)]">
             {courses.length === 0
-              ? "Your learning starts here."
+              ? "✨ Your magical learning journey starts here."
               : completedCourses > 0
-                ? `You've finished ${completedCourses} of ${courses.length} courses. Keep the streak going.`
-                : `${lessonsDone} of ${totalLessons} lessons done across ${courses.length} courses.`}
+                ? `🎯 You've completed ${completedCourses} of ${courses.length} courses. Keep the momentum!`
+                : `📚 ${lessonsDone} of ${totalLessons} lessons mastered across ${courses.length} courses.`}
           </p>
         </header>
 

@@ -1,66 +1,69 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------
-   Design tokens.
+   MAGICAL EDUCATION THEME
 
-   Light is defined on bare :root so it is always the fallback.
-   Dark is redefined twice: once for system preference (guarded so an
-   explicit light choice wins) and once for the explicit [data-theme]
-   attribute set by the toggle.
+   Dark Mode: Deep burgundy + gold luxury (from user's design)
+   Light Mode: Pastel red + cream + silver + purple glow
    --------------------------------------------------------------- */
 
+/* Light mode (Magical Pastel) - DEFAULT */
 :root {
-  --bg: #ffffff;
-  --bg-subtle: #f6f5fb;
-  --surface: #ffffff;
-  --surface-2: #faf9fe;
-  --border: #e8e6f2;
-  --border-strong: #d6d2e8;
+  --bg: #FFF3F3;
+  --bg-subtle: #FFFBF8;
+  --surface: #FFFBF8;
+  --surface-2: #F5EDED;
+  --border: #E0D5D0;
+  --border-strong: #D4C5C0;
 
-  --text: #17143a;
-  --text-muted: #6b6790;
-  --text-faint: #9b97b8;
+  --text: #2D1F1F;
+  --text-muted: #7A5F5F;
+  --text-faint: #A89898;
 
-  --brand: #6d3ded;
-  --brand-hover: #5b2fd4;
-  --brand-soft: #f1ebff;
+  --brand: #D4679F;
+  --brand-hover: #B84A7F;
+  --brand-soft: #FFE5F1;
   --brand-contrast: #ffffff;
 
-  --ring: #6d3ded;
+  --glow: #B8A0FF;
+  --ring: #B8A0FF;
 
-  /* Hero backdrop blobs */
-  --blob-a: #e9e0ff;
-  --blob-b: #ffe6f3;
-  --blob-c: #e0f7f1;
+  /* Magical pastel blobs */
+  --blob-a: linear-gradient(135deg, #FFB3D9 0%, #FFC9E3 100%);
+  --blob-b: linear-gradient(180deg, #FFE8D6 0%, #FFCFB8 100%);
+  --blob-c: linear-gradient(-45deg, #E8D4FF 0%, #F0E5FF 100%);
 
-  --shadow-card: 0 1px 2px rgb(23 20 58 / 0.04), 0 8px 24px rgb(23 20 58 / 0.06);
-  --shadow-lift: 0 2px 4px rgb(23 20 58 / 0.05), 0 18px 40px rgb(23 20 58 / 0.12);
-  --shadow-panel: 0 4px 12px rgb(23 20 58 / 0.04), 0 32px 64px rgb(23 20 58 / 0.08);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px rgb(0 0 0 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.08), 0 18px 40px rgb(0 0 0 / 0.12);
+  --shadow-panel: 0 4px 12px rgb(0 0 0 / 0.06), 0 32px 64px rgb(0 0 0 / 0.1);
 }
 
+/* Dark mode (Magical Luxury) - System preference + explicit toggle */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0d0b1c;
-    --bg-subtle: #131029;
-    --surface: #17143a;
-    --surface-2: #1d1947;
-    --border: #2b2560;
-    --border-strong: #3b3480;
+    --bg: #1A0F1A;
+    --bg-subtle: #2D1A2D;
+    --surface: #3D2A3D;
+    --surface-2: #4A3450;
+    --border: #6B4B6B;
+    --border-strong: #7D5D7D;
 
-    --text: #f3f1ff;
-    --text-muted: #a9a3d0;
-    --text-faint: #7d77a8;
+    --text: #F5E6F5;
+    --text-muted: #D4B5D4;
+    --text-faint: #A899A8;
 
-    --brand: #8b5cf6;
-    --brand-hover: #a181f8;
-    --brand-soft: #241d52;
+    --brand: #D4A574;
+    --brand-hover: #E8B88A;
+    --brand-soft: rgb(212 165 116 / 0.15);
     --brand-contrast: #ffffff;
 
-    --ring: #8b5cf6;
+    --glow: #E8C66F;
+    --ring: #D4A574;
 
-    --blob-a: #2a1f5c;
-    --blob-b: #3d1f45;
-    --blob-c: #14364a;
+    /* Magical dark blobs */
+    --blob-a: linear-gradient(135deg, #6B4B6B 0%, #5D3D5D 100%);
+    --blob-b: linear-gradient(180deg, #8B6B3D 0%, #9B6B2D 100%);
+    --blob-c: linear-gradient(-45deg, #6B3D8B 0%, #5D2D7D 100%);
 
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.35);
     --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 18px 40px rgb(0 0 0 / 0.5);
@@ -69,27 +72,28 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #0d0b1c;
-  --bg-subtle: #131029;
-  --surface: #17143a;
-  --surface-2: #1d1947;
-  --border: #2b2560;
-  --border-strong: #3b3480;
+  --bg: #1A0F1A;
+  --bg-subtle: #2D1A2D;
+  --surface: #3D2A3D;
+  --surface-2: #4A3450;
+  --border: #6B4B6B;
+  --border-strong: #7D5D7D;
 
-  --text: #f3f1ff;
-  --text-muted: #a9a3d0;
-  --text-faint: #7d77a8;
+  --text: #F5E6F5;
+  --text-muted: #D4B5D4;
+  --text-faint: #A899A8;
 
-  --brand: #8b5cf6;
-  --brand-hover: #a181f8;
-  --brand-soft: #241d52;
+  --brand: #D4A574;
+  --brand-hover: #E8B88A;
+  --brand-soft: rgb(212 165 116 / 0.15);
   --brand-contrast: #ffffff;
 
-  --ring: #8b5cf6;
+  --glow: #E8C66F;
+  --ring: #D4A574;
 
-  --blob-a: #2a1f5c;
-  --blob-b: #3d1f45;
-  --blob-c: #14364a;
+  --blob-a: linear-gradient(135deg, #6B4B6B 0%, #5D3D5D 100%);
+  --blob-b: linear-gradient(180deg, #8B6B3D 0%, #9B6B2D 100%);
+  --blob-c: linear-gradient(-45deg, #6B3D8B 0%, #5D2D7D 100%);
 
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.35);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 18px 40px rgb(0 0 0 / 0.5);
@@ -130,25 +134,49 @@ body {
 
 /* The gradient wordmark / headline treatment */
 .text-gradient {
-  background: linear-gradient(100deg, #7c3aed 0%, #d946ef 45%, #fb7185 100%);
+  background: linear-gradient(100deg, var(--brand) 0%, var(--glow) 45%, var(--brand) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .brand-gradient {
-  background: linear-gradient(135deg, #7c3aed 0%, #6d3ded 50%, #4f46e5 100%);
+  background: linear-gradient(135deg, var(--brand) 0%, var(--glow) 50%, var(--brand) 100%);
+}
+
+/* Magical glow effect on text - subtle luminescence */
+.glow-text {
+  color: var(--text);
+  text-shadow: 0 0 8px var(--glow), 0 0 16px var(--glow, rgba(212, 165, 116, 0.3));
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .glow-text {
+    text-shadow: 0 0 12px rgba(232, 198, 111, 0.4), 0 0 24px rgba(232, 198, 111, 0.2);
+  }
+}
+
+:root[data-theme="dark"] .glow-text {
+  text-shadow: 0 0 12px rgba(232, 198, 111, 0.4), 0 0 24px rgba(232, 198, 111, 0.2);
+}
+
+/* Accent text with glow */
+.accent-glow {
+  color: var(--glow);
+  text-shadow: 0 0 8px var(--glow, rgba(184, 160, 255, 0.4));
 }
 
 /* Shared form + button primitives, so pages don't repeat long class lists */
 .input {
   width: 100%;
   border-radius: 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   background: var(--surface-2);
   padding: 0.625rem 0.875rem;
   color: var(--text);
   font-size: 0.9375rem;
+  transition: all 0.25s ease;
 }
 
 .input::placeholder {
@@ -158,7 +186,8 @@ body {
 .input:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 1px;
-  border-color: transparent;
+  border-color: var(--glow);
+  box-shadow: 0 0 8px var(--glow, rgba(212, 165, 116, 0.2));
 }
 
 .label {
@@ -187,13 +216,17 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7c3aed 0%, #6d3ded 50%, #4f46e5 100%);
+  background: linear-gradient(135deg, var(--brand) 0%, var(--glow) 50%, var(--brand) 100%);
   color: #fff;
-  box-shadow: 0 4px 14px rgb(109 61 237 / 0.3);
+  box-shadow: 0 4px 14px var(--glow, rgb(212 165 116 / 0.3)), 0 0 8px var(--glow, rgb(212 165 116 / 0.2));
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .btn-primary:hover:not(:disabled) {
-  opacity: 0.9;
+  opacity: 0.95;
+  box-shadow: 0 6px 20px var(--glow, rgb(212 165 116 / 0.4)), 0 0 12px var(--glow, rgb(212 165 116 / 0.3));
+  transform: translateY(-2px);
 }
 
 .btn-primary:disabled {
@@ -214,7 +247,13 @@ body {
   border-radius: 1.5rem;
   border: 1px solid var(--border);
   background: var(--surface);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-card), 0 0 8px var(--glow, rgba(212, 165, 116, 0.05));
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lift), 0 0 12px var(--glow, rgba(212, 165, 116, 0.1));
+  border-color: var(--glow, var(--border));
 }
 
 /* Per-category accent colour. The element supplies both values as custom
@@ -290,9 +329,35 @@ body {
 }
 
 @keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgb(109 61 237 / 0.45); }
-  70%  { box-shadow: 0 0 0 14px rgb(109 61 237 / 0); }
-  100% { box-shadow: 0 0 0 0 rgb(109 61 237 / 0); }
+  0%   { box-shadow: 0 0 0 0 var(--glow, rgb(212 165 116 / 0.45)); }
+  70%  { box-shadow: 0 0 0 14px var(--glow, rgb(212 165 116 / 0)); }
+  100% { box-shadow: 0 0 0 0 var(--glow, rgb(212 165 116 / 0)); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50%      { opacity: 1; transform: scale(1); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 8px var(--glow, rgba(212, 165, 116, 0.3)),
+                 0 0 16px var(--glow, rgba(212, 165, 116, 0.1));
+  }
+  50%      {
+    text-shadow: 0 0 12px var(--glow, rgba(212, 165, 116, 0.6)),
+                 0 0 24px var(--glow, rgba(212, 165, 116, 0.3));
+  }
+}
+
+@keyframes magical-shimmer {
+  0%   { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-8px); }
 }
 
 .animate-fade-up { animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -300,7 +365,11 @@ body {
 .animate-pop-in  { animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-slide-in-right { animation: slide-in-right 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-float { animation: float-y 6s ease-in-out infinite; }
+.animate-float-gentle { animation: float-gentle 4s ease-in-out infinite; }
 .animate-pulse-ring { animation: pulse-ring 2s ease-out infinite; }
+.animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
+.animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-magical-shimmer { animation: magical-shimmer 8s linear infinite; }
 
 /* Stagger helper: children animate in sequence. */
 .stagger > * { animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -329,14 +398,22 @@ body {
 }
 
 /* Press feedback shared by buttons and cards */
-.press:active { transform: scale(0.97); }
-
-.lift {
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+.press:active {
+  transform: scale(0.95);
+  filter: brightness(0.95);
 }
 
-.lift:hover { transform: translateY(-4px); }
+.lift {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.3s ease;
+  position: relative;
+}
+
+.lift:hover {
+  transform: translateY(-6px);
+  filter: brightness(1.05);
+}
 
 /* Skeleton shimmer for loading states */
 .shimmer {
