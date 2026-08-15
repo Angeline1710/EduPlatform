@@ -19,6 +19,9 @@ export default function Footer() {
           <Link href="/dashboard" className="transition hover:text-[var(--text)]">
             My learning
           </Link>
+          <Link href="/verify" className="transition hover:text-[var(--text)]">
+            Verify credential
+          </Link>
           <Link href="/admin/login" className="transition hover:text-[var(--text)]">
             Admin
           </Link>

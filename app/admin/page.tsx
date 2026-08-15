@@ -34,10 +34,16 @@ export default async function AdminDashboard() {
             Manage courses, lessons, and pricing.
           </p>
         </div>
-        <Link href="/admin/courses/new" className="btn btn-primary">
-          <Icon name="plus" className="h-4 w-4" />
-          New course
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href="/admin/users" className="btn btn-secondary press">
+            <Icon name="user" className="h-4 w-4" />
+            Manage users
+          </Link>
+          <Link href="/admin/courses/new" className="btn btn-primary press">
+            <Icon name="plus" className="h-4 w-4" />
+            New course
+          </Link>
+        </div>
       </div>
 
       <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

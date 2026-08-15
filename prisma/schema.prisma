@@ -8,6 +8,7 @@ datasource db {
 
 // Role: "ADMIN" | "STUDENT" (SQLite has no native enum support in Prisma)
 // PaymentStatus: "PENDING" | "PAID" | "FAILED"
+// User.status: "ACTIVE" | "SUSPENDED"
 
 model User {
   id           String       @id @default(cuid())
@@ -15,11 +16,14 @@ model User {
   email        String       @unique
   passwordHash String
   role         String       @default("STUDENT")
+  status       String       @default("ACTIVE")
   createdAt    DateTime     @default(now())
 
-  coursesCreated Course[]     @relation("CourseCreatedBy")
+  coursesCreated Course[]         @relation("CourseCreatedBy")
   enrollments    Enrollment[]
   payments       Payment[]
+  progress       LessonProgress[]
+  certificates   Certificate[]
 }
 
 model Course {
@@ -35,9 +39,10 @@ model Course {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  lessons     Lesson[]
-  enrollments Enrollment[]
-  payments    Payment[]
+  lessons      Lesson[]
+  enrollments  Enrollment[]
+  payments     Payment[]
+  certificates Certificate[]
 }
 
 model Lesson {
@@ -47,6 +52,35 @@ model Lesson {
   title    String
   content  String // video URL or text/markdown content
   order    Int
+
+  progress LessonProgress[]
+}
+
+model LessonProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completedAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+}
+
+/// A credential issued when a student completes every lesson in a course.
+/// `code` is the human-readable value printed on the certificate and encoded
+/// in its QR; it is what the public /verify page looks up.
+model Certificate {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  issuedAt  DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@unique([userId, courseId])
 }
 
 model Enrollment {

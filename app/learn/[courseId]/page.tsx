@@ -19,9 +19,19 @@ export default async function LearnPage({ params }: PageProps<"/learn/[courseId]
   if (!course) notFound();
 
   const isAdmin = session.user.role === "ADMIN";
-  const enrollment = await prisma.enrollment.findUnique({
-    where: { userId_courseId: { userId: session.user.id, courseId } },
-  });
+  const [enrollment, progress, certificate] = await Promise.all([
+    prisma.enrollment.findUnique({
+      where: { userId_courseId: { userId: session.user.id, courseId } },
+    }),
+    prisma.lessonProgress.findMany({
+      where: { userId: session.user.id, lesson: { courseId } },
+      select: { lessonId: true },
+    }),
+    prisma.certificate.findUnique({
+      where: { userId_courseId: { userId: session.user.id, courseId } },
+      select: { code: true, revokedAt: true },
+    }),
+  ]);
 
   if (!enrollment && !isAdmin) {
     return (
@@ -74,7 +84,12 @@ export default async function LearnPage({ params }: PageProps<"/learn/[courseId]
         )}
       </div>
 
-      <LessonViewer lessons={course.lessons} />
+      <LessonViewer
+        lessons={course.lessons}
+        completedIds={progress.map((p) => p.lessonId)}
+        canTrackProgress={Boolean(enrollment)}
+        existingCertificateCode={certificate && !certificate.revokedAt ? certificate.code : null}
+      />
     </div>
   );
 }

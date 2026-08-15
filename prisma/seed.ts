@@ -120,6 +120,32 @@ async function main() {
     },
   });
 
+  // Owner account. The password is read from the environment so it never
+  // lands in version control — set ADMIN_PASSWORD in .env (gitignored).
+  const ownerEmail = process.env.ADMIN_EMAIL;
+  const ownerPassword = process.env.ADMIN_PASSWORD;
+
+  if (ownerEmail && ownerPassword) {
+    await prisma.user.upsert({
+      where: { email: ownerEmail },
+      // Re-hash on every seed so rotating ADMIN_PASSWORD in .env takes effect.
+      update: {
+        passwordHash: await bcrypt.hash(ownerPassword, 10),
+        role: "ADMIN",
+        status: "ACTIVE",
+      },
+      create: {
+        name: process.env.ADMIN_NAME ?? "Davin",
+        email: ownerEmail,
+        passwordHash: await bcrypt.hash(ownerPassword, 10),
+        role: "ADMIN",
+      },
+    });
+    console.log(`Owner admin ready: ${ownerEmail}`);
+  } else {
+    console.log("ADMIN_EMAIL / ADMIN_PASSWORD not set — skipped owner admin.");
+  }
+
   for (const course of COURSES) {
     const existing = await prisma.course.findFirst({ where: { title: course.title } });
     if (existing) {

@@ -38,7 +38,7 @@ export default function Nav() {
         <div className="hidden flex-1 items-center justify-center gap-1 lg:flex">
           <NavLink href="/">Courses</NavLink>
           <NavLink href="/#categories">Categories</NavLink>
-          <NavLink href="/#why">Why us</NavLink>
+          <NavLink href="/verify">Verify</NavLink>
           {user?.role === "ADMIN" && <NavLink href="/admin">Admin</NavLink>}
           {user && user.role !== "ADMIN" && (
             <NavLink href="/dashboard">My learning</NavLink>
