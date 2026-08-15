@@ -5,6 +5,7 @@ import Providers from "@/components/Providers";
 import Nav from "@/components/Nav";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import PageTransition from "@/components/magic/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,9 +52,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               column scrolls independently, as in the reference layout. */}
           <div className="flex min-h-screen">
             <Sidebar />
-            <div className="flex min-w-0 flex-1 flex-col">
+            <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
               <Nav />
-              <main className="flex-1">{children}</main>
+              <PageTransition>
+                {children}
+              </PageTransition>
               <Footer />
             </div>
           </div>

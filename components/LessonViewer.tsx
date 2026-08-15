@@ -87,56 +87,62 @@ export default function LessonViewer({
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[300px_1fr] lg:items-start">
-      <aside className="card animate-fade-up sticky top-24 overflow-hidden p-2">
-        <div className="px-3 pb-3 pt-2">
-          <div className="flex items-baseline justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
-              Progress
+    <div className="grid gap-6 lg:grid-cols-[260px_1fr_300px] lg:items-start">
+      <aside className="card animate-fade-up sticky top-24 overflow-hidden p-0 border border-[var(--border)] shadow-[var(--shadow-panel)]">
+        <div className="bg-[var(--surface-2)] border-b border-[var(--border)] px-4 pb-4 pt-4">
+          <div className="flex items-baseline justify-between mb-2">
+            <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-faint)]">
+              Curriculum
             </p>
-            <p className="text-sm font-bold text-[var(--brand)]">{percent}%</p>
+            <p className="text-sm font-bold text-[var(--gold)]">{percent}%</p>
           </div>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-[var(--surface-2)]">
+          <div className="relative mt-2 h-1.5 overflow-hidden rounded-full bg-[var(--surface)]">
             <div
-              className="brand-gradient h-full rounded-full"
+              className="absolute inset-y-0 left-0 rounded-full bg-[var(--gold)] shadow-[0_0_8px_var(--gold)]"
               style={{
                 width: `${percent}%`,
-                transition: "width 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
+                transition: "width 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             />
           </div>
-          <p className="mt-1.5 text-xs text-[var(--text-faint)]">
-            {doneCount} of {lessons.length} lessons
+          <p className="mt-2 text-[11px] font-medium tracking-wide text-[var(--text-muted)] text-right">
+            {doneCount} of {lessons.length} Mastered
           </p>
         </div>
 
-        <ol className="space-y-0.5">
+        <ol className="divide-y divide-[var(--border)] max-h-[calc(100vh-16rem)] overflow-y-auto">
           {lessons.map((lesson, i) => {
             const isActive = i === activeIndex;
             const isComplete = completed.has(lesson.id);
             return (
-              <li key={lesson.id}>
+              <li key={lesson.id} className="relative group">
+                {isActive && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--gold)] shadow-[0_0_8px_var(--gold)] z-10"
+                  />
+                )}
                 <button
                   onClick={() => setActiveIndex(i)}
                   aria-current={isActive ? "true" : undefined}
-                  className={`focus-ring press flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${
+                  className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-all duration-300 ${
                     isActive
-                      ? "brand-gradient font-semibold text-white shadow-sm"
-                      : "text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+                      ? "bg-[var(--surface-2)] font-semibold text-[var(--brand)]"
+                      : "text-[var(--text-muted)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
                   }`}
                 >
                   <span
-                    className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-bold transition ${
+                    className={`grid h-[22px] w-[22px] shrink-0 place-items-center rounded-sm border text-[11px] font-bold transition-all ${
                       isComplete
-                        ? "bg-emerald-500 text-white"
+                        ? "border-[var(--gold)] bg-[var(--gold)] text-[#241026]"
                         : isActive
-                          ? "bg-white/25"
-                          : "bg-[var(--surface-2)]"
+                          ? "border-[var(--gold)] bg-transparent text-[var(--gold)]"
+                          : "border-[var(--border)] bg-transparent text-[var(--text-faint)] group-hover:border-[var(--text-muted)] group-hover:text-[var(--text)]"
                     }`}
                   >
-                    {isComplete ? <Icon name="check" className="h-3.5 w-3.5" /> : i + 1}
+                    {isComplete ? <Icon name="check" className="h-3 w-3" /> : i + 1}
                   </span>
-                  <span className="flex-1">{lesson.title}</span>
+                  <span className="flex-1 line-clamp-2 leading-tight">{lesson.title}</span>
                 </button>
               </li>
             );
@@ -144,89 +150,114 @@ export default function LessonViewer({
         </ol>
       </aside>
 
-      <section className="card animate-fade-up p-8" style={{ animationDelay: "0.08s" }}>
-        {certCode && (
-          <div
-            className={`mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 ${
-              justEarned ? "animate-pop-in" : ""
-            }`}
-          >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-emerald-500 text-white">
-              <Icon name="award" className="h-5 w-5" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="font-bold text-emerald-600 dark:text-emerald-400">
-                {justEarned ? "Course complete — certificate issued!" : "Certificate earned"}
-              </p>
-              <p className="font-mono text-xs text-[var(--text-muted)]">{certCode}</p>
-            </div>
-            <Link href={`/certificates/${certCode}`} className="btn btn-primary press">
-              View certificate
-              <Icon name="arrowRight" className="h-4 w-4" />
-            </Link>
-          </div>
-        )}
+      <section className="card animate-fade-up p-8 relative min-h-[600px] border border-[var(--border)] shadow-[var(--shadow-card)]" style={{ animationDelay: "0.08s" }}>
+        {/* Parchment background for content */}
+        <div className="absolute inset-0 bg-[var(--surface)] opacity-90 rounded-2xl pointer-events-none" />
 
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--brand)]">
-          Lesson {activeIndex + 1} of {lessons.length}
-        </p>
-        <h2 className="text-2xl font-bold tracking-tight">{active.title}</h2>
-
-        <div
-          key={active.id}
-          className="animate-fade-in mt-6 whitespace-pre-wrap leading-relaxed text-[var(--text-muted)]"
-        >
-          {active.content}
-        </div>
-
-        {error && (
-          <p className="mt-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-500">
-            {error}
-          </p>
-        )}
-
-        {canTrackProgress && (
-          <button
-            onClick={toggleComplete}
-            disabled={saving}
-            className={`press mt-8 inline-flex w-full items-center justify-center gap-2.5 rounded-full px-5 py-3 font-semibold transition sm:w-auto ${
-              isDone
-                ? "border border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                : "btn-primary text-white"
-            }`}
-          >
-            <span
-              className={`grid h-5 w-5 place-items-center rounded-full ${
-                isDone ? "bg-emerald-500 text-white" : "bg-white/25"
+        <div className="relative z-10">
+          {certCode && (
+            <div
+              className={`mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-[var(--gold)] bg-[var(--surface-2)] px-6 py-5 shadow-[0_0_12px_var(--academy-glow)] ${
+                justEarned ? "animate-pop-in" : ""
               }`}
             >
-              <Icon name="check" className="h-3 w-3" />
-            </span>
-            {saving ? "Saving..." : isDone ? "Completed" : "Mark as complete"}
-          </button>
-        )}
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] shadow-lg">
+                <Icon name="award" className="h-6 w-6" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-serif text-lg font-bold text-[var(--gold)]">
+                  {justEarned ? "Mastery Achieved — Credential Issued!" : "Credential Earned"}
+                </p>
+                <p className="font-mono text-sm text-[var(--text-muted)] tracking-widest">{certCode}</p>
+              </div>
+              <Link href={`/certificates/${certCode}`} className="rune-edge press inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:brightness-110">
+                View Credential
+                <Icon name="arrowRight" className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
 
-        <div className="mt-8 flex items-center justify-between border-t border-[var(--border)] pt-6">
-          <button
-            onClick={() => setActiveIndex((i) => Math.max(0, i - 1))}
-            disabled={activeIndex === 0}
-            className="btn btn-secondary press disabled:opacity-40"
+          <header className="mb-8 border-b border-[var(--border)] pb-6">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[var(--gold)]">
+              Manuscript {activeIndex + 1} of {lessons.length}
+            </p>
+            <h2 className="font-serif text-3xl font-bold tracking-tight text-[var(--brand)]">{active.title}</h2>
+          </header>
+
+          <div
+            key={active.id}
+            className="animate-fade-in whitespace-pre-wrap leading-relaxed text-[17px] text-[var(--text-muted)]"
           >
-            <span className="rotate-180">
+            {active.content}
+          </div>
+
+          {error && (
+            <p className="mt-6 rounded-md bg-red-900/20 px-4 py-3 text-sm font-medium text-red-400 border border-red-800">
+              {error}
+            </p>
+          )}
+
+          {canTrackProgress && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={toggleComplete}
+                disabled={saving}
+                className={`rune-edge group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-md border px-8 py-3 text-[16px] font-semibold transition-all duration-300 w-full sm:w-auto ${
+                  isDone
+                    ? "border-[var(--gold)] bg-[var(--surface-2)] text-[var(--gold)] shadow-[0_0_12px_var(--academy-glow)]"
+                    : "border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] hover:brightness-110 shadow-[0_0_18px_rgb(212_162_76/0.35)]"
+                }`}
+              >
+                <span className={`grid h-5 w-5 place-items-center rounded-full transition-colors ${isDone ? "bg-[var(--gold)] text-[#241026]" : "bg-black/20 text-[#241026]"}`}>
+                  <Icon name="check" className="h-3 w-3" />
+                </span>
+                {saving ? "Inscribing..." : isDone ? "Mastery Recorded" : "Mark as Mastered"}
+              </button>
+            </div>
+          )}
+
+          <div className="mt-12 flex items-center justify-between border-t border-[var(--border)] pt-8">
+            <button
+              onClick={() => setActiveIndex((i) => Math.max(0, i - 1))}
+              disabled={activeIndex === 0}
+              className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-5 py-2.5 font-medium text-[var(--text)] transition hover:text-[var(--gold)] hover:border-[var(--gold)] disabled:opacity-40 disabled:pointer-events-none"
+            >
+              <span className="rotate-180">
+                <Icon name="arrowRight" className="h-4 w-4" />
+              </span>
+              Previous
+            </button>
+            <button
+              onClick={() => setActiveIndex((i) => Math.min(lessons.length - 1, i + 1))}
+              disabled={activeIndex === lessons.length - 1}
+              className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:bg-[var(--gold)] hover:text-[#241026] disabled:opacity-40 disabled:pointer-events-none"
+            >
+              Next
               <Icon name="arrowRight" className="h-4 w-4" />
-            </span>
-            Previous
-          </button>
-          <button
-            onClick={() => setActiveIndex((i) => Math.min(lessons.length - 1, i + 1))}
-            disabled={activeIndex === lessons.length - 1}
-            className="btn btn-primary press disabled:opacity-40"
-          >
-            Next
-            <Icon name="arrowRight" className="h-4 w-4" />
-          </button>
+            </button>
+          </div>
         </div>
       </section>
+
+      {/* Study Notes Sidebar */}
+      <aside className="card animate-fade-up sticky top-24 h-[calc(100vh-8rem)] flex flex-col overflow-hidden border border-[var(--border)] bg-[var(--surface-2)] shadow-[var(--shadow-panel)]" style={{ animationDelay: "0.15s" }}>
+        <div className="border-b border-[var(--border)] bg-[var(--surface)] px-4 py-3 flex items-center gap-2">
+          <Icon name="code" className="h-4 w-4 text-[var(--gold)]" />
+          <h3 className="font-serif font-bold text-[var(--brand)]">Study Notes</h3>
+        </div>
+        <textarea
+          className="flex-1 w-full resize-none bg-transparent p-4 text-[15px] text-[var(--text-muted)] placeholder:text-[var(--text-faint)] focus:outline-none"
+          placeholder="Jot down your insights here... (Autosaved locally)"
+          defaultValue=""
+          onChange={(e) => {
+            // Mock autosave
+            clearTimeout((window as any)._notesTimer);
+            (window as any)._notesTimer = setTimeout(() => {
+              console.log("Notes autosaved");
+            }, 1000);
+          }}
+        />
+      </aside>
     </div>
   );
 }

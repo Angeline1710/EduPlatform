@@ -71,31 +71,45 @@ export default async function CoursePage({ params }: PageProps<"/courses/[id]">)
               </span>
             </div>
 
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl font-serif text-[var(--brand)]">
               {course.title}
             </h1>
-            <div className="mt-3 h-1 w-20 bg-gradient-to-r from-[var(--brand)] to-[var(--glow)] rounded-full opacity-60"></div>
-            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">
-              ✨ {course.description}
+            <div className="mt-4 flex items-center gap-2 text-[var(--text-faint)]">
+              <Icon name="user" className="h-4 w-4" /> Instructor: Master Scholar
+              <span className="mx-2">•</span>
+              <Icon name="star" className="h-4 w-4 text-[var(--gold)]" /> 4.9/5
+            </div>
+            
+            <div className="mt-4 h-[1px] w-full bg-gradient-to-r from-[var(--gold)] via-[var(--gold-dim)] to-transparent opacity-60"></div>
+            
+            <p className="mt-6 max-w-2xl text-[16px] leading-relaxed text-[var(--text-muted)]">
+              {course.description}
             </p>
 
-            <div className="mt-10">
-              <h2 className="mb-4 flex items-center gap-2 text-xl font-bold glow-text">
-                📚 Course content
-                <span className="text-sm font-normal text-[var(--text-muted)]">
-                  {course.lessons.length} lessons
+            <div className="mt-12">
+              <h2 className="mb-6 flex items-center gap-3 text-[22px] font-bold font-serif text-[var(--brand)]">
+                <span className="text-[var(--gold)]"><Icon name="book" className="h-6 w-6" /></span>
+                Curriculum
+                <span className="text-sm font-normal text-[var(--text-faint)] ml-2 border border-[var(--border)] rounded-full px-3 py-0.5 bg-[var(--surface-2)]">
+                  {course.lessons.length} manuscripts
                 </span>
               </h2>
 
-              <ol className="card divide-y divide-[var(--border)] overflow-hidden border-[var(--border)] hover:border-[var(--glow)] transition-all">
+              <ol className="card divide-y divide-[var(--border)] overflow-hidden border-[var(--border)] shadow-[var(--shadow-card)]">
                 {course.lessons.map((lesson, i) => (
-                  <li key={lesson.id} className="flex items-center gap-4 px-5 py-4 hover:bg-[var(--surface-2)] transition group">
-                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-sm font-semibold text-[var(--text-muted)] group-hover:bg-gradient-to-br group-hover:from-[var(--brand)] group-hover:to-[var(--glow)] group-hover:text-white transition">
+                  <li key={lesson.id} className="group relative flex items-center gap-4 px-6 py-5 hover:bg-[var(--surface-2)] transition-colors duration-300">
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    />
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-sm border border-[var(--border)] bg-[var(--surface)] font-serif font-bold text-[var(--text-muted)] group-hover:border-[var(--gold)] group-hover:text-[var(--gold)] transition-all">
                       {i + 1}
                     </span>
-                    <span className="flex-1 font-medium group-hover:text-[var(--brand)] transition">{lesson.title}</span>
-                    <span className={`transition ${enrolled ? "text-[var(--brand)]" : "text-[var(--text-faint)]"}`}>
-                      <Icon name={enrolled ? "play" : "lock"} className="h-4 w-4" />
+                    <span className="flex-1 text-[15px] font-medium text-[var(--text)] group-hover:text-[var(--brand)] transition-colors">
+                      {lesson.title}
+                    </span>
+                    <span className={`transition-all duration-300 ${enrolled ? "text-[var(--gold)]" : "text-[var(--text-faint)] group-hover:text-[var(--text-muted)]"}`}>
+                      <Icon name={enrolled ? "play" : "lock"} className="h-[18px] w-[18px]" />
                     </span>
                   </li>
                 ))}
@@ -112,33 +126,36 @@ export default async function CoursePage({ params }: PageProps<"/courses/[id]">)
               One-time payment · lifetime access
             </p>
 
-            <div className="mt-6">
+            <div className="mt-8">
               {enrolled ? (
-                <Link
-                  href={`/learn/${course.id}`}
-                  className="btn btn-primary w-full"
-                >
-                  Go to course
-                  <Icon name="arrowRight" className="h-4 w-4" />
-                </Link>
+                <div className="text-center animate-fade-up border border-[var(--gold)] bg-[var(--surface-2)] p-6 rounded-lg shadow-[0_0_12px_var(--academy-glow)]">
+                  <p className="font-serif text-lg font-bold text-[var(--brand)] mb-4">You are a student of this course.</p>
+                  <Link
+                    href={`/learn/${course.id}`}
+                    className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-5 py-2.5 font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110 w-full justify-center"
+                  >
+                    Enter Study Chamber
+                    <Icon name="arrowRight" className="h-4 w-4" />
+                  </Link>
+                </div>
               ) : session?.user ? (
                 <BuyButton courseId={course.id} />
               ) : (
-                <Link href="/login" className="btn btn-primary w-full">
-                  Sign in to buy
+                <Link href="/login" className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110 w-full justify-center">
+                  Sign in to Apply
                 </Link>
               )}
             </div>
 
-            <ul className="mt-6 space-y-3 text-sm text-[var(--text-muted)]">
+            <ul className="mt-8 space-y-4 text-sm text-[var(--text-muted)]">
               {[
-                `${course.lessons.length} on-demand lessons`,
-                "Lifetime access",
-                "Certificate of completion",
-                "Learn on any device",
+                `${course.lessons.length} structured lessons`,
+                "Lifetime archive access",
+                "Official academy credential",
+                "Learn at your own pace",
               ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5">
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)]">
+                <li key={item} className="flex items-center gap-3">
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--brand-soft)] text-[var(--gold)] border border-[var(--gold)]/30 shadow-[0_0_8px_var(--academy-glow)]">
                     <Icon name="check" className="h-3 w-3" />
                   </span>
                   {item}

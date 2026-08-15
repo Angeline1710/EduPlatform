@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Icon from "@/components/Icon";
 import ThemeToggle from "@/components/ThemeToggle";
 import { AcademyCrest } from "@/components/Crests";
+import MagicalSearch from "@/components/magic/MagicalSearch";
 
 const LINKS = [
   { href: "/", label: "Courses" },
@@ -63,10 +64,10 @@ export default function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`group relative rounded px-3.5 py-2 text-[15px] transition-colors ${
+                className={`rune-edge group relative rounded-md px-4 py-2 text-[15px] transition-all duration-300 ${
                   active
                     ? "font-semibold text-[var(--gold-bright)]"
-                    : "text-[var(--shell-text)] hover:text-[var(--gold-bright)]"
+                    : "text-[var(--shell-text)] hover:text-[var(--gold-bright)] hover:bg-[var(--shell-line-soft)]"
                 }`}
               >
                 {link.label}
@@ -85,28 +86,9 @@ export default function Nav() {
         </div>
 
         {/* Pill search with gold trim */}
-        <form
-          onSubmit={onSearch}
-          className="ml-auto hidden min-w-0 max-w-[280px] shrink md:block 2xl:ml-0"
-        >
-          <div className="flex items-center gap-2 rounded-full border border-[var(--shell-line)] bg-black/25 py-1.5 pl-4 pr-1.5 transition focus-within:border-[var(--gold)]">
-            <Icon name="search" className="h-4 w-4 shrink-0 text-[var(--gold)]" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search courses..."
-              aria-label="Search courses"
-              className="w-full min-w-0 bg-transparent text-sm text-[var(--shell-text)] placeholder:text-[var(--shell-text-muted)] focus:outline-none"
-            />
-            <button
-              type="submit"
-              aria-label="Search"
-              className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-[var(--gold)] transition hover:bg-[var(--gold-soft)]"
-            >
-              <Icon name="arrowRight" className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </form>
+        <div className="ml-auto hidden min-w-0 max-w-[280px] shrink md:block 2xl:ml-0">
+          <MagicalSearch initialQuery={query} />
+        </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-3 md:ml-0">
           <ThemeToggle />

@@ -1,6 +1,7 @@
 import Icon from "@/components/Icon";
 import { categoryTheme } from "@/lib/categories";
 import { formatIssueDate } from "@/lib/certificates";
+import AcademySeal from "./magic/AcademySeal";
 
 type CertificateProps = {
   holderName: string;
@@ -32,12 +33,16 @@ export default function Certificate({
   return (
     <div
       id="certificate"
-      className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-panel)] sm:p-12"
+      className="paper relative overflow-hidden rounded-[4px] border-[8px] border-[var(--surface-2)] bg-[#F7F1E5] p-10 shadow-[0_0_40px_rgba(0,0,0,0.5)] sm:p-16 text-[#241026]"
     >
+      {/* Inner ornamental border */}
+      <div className="pointer-events-none absolute inset-2 border-[2px] border-[var(--gold)] opacity-50" />
+      <div className="pointer-events-none absolute inset-3 border border-[var(--gold)] opacity-30" />
+      
       {/* Corner wash in the course's category colour */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-25 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-15 blur-3xl mix-blend-multiply"
         style={{ background: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}
       />
 
@@ -48,66 +53,68 @@ export default function Certificate({
       )}
 
       <div className="relative flex flex-wrap items-start justify-between gap-6">
-        <div className="flex items-center gap-3">
-          <span className="brand-gradient grid h-11 w-11 place-items-center rounded-xl text-white shadow-md">
-            <Icon name="logo" className="h-5 w-5" />
-          </span>
+        <div className="flex items-center gap-4">
+          <AcademySeal size={80} />
           <div>
-            <p className="text-lg font-bold tracking-tight">EduPlatform</p>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">
-              Certificate of Completion
+            <p className="font-serif text-3xl font-bold tracking-tight text-[var(--academy-plum)]">EduPlatform</p>
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#a87c33]">
+              Academy of Knowledge
             </p>
           </div>
         </div>
 
         <span
-          className="rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white"
+          className="rounded-sm px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-md border border-white/20"
           style={{ backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}
         >
           {category}
         </span>
       </div>
 
-      <p className="relative mt-10 text-sm text-[var(--text-muted)]">
-        This certifies that
-      </p>
-      <p className="relative mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">
-        {holderName}
-      </p>
+      <div className="text-center mt-12">
+        <p className="font-serif text-lg italic text-[#6B5A63]">
+          This certifies that the scholar
+        </p>
+        <p className="mt-4 font-serif text-5xl font-extrabold tracking-tight text-[var(--academy-purple)]">
+          {holderName}
+        </p>
 
-      <p className="relative mt-6 text-sm text-[var(--text-muted)]">
-        has successfully completed all {lessonCount}{" "}
-        {lessonCount === 1 ? "lesson" : "lessons"} of
-      </p>
-      <p className="relative mt-2 text-2xl font-bold sm:text-3xl">{courseTitle}</p>
+        <div className="mx-auto mt-6 h-px w-64 bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent opacity-60"></div>
 
-      <div className="relative mt-10 flex flex-wrap items-end justify-between gap-8 border-t border-[var(--border)] pt-8">
+        <p className="mt-6 font-serif text-lg italic text-[#6B5A63]">
+          has demonstrated mastery in all {lessonCount}{" "}
+          {lessonCount === 1 ? "manuscript" : "manuscripts"} of
+        </p>
+        <p className="mt-3 font-serif text-3xl font-bold text-[var(--academy-plum)]">{courseTitle}</p>
+      </div>
+
+      <div className="relative mt-16 flex flex-wrap items-end justify-between gap-8 border-t border-[var(--gold)]/30 pt-8">
         <div className="space-y-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">
-              Issued
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[#8a5a2b]">
+              Inscribed On
             </p>
-            <p className="mt-1 font-semibold">{formatIssueDate(issuedAt)}</p>
+            <p className="mt-1 font-serif text-lg font-bold text-[#241026]">{formatIssueDate(issuedAt)}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">
-              Credential ID
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[#8a5a2b]">
+              Seal ID
             </p>
-            <p className="mt-1 font-mono text-lg font-bold tracking-wider text-[var(--brand)]">
+            <p className="mt-1 font-mono text-xl font-bold tracking-wider text-[var(--academy-purple)]">
               {code}
             </p>
           </div>
-          <p className="max-w-xs text-xs leading-relaxed text-[var(--text-faint)]">
-            Verify at {verifyUrl}
+          <p className="max-w-xs text-xs font-medium leading-relaxed text-[#6B5A63]">
+            Verify authenticity at {verifyUrl}
           </p>
         </div>
 
         <div className="text-center">
           <div
-            className="overflow-hidden rounded-xl bg-white p-2 shadow-sm [&>svg]:block [&>svg]:h-32 [&>svg]:w-32"
+            className="overflow-hidden rounded-md border border-[var(--gold)]/50 bg-white p-2 shadow-sm [&>svg]:block [&>svg]:h-32 [&>svg]:w-32 mix-blend-multiply"
             dangerouslySetInnerHTML={{ __html: qrMarkup }}
           />
-          <p className="mt-2 text-xs font-medium text-[var(--text-faint)]">Scan to verify</p>
+          <p className="mt-3 text-[11px] font-bold uppercase tracking-widest text-[#8a5a2b]">Scan Sigil</p>
         </div>
       </div>
     </div>

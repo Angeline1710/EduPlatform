@@ -3,6 +3,7 @@ import Icon from "@/components/Icon";
 import { categoryTheme } from "@/lib/categories";
 import { formatPrice } from "@/lib/format";
 import { DepartmentCrest } from "@/components/Crests";
+import HoverCard from "@/components/magic/HoverCard";
 
 type CourseCardProps = {
   id: string;
@@ -24,10 +25,11 @@ export default function CourseCard({
   const theme = categoryTheme(category);
 
   return (
-    <Link
-      href={`/courses/${id}`}
-      className="group relative flex gap-4 rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold)] hover:shadow-[var(--shadow-lift)]"
-    >
+    <HoverCard className="h-full">
+      <Link
+        href={`/courses/${id}`}
+        className="group relative flex h-full gap-4 rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] transition-colors duration-300 hover:border-[var(--gold)]"
+      >
       {/* Gold corner ticks appear on hover */}
       <span
         aria-hidden="true"
@@ -79,6 +81,7 @@ export default function CourseCard({
           </span>
         </div>
       </div>
-    </Link>
+      </Link>
+    </HoverCard>
   );
 }

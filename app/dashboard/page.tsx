@@ -8,6 +8,8 @@ import Icon from "@/components/Icon";
 import CountUp from "@/components/CountUp";
 import ProgressRing from "@/components/ProgressRing";
 import Reveal from "@/components/Reveal";
+import SuccessFlow from "@/components/magic/SuccessFlow";
+import HoverCard from "@/components/magic/HoverCard";
 
 function greeting(date: Date) {
   const hour = date.getHours();
@@ -88,30 +90,35 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
 
       <div className="mx-auto max-w-6xl px-6 py-12">
         {purchase === "success" && (
-          <div className="animate-pop-in mb-8 flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 text-sm font-medium text-emerald-600 dark:text-emerald-400">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-500 text-white">
-              <Icon name="check" className="h-4 w-4" />
-            </span>
-            Payment successful. Your course is unlocked below.
-          </div>
+          <SuccessFlow studentName={session.user.name ?? "Scholar"} />
         )}
 
-        {/* Greeting */}
-        <header className="animate-fade-up mb-10">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[var(--brand)] glow-text">
-            ✨ {greeting(new Date())}
-          </p>
-          <h1 className="mt-1.5 text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Welcome back, <span className="bg-gradient-to-r from-[var(--brand)] via-[var(--glow)] to-[var(--brand)] bg-clip-text text-transparent animate-glow-pulse">{firstName}</span>
-          </h1>
-          <div className="mt-2 h-1 w-32 bg-gradient-to-r from-[var(--brand)] to-[var(--glow)] rounded-full opacity-60"></div>
-          <p className="mt-3 text-lg text-[var(--text-muted)]">
-            {courses.length === 0
-              ? "✨ Your magical learning journey starts here."
-              : completedCourses > 0
-                ? `🎯 You've completed ${completedCourses} of ${courses.length} courses. Keep the momentum!`
-                : `📚 ${lessonsDone} of ${totalLessons} lessons mastered across ${courses.length} courses.`}
-          </p>
+        <header className="animate-fade-up mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-b border-[var(--border)] pb-8">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-[var(--gold)] flex items-center gap-2">
+              <Icon name="sun" className="h-4 w-4" /> {greeting(new Date())}
+            </p>
+            <h1 className="mt-2 font-serif text-4xl font-extrabold tracking-tight sm:text-5xl text-[var(--brand)]">
+              Welcome to your desk, <span className="bg-gradient-to-r from-[var(--gold-bright)] to-[var(--gold)] bg-clip-text text-transparent animate-glow-pulse">{firstName}</span>
+            </h1>
+            <p className="mt-4 text-lg text-[var(--text-muted)] max-w-2xl">
+              {courses.length === 0
+                ? "Your scholar's desk awaits its first manuscript."
+                : completedCourses > 0
+                  ? `You have mastered ${completedCourses} of your ${courses.length} tomes. Knowledge grows.`
+                  : `${lessonsDone} pages read across ${courses.length} active manuscripts.`}
+            </p>
+          </div>
+          <div className="flex items-center gap-3 bg-[var(--surface-2)] p-4 rounded-lg border border-[var(--gold)]/30 shadow-[0_0_15px_var(--academy-glow)] relative">
+            {/* Streak Tracker */}
+            <Icon name="sun" className="h-8 w-8 text-[var(--gold)] animate-spin-slow" />
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-faint)]">Scholar's Streak</p>
+              <p className="font-serif text-2xl font-bold text-[var(--gold)]">3 Days</p>
+            </div>
+            {/* Particles container */}
+            <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-white shadow-[0_0_8px_4px_white] animate-sparkle" />
+          </div>
         </header>
 
         {courses.length > 0 && (
@@ -185,78 +192,93 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
         </div>
 
         {courses.length === 0 ? (
-          <div className="card animate-pop-in px-6 py-16 text-center">
-            <span className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-[var(--brand-soft)] text-[var(--brand)]">
-              <Icon name="book" className="h-6 w-6" />
+          <div className="card animate-pop-in px-6 py-16 text-center border border-[var(--gold)]/30 bg-[var(--surface-2)] shadow-[0_0_15px_var(--academy-glow)]">
+            <span className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] shadow-lg">
+              <Icon name="book" className="h-8 w-8" />
             </span>
-            <p className="text-lg font-semibold">No courses yet</p>
-            <p className="mt-1 text-sm text-[var(--text-muted)]">
-              Browse the catalog and start learning today.
+            <p className="text-xl font-serif font-bold text-[var(--brand)]">Your desk is empty</p>
+            <p className="mt-2 text-[15px] text-[var(--text-muted)]">
+              Visit the archives to find your first manuscript.
             </p>
-            <Link href="/" className="btn btn-primary press mt-6">
-              Browse courses
+            <Link href="/" className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3 font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110 mt-8">
+              Browse Archives
               <Icon name="arrowRight" className="h-4 w-4" />
             </Link>
           </div>
         ) : (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {courses.map((course, i) => {
               const theme = categoryTheme(course.category);
               const finished = course.percent === 100;
               return (
                 <Reveal key={course.id} delay={i * 0.05}>
-                  <Link
-                    href={`/learn/${course.id}`}
-                    className="lift press group card flex h-full flex-col p-5"
-                  >
-                    <div className="mb-4 flex items-start justify-between gap-3">
-                      <span
-                        className="grid h-12 w-12 place-items-center rounded-2xl text-white shadow-md transition group-hover:scale-105"
-                        style={{
-                          backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
-                        }}
-                      >
-                        <Icon name={theme.icon} className="h-5 w-5" />
-                      </span>
-
-                      <ProgressRing
-                        percent={course.percent}
-                        size={52}
-                        stroke={5}
-                        gradientId={`ring-${course.id}`}
-                        from={theme.from}
-                        to={theme.to}
-                      />
-                    </div>
-
-                    <span className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-[var(--text-faint)]">
-                      {course.category}
-                    </span>
-                    <h3 className="mb-1.5 font-bold leading-snug">{course.title}</h3>
-                    <p className="mb-5 line-clamp-2 flex-1 text-sm leading-relaxed text-[var(--text-muted)]">
-                      {course.description}
-                    </p>
-
-                    <div className="flex items-center gap-2 text-sm font-semibold">
-                      {finished ? (
-                        <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-                          <Icon name="check" className="h-4 w-4" />
-                          Completed
+                  <HoverCard className="w-full h-full">
+                    <Link
+                      href={`/learn/${course.id}`}
+                      className="group relative flex h-[280px] w-full flex-col justify-end overflow-hidden rounded-r-xl rounded-l-md border-l-[12px] border-y-2 border-r-2 bg-[var(--surface-2)] p-6 shadow-[10px_10px_20px_rgba(0,0,0,0.4)]"
+                      style={{
+                        borderLeftColor: theme.from,
+                        borderColor: "var(--border)",
+                        backgroundImage: `linear-gradient(to right, ${theme.from}15, transparent)`,
+                      }}
+                    >
+                    {/* Spine details */}
+                    <div className="absolute left-0 top-0 bottom-0 w-8 border-r border-black/20 bg-black/10 mix-blend-overlay" />
+                    <div className="absolute left-2 top-8 h-1 w-6 bg-black/20" />
+                    <div className="absolute left-2 bottom-8 h-1 w-6 bg-black/20" />
+                    
+                    <div className="relative z-10 flex h-full flex-col">
+                      <div className="mb-4 flex items-start justify-between gap-3">
+                        <span
+                          className="grid h-12 w-12 place-items-center rounded-full text-[#241026] shadow-md transition group-hover:scale-105 group-hover:rotate-6"
+                          style={{
+                            backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+                            boxShadow: `0 0 12px ${theme.from}80`,
+                          }}
+                        >
+                          <Icon name={theme.icon} className="h-6 w-6" />
                         </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 text-[var(--brand)]">
-                          Continue
-                          <Icon
-                            name="arrowRight"
-                            className="h-4 w-4 transition group-hover:translate-x-0.5"
-                          />
-                        </span>
-                      )}
-                      <span className="ml-auto font-normal text-[var(--text-faint)]">
-                        {course.done}/{course.total}
+
+                        <ProgressRing
+                          percent={course.percent}
+                          size={52}
+                          stroke={4}
+                          gradientId={`ring-${course.id}`}
+                          from={theme.from}
+                          to={theme.to}
+                        />
+                      </div>
+
+                      <span className="mb-2 text-[11px] font-bold uppercase tracking-widest text-[var(--gold)]">
+                        {course.category}
                       </span>
+                      <h3 className="mb-2 font-serif text-xl font-bold leading-snug text-[var(--brand)] line-clamp-2">{course.title}</h3>
+                      <p className="line-clamp-2 flex-1 text-[13px] leading-relaxed text-[var(--text-muted)]">
+                        {course.description}
+                      </p>
+
+                      <div className="mt-4 flex items-center justify-between border-t border-[var(--border)] pt-4 text-sm font-semibold">
+                        {finished ? (
+                          <span className="inline-flex items-center gap-1.5 text-[var(--gold)]">
+                            <Icon name="check" className="h-4 w-4" />
+                            Mastered
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 text-[var(--text)] group-hover:text-[var(--gold)] transition-colors">
+                            Continue Reading
+                            <Icon
+                              name="arrowRight"
+                              className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                            />
+                          </span>
+                        )}
+                        <span className="font-mono text-[11px] font-normal text-[var(--text-faint)]">
+                          PG {course.done}/{course.total}
+                        </span>
+                      </div>
                     </div>
-                  </Link>
+                    </Link>
+                  </HoverCard>
                 </Reveal>
               );
             })}

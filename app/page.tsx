@@ -66,6 +66,28 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
     <>
       {!isFiltered && <Hero courseCount={allPublished.length} />}
 
+      {/* Today's Learning preview (if not filtered) */}
+      {!isFiltered && (
+        <section className="border-b border-[var(--border)] bg-[var(--surface-2)] px-6 py-12 xl:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <h2 className="mb-6 font-serif text-[28px] font-bold text-[var(--brand)] flex items-center gap-3">
+              <Icon name="sun" className="h-6 w-6" />
+              Today's Study
+            </h2>
+            <div className="flex flex-col md:flex-row items-center justify-between bg-[var(--surface)] p-6 rounded-lg border border-[var(--border)] shadow-[var(--shadow-card)]">
+              <div>
+                <p className="text-sm font-semibold text-[var(--gold)] mb-1">18 min recommended</p>
+                <h3 className="font-serif text-[22px] font-bold text-[var(--text)]">Python for Data Analysis</h3>
+                <p className="text-[var(--text-muted)] mt-1">Continue from: Data Cleaning</p>
+              </div>
+              <Link href="/dashboard" className="rune-edge mt-4 md:mt-0 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-5 py-2.5 font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110">
+                Continue <Icon name="arrowRight" className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Parchment catalogue band */}
       <section
         id="courses"
@@ -138,6 +160,32 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
           )}
         </div>
       </section>
+
+      {/* How Learning Works */}
+      {!isFiltered && (
+        <section className="border-b border-[var(--border)] bg-[var(--surface)] px-6 py-16 xl:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <h2 className="text-center font-serif text-[34px] font-bold text-[var(--brand)] mb-12">How Learning Works</h2>
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 relative">
+              {/* Optional connecting line can be drawn behind items */}
+              {[
+                { step: "DISCOVER", icon: "search", desc: "Find your path in the archives" },
+                { step: "LEARN", icon: "book", desc: "Study expert manuscripts" },
+                { step: "PRACTICE", icon: "code", desc: "Apply knowledge directly" },
+                { step: "MASTER", icon: "award", desc: "Earn your credentials" }
+              ].map((item, i) => (
+                <div key={item.step} className="flex flex-col items-center text-center relative z-10 group">
+                  <div className="h-16 w-16 rounded-full border border-[var(--gold)] bg-[var(--surface-2)] text-[var(--gold)] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-[0_0_12px_var(--academy-glow)]">
+                    <Icon name={item.icon} className="h-7 w-7" />
+                  </div>
+                  <h3 className="font-serif font-bold tracking-wider text-[var(--text)] mb-2">{item.step}</h3>
+                  <p className="text-sm text-[var(--text-muted)] max-w-[200px]">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Dark feature bar */}
       <section id="why" className="shell-panel border-t border-[var(--shell-line)]">

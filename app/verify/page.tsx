@@ -17,18 +17,18 @@ export default function VerifyLandingPage() {
       </div>
 
       <div className="mx-auto max-w-xl px-6 py-20 text-center">
-        <span className="animate-pop-in mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl bg-[var(--brand-soft)] text-[var(--brand)]">
-          <Icon name="award" className="h-7 w-7" />
+        <span className="animate-pop-in mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] shadow-[0_0_24px_var(--academy-glow)]">
+          <Icon name="award" className="h-10 w-10" />
         </span>
 
-        <h1 className="animate-fade-up text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Verify a <span className="text-gradient">credential</span>
+        <h1 className="animate-fade-up text-4xl font-serif font-bold tracking-tight sm:text-5xl text-[var(--brand)]">
+          Verify a <span className="bg-gradient-to-r from-[var(--gold-bright)] to-[var(--gold)] bg-clip-text text-transparent animate-glow-pulse">Credential</span>
         </h1>
         <p
-          className="animate-fade-up mt-4 text-[var(--text-muted)]"
+          className="animate-fade-up mt-4 text-[var(--text-muted)] text-lg"
           style={{ animationDelay: "0.08s" }}
         >
-          Enter the credential ID printed on the certificate, or scan its QR code.
+          Enter the magical seal ID inscribed on the credential, or scan its sigil.
         </p>
 
         <div className="animate-fade-up mt-10" style={{ animationDelay: "0.16s" }}>
