@@ -2,7 +2,7 @@ import Link from "next/link";
 import Icon from "@/components/Icon";
 import { categoryTheme } from "@/lib/categories";
 import { formatPrice } from "@/lib/format";
-import { HexTile } from "@/components/Ornament";
+import { DepartmentCrest } from "@/components/Crests";
 
 type CourseCardProps = {
   id: string;
@@ -38,7 +38,19 @@ export default function CourseCard({
         className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[var(--gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       />
 
-      <HexTile from={theme.from} to={theme.to} icon={theme.icon} size={58} />
+      {/* Department crest. Uses the readable ink role, not the gradient hue,
+          so the mark holds up on parchment as well as plum. */}
+      <span
+        className="accent mt-0.5 shrink-0 transition-transform duration-500 group-hover:scale-110"
+        style={
+          {
+            "--accent-light": theme.ink,
+            "--accent-dark": theme.inkDark,
+          } as React.CSSProperties
+        }
+      >
+        <DepartmentCrest name={category} className="h-12 w-12" />
+      </span>
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Bookmark sits opposite the title, as in the reference */}

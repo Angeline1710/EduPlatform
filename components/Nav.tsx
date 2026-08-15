@@ -6,7 +6,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Icon from "@/components/Icon";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Crest } from "@/components/Ornament";
+import { AcademyCrest } from "@/components/Crests";
 
 const LINKS = [
   { href: "/", label: "Courses" },
@@ -40,7 +40,7 @@ export default function Nav() {
         {/* Crest + wordmark */}
         <Link href="/" className="group flex shrink-0 items-center gap-3">
           <span className="transition-transform duration-500 group-hover:scale-105">
-            <Crest size={38} />
+            <AcademyCrest size={38} />
           </span>
           <span className="hidden sm:block">
             <span className="gold-leaf block font-serif text-[22px] font-bold leading-none tracking-wide">

@@ -1,8 +1,15 @@
 /**
- * Each category carries its own accent so course cards read as a set of
- * distinct subjects at a glance. `from`/`to` drive the icon tile gradient;
- * `text` is the price/label colour and is picked to stay legible on both
- * the light and dark surface tokens.
+ * Each department carries its own jewel accent so courses read as a set of
+ * distinct subjects at a glance.
+ *
+ * Two colour roles, and they are not interchangeable:
+ *   from/to — decorative gradients only (tiles, washes)
+ *   ink/inkDark — anything a reader must actually read, or any crest that
+ *     carries meaning. These are darkened/lightened against the parchment
+ *     and plum surfaces respectively and every pair clears WCAG AA.
+ *
+ * Using from/to for a label is the mistake to avoid: those hues were chosen
+ * to look rich behind white glyphs and drop to ~2:1 as text on parchment.
  */
 export type CategoryKey =
   | "Development"
@@ -16,59 +23,61 @@ export type CategoryKey =
 type CategoryTheme = {
   from: string;
   to: string;
-  text: string;
-  textDark: string;
+  /** Readable on the parchment surfaces (light direction). */
+  ink: string;
+  /** Readable on the plum surfaces (dark direction). */
+  inkDark: string;
   icon: string;
 };
 
 export const CATEGORIES: Record<CategoryKey, CategoryTheme> = {
   Development: {
-    from: "#8b5cf6",
-    to: "#6366f1",
-    text: "#6d3ded",
-    textDark: "#a78bfa",
+    from: "#7A4E92",
+    to: "#4C285F",
+    ink: "#4A2560",
+    inkDark: "#C9A6DC",
     icon: "code",
   },
   Data: {
-    from: "#10b981",
-    to: "#059669",
-    text: "#047857",
-    textDark: "#34d399",
+    from: "#4E8F76",
+    to: "#376B58",
+    ink: "#28503F",
+    inkDark: "#8FCBB2",
     icon: "chart",
   },
   Design: {
-    from: "#ec4899",
-    to: "#f43f5e",
-    text: "#db2777",
-    textDark: "#f472b6",
+    from: "#B4436A",
+    to: "#8C2946",
+    ink: "#8C2946",
+    inkDark: "#F0A3BB",
     icon: "palette",
   },
   Business: {
-    from: "#f59e0b",
-    to: "#f97316",
-    text: "#c2410c",
-    textDark: "#fbbf24",
+    from: "#C99632",
+    to: "#9A7024",
+    ink: "#7A5410",
+    inkDark: "#E4BD68",
     icon: "megaphone",
   },
   Security: {
-    from: "#0ea5e9",
-    to: "#0284c7",
-    text: "#0369a1",
-    textDark: "#38bdf8",
+    from: "#3A6E96",
+    to: "#234B69",
+    ink: "#1D4463",
+    inkDark: "#95C2E0",
     icon: "shield",
   },
   Communication: {
-    from: "#14b8a6",
-    to: "#0d9488",
-    text: "#0f766e",
-    textDark: "#2dd4bf",
+    from: "#3D7A6E",
+    to: "#245349",
+    ink: "#1E5349",
+    inkDark: "#8ED0C2",
     icon: "chat",
   },
   General: {
-    from: "#64748b",
-    to: "#475569",
-    text: "#475569",
-    textDark: "#94a3b8",
+    from: "#7A6A72",
+    to: "#544750",
+    ink: "#4A3F46",
+    inkDark: "#C4B8BF",
     icon: "book",
   },
 };

@@ -16,112 +16,165 @@
    deep plum in dark.
    --------------------------------------------------------------- */
 
+/* ===============================================================
+   ACADEMY DESIGN TOKENS
+
+   Two art directions, not one palette inverted:
+     Light — "Sunlit Academy": parchment, ivory, plum, emerald, gold
+     Dark  — "Midnight Archive": maroon, plum, silver, muted gold
+
+   The shell (rail, top bar, hero, feature bar) keeps the deep
+   plum-and-gold treatment in both directions — that furniture is the
+   brand. The theme changes the content surfaces around it.
+   =============================================================== */
+
 :root {
-  /* Fixed shell — identical in both themes */
-  --shell: #1a0d18;
-  --shell-2: #24101f;
-  --shell-line: rgb(212 162 76 / 0.28);
-  --shell-line-soft: rgb(212 162 76 / 0.14);
-  --shell-text: #f2e7dc;
-  --shell-text-muted: #b9a49c;
+  /* ---- Animation tokens (§71) ---- */
+  --t-micro: 120ms;
+  --t-fast: 200ms;
+  --t-normal: 300ms;
+  --t-emphasis: 500ms;
+  --t-magical: 700ms;
+  --t-major: 900ms;
+  --ease-academy: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-ink: cubic-bezier(0.65, 0, 0.35, 1);
 
-  --hero-from: #2b1430;
-  --hero-via: #3a1c3c;
-  --hero-to: #241026;
+  /* ---- Radius ---- */
+  --academy-radius: 4px;
+  --academy-radius-lg: 8px;
 
-  /* Gold ramp */
-  --gold: #d4a24c;
-  --gold-bright: #f0d089;
-  --gold-dim: #a87c33;
-  --gold-soft: rgb(212 162 76 / 0.12);
+  /* ---- Shell: fixed in both directions ---- */
+  --shell: #1B1019;
+  --shell-2: #29172F;
+  --shell-line: rgb(201 150 50 / 0.3);
+  --shell-line-soft: rgb(201 150 50 / 0.14);
+  --shell-text: #F4EFE7;
+  --shell-text-muted: #BDB4B9;
 
-  /* Light theme content band: warm parchment */
-  --bg: #f4ede0;
-  --bg-subtle: #ece2d2;
-  --surface: #fffdf7;
-  --surface-2: #f7f1e5;
-  --border: #e0d4bf;
-  --border-strong: #cdbb9e;
+  --hero-from: #29172F;
+  --hero-via: #3A1825;
+  --hero-to: #1B1019;
 
-  --text: #2a1a26;
-  --text-muted: #6d5a63;
-  --text-faint: #9a8790;
+  /* ---- Gold ramp ---- */
+  --academy-gold: #C99632;
+  --gold: #C99632;
+  --gold-bright: #E4BD68;
+  --gold-dim: #9A7024;
+  --gold-soft: rgb(201 150 50 / 0.12);
+  --academy-silver: #AAA5A7;
 
-  --brand: #8a5a2b;
-  --brand-hover: #6f4720;
-  --brand-soft: rgb(212 162 76 / 0.16);
-  --brand-contrast: #1a0d18;
+  /* ---- Sunlit Academy (light) ---- */
+  --bg: #F7F1E5;
+  --bg-subtle: #EFE7D6;
+  --surface: #FFFDF7;
+  --surface-2: #F7F1E5;
+  --border: #D8C7A7;
+  --border-strong: #C3AE88;
 
-  --glow: #d4a24c;
-  --ring: #a87c33;
+  --text: #251B25;
+  --text-muted: #756A73;
+  --text-faint: #9C919A;
 
-  --blob-a: radial-gradient(circle, rgb(212 162 76 / 0.35), transparent 70%);
-  --blob-b: radial-gradient(circle, rgb(139 74 122 / 0.28), transparent 70%);
-  --blob-c: radial-gradient(circle, rgb(90 60 130 / 0.25), transparent 70%);
+  --academy-purple: #4C285F;
+  --academy-plum: #32152F;
+  --academy-emerald: #376B58;
 
-  --shadow-card: 0 1px 2px rgb(42 26 38 / 0.06), 0 10px 28px rgb(42 26 38 / 0.08);
-  --shadow-lift: 0 2px 6px rgb(42 26 38 / 0.1), 0 22px 48px rgb(42 26 38 / 0.16);
-  --shadow-panel: 0 6px 18px rgb(42 26 38 / 0.08), 0 40px 80px rgb(42 26 38 / 0.14);
+  --brand: #4C285F;
+  --brand-hover: #32152F;
+  --brand-soft: rgb(76 40 95 / 0.1);
+  --brand-contrast: #FFFDF7;
+
+  --glow: #C99632;
+  --ring: #4C285F;
+
+  --academy-shadow: rgb(37 27 37 / 0.1);
+  --academy-glow: rgb(201 150 50 / 0.35);
+
+  --shadow-card: 0 1px 2px rgb(37 27 37 / 0.05), 0 10px 28px rgb(37 27 37 / 0.07);
+  --shadow-lift: 0 2px 6px rgb(37 27 37 / 0.09), 0 22px 48px rgb(37 27 37 / 0.15);
+  --shadow-panel: 0 6px 18px rgb(37 27 37 / 0.07), 0 40px 80px rgb(37 27 37 / 0.12);
+
+  /* Parchment grain — a single inline SVG, no network request */
+  --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
+/* ---- Midnight Archive (dark) ---- */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1a0d18;
-    --bg-subtle: #140a13;
-    --surface: #2a1428;
-    --surface-2: #341a31;
-    --border: #4a2a44;
-    --border-strong: #633a5a;
+    --bg: #1B1019;
+    --bg-subtle: #150C14;
+    --surface: #29172F;
+    --surface-2: #3A1825;
+    --border: #542638;
+    --border-strong: #6B3547;
 
-    --text: #f2e7dc;
-    --text-muted: #bda8b5;
-    --text-faint: #8d7a88;
+    --text: #F4EFE7;
+    --text-muted: #BDB4B9;
+    --text-faint: #8F868C;
 
-    --brand: #d4a24c;
-    --brand-hover: #f0d089;
-    --brand-soft: rgb(212 162 76 / 0.14);
-    --brand-contrast: #1a0d18;
+    --academy-purple: #7A4E92;
+    --academy-plum: #542638;
+    --academy-emerald: #5A9B82;
 
-    --glow: #f0d089;
-    --ring: #d4a24c;
+    --brand: #B88A3B;
+    --brand-hover: #E4BD68;
+    --brand-soft: rgb(184 138 59 / 0.14);
+    --brand-contrast: #1B1019;
 
-    --blob-a: radial-gradient(circle, rgb(212 162 76 / 0.22), transparent 70%);
-    --blob-b: radial-gradient(circle, rgb(139 74 122 / 0.3), transparent 70%);
-    --blob-c: radial-gradient(circle, rgb(90 60 130 / 0.28), transparent 70%);
+    --gold: #B88A3B;
+    --glow: #E4BD68;
+    --ring: #B88A3B;
 
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 28px rgb(0 0 0 / 0.42);
-    --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.55);
-    --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.5);
+    --academy-shadow: rgb(0 0 0 / 0.5);
+    --academy-glow: rgb(228 189 104 / 0.3);
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.45), 0 10px 28px rgb(0 0 0 / 0.4);
+    --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.52);
+    --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.48);
+
+    --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #1a0d18;
-  --bg-subtle: #140a13;
-  --surface: #2a1428;
-  --surface-2: #341a31;
-  --border: #4a2a44;
-  --border-strong: #633a5a;
+  --bg: #1B1019;
+  --bg-subtle: #150C14;
+  --surface: #29172F;
+  --surface-2: #3A1825;
+  --border: #542638;
+  --border-strong: #6B3547;
 
-  --text: #f2e7dc;
-  --text-muted: #bda8b5;
-  --text-faint: #8d7a88;
+  --text: #F4EFE7;
+  --text-muted: #BDB4B9;
+  --text-faint: #8F868C;
 
-  --brand: #d4a24c;
-  --brand-hover: #f0d089;
-  --brand-soft: rgb(212 162 76 / 0.14);
-  --brand-contrast: #1a0d18;
+  --academy-purple: #7A4E92;
+  --academy-plum: #542638;
+  --academy-emerald: #5A9B82;
 
-  --glow: #f0d089;
-  --ring: #d4a24c;
+  --brand: #B88A3B;
+  --brand-hover: #E4BD68;
+  --brand-soft: rgb(184 138 59 / 0.14);
+  --brand-contrast: #1B1019;
 
-  --blob-a: radial-gradient(circle, rgb(212 162 76 / 0.22), transparent 70%);
-  --blob-b: radial-gradient(circle, rgb(139 74 122 / 0.3), transparent 70%);
-  --blob-c: radial-gradient(circle, rgb(90 60 130 / 0.28), transparent 70%);
+  --gold: #B88A3B;
+  --glow: #E4BD68;
+  --ring: #B88A3B;
 
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 28px rgb(0 0 0 / 0.42);
-  --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.55);
-  --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.5);
+  --academy-shadow: rgb(0 0 0 / 0.5);
+  --academy-glow: rgb(228 189 104 / 0.3);
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.45), 0 10px 28px rgb(0 0 0 / 0.4);
+  --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.52);
+  --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.48);
+
+  --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Parchment grain applied to content bands */
+.paper {
+  background-color: var(--bg);
+  background-image: var(--paper-texture);
 }
 
 @theme inline {
@@ -263,6 +316,39 @@ body {
     transparent
   );
 }
+
+.animate-ink-reveal { animation: ink-reveal var(--t-magical) var(--ease-ink) both; }
+.animate-seal-press { animation: seal-press var(--t-magical) var(--ease-academy) both; }
+
+/**
+ * Cartouche: the arched, double-ruled frame the reference uses for
+ * department cards. Built from a clip-path arch plus an inset rule, so it
+ * needs no images and scales cleanly.
+ */
+.cartouche {
+  position: relative;
+  clip-path: polygon(
+    50% 0%, 88% 6%, 100% 18%, 100% 82%, 88% 94%,
+    50% 100%, 12% 94%, 0% 82%, 0% 18%, 12% 6%
+  );
+  transition: transform var(--t-normal) var(--ease-academy),
+              filter var(--t-normal) var(--ease-academy);
+}
+
+.cartouche-rule {
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--gold);
+  opacity: 0.45;
+  clip-path: polygon(
+    50% 0%, 88% 6%, 100% 18%, 100% 82%, 88% 94%,
+    50% 100%, 12% 94%, 0% 82%, 0% 18%, 12% 6%
+  );
+  pointer-events: none;
+  transition: opacity var(--t-normal) var(--ease-academy);
+}
+
+.group:hover .cartouche-rule { opacity: 0.9; }
 
 /* Shell surfaces — brand furniture, identical in both themes */
 .shell-panel {
@@ -501,6 +587,34 @@ body {
   0%   { transform: translateX(-100%); opacity: 0; }
   35%  { opacity: 1; }
   100% { transform: translateX(400%); opacity: 0; }
+}
+
+/* A single mote crossing a heading — the living-ink effect */
+@keyframes mote-drift {
+  0%   { transform: translateX(0) translateY(0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(var(--mote-distance, 100%)) translateY(-6px); opacity: 0; }
+}
+
+/* Ink settling into the page, for headings on first view */
+@keyframes ink-reveal {
+  from { opacity: 0; filter: blur(6px); transform: translateY(8px); }
+  to   { opacity: 1; filter: blur(0); transform: none; }
+}
+
+/* A seal pressing down into parchment */
+@keyframes seal-press {
+  0%   { opacity: 0; transform: scale(1.6) rotate(-12deg); }
+  55%  { opacity: 1; transform: scale(0.94) rotate(2deg); }
+  75%  { transform: scale(1.03) rotate(-1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Gold ring expanding out from a completed action */
+@keyframes seal-ring {
+  0%   { opacity: 0.85; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(1.9); }
 }
 
 .animate-fade-up { animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }

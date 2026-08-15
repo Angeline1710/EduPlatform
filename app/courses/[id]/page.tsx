@@ -62,8 +62,8 @@ export default async function CoursePage({ params }: PageProps<"/courses/[id]">)
                 className="accent text-xs font-bold uppercase tracking-widest"
                 style={
                   {
-                    "--accent-light": theme.text,
-                    "--accent-dark": theme.textDark,
+                    "--accent-light": theme.ink,
+                    "--accent-dark": theme.inkDark,
                   } as React.CSSProperties
                 }
               >

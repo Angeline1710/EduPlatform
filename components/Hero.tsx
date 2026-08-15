@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import Castle from "@/components/Castle";
-import { Diamond, Embers, Star } from "@/components/Ornament";
+import { Diamond, Star } from "@/components/Ornament";
+import MagicParticles from "@/components/magic/MagicParticles";
+import LivingInk from "@/components/magic/LivingInk";
 
 const STATS = [
   { icon: "cap", value: "12+", label: "Expert Courses" },
@@ -13,7 +15,8 @@ const STATS = [
 export default function Hero({ courseCount }: { courseCount: number }) {
   return (
     <section className="hero-panel relative overflow-hidden">
-      <Embers count={16} />
+      {/* One pooled canvas rather than a stack of animated DOM nodes */}
+      <MagicParticles count={44} kind="ember" />
 
       {/* Scattered sparkles */}
       <Star className="left-[6%] top-[18%]" size={16} delay={0} />
@@ -34,9 +37,11 @@ export default function Hero({ courseCount }: { courseCount: number }) {
           </div>
 
           <h1 className="font-serif text-[44px] font-bold leading-[1.06] tracking-tight text-[var(--shell-text)] sm:text-[54px]">
-            Learn something
+            <LivingInk interval={7}>Learn something</LivingInk>
             <br />
-            <span className="gold-leaf glow-text">new today</span>
+            <LivingInk interval={5}>
+              <span className="gold-leaf glow-text">new today</span>
+            </LivingInk>
           </h1>
 
           {/* Ornamental rule under the headline */}

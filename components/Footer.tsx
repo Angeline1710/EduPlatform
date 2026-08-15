@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import { Crest, Diamond } from "@/components/Ornament";
+import { Diamond } from "@/components/Ornament";
+import { AcademyCrest } from "@/components/Crests";
 
 export default function Footer() {
   return (
@@ -17,7 +18,7 @@ export default function Footer() {
         <div className="mt-7 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link href="/" className="group flex items-center gap-3">
             <span className="transition-transform duration-500 group-hover:scale-105">
-              <Crest size={32} />
+              <AcademyCrest size={32} />
             </span>
             <span>
               <span className="gold-leaf block font-serif text-lg font-bold leading-none">

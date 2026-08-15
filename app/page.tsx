@@ -4,8 +4,11 @@ import Hero from "@/components/Hero";
 import CourseCard from "@/components/CourseCard";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
-import { DiamondHeading } from "@/components/Ornament";
-import { CATEGORY_NAMES, categoryTheme } from "@/lib/categories";
+import { Diamond } from "@/components/Ornament";
+import { AcademyCrest } from "@/components/Crests";
+import DepartmentFilter from "@/components/DepartmentFilter";
+import LivingInk from "@/components/magic/LivingInk";
+import { CATEGORY_NAMES } from "@/lib/categories";
 
 const FEATURES = [
   {
@@ -64,43 +67,48 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
       {!isFiltered && <Hero courseCount={allPublished.length} />}
 
       {/* Parchment catalogue band */}
-      <section id="courses" className="bg-[var(--bg)] px-6 py-14 xl:px-10">
-        <div className="mx-auto max-w-[1400px]">
-          <DiamondHeading>
-            {isFiltered ? "Search Results" : "Popular Courses"}
-          </DiamondHeading>
+      <section
+        id="courses"
+        className="paper relative border-y border-[var(--border)] px-6 py-16 xl:px-10"
+      >
+        {/* Corner flourishes, as on the reference band */}
+        <Flourish className="left-3 top-3" />
+        <Flourish className="right-3 top-3 -scale-x-100" />
+        <Flourish className="bottom-3 left-3 -scale-y-100" />
+        <Flourish className="bottom-3 right-3 -scale-100" />
 
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-sm text-[var(--text-muted)]">
-            {isFiltered ? (
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1.5 font-semibold text-[var(--brand)] hover:underline"
-              >
-                Clear filters
-              </Link>
-            ) : (
-              <span>{allPublished.length} courses available</span>
-            )}
+        <div className="mx-auto max-w-[1400px]">
+          {/* Crest ornament above the heading */}
+          <div className="mb-5 flex items-center justify-center gap-3" aria-hidden="true">
+            <span className="rule-fade w-20 sm:w-28" />
+            <span className="text-[var(--gold)]">
+              <AcademyCrest size={26} />
+            </span>
+            <span className="rule-fade w-20 sm:w-28" />
           </div>
 
-          {/* Category chips */}
-          <div
-            id="categories"
-            className="mb-9 mt-7 flex flex-wrap justify-center gap-2"
-          >
-            <CategoryChip active={!category} href="/" label="All" />
-            {usedCategories.map((name) => {
-              const theme = categoryTheme(name);
-              return (
-                <CategoryChip
-                  key={name}
-                  active={category === name}
-                  href={`/?category=${encodeURIComponent(name)}`}
-                  label={name}
-                  color={theme.from}
-                />
-              );
-            })}
+          <h2 className="text-center font-serif text-[38px] leading-none tracking-tight text-[var(--brand)] sm:text-[46px]">
+            <LivingInk>{isFiltered ? "The Archives" : "Popular Courses"}</LivingInk>
+          </h2>
+
+          <div className="mt-4 flex items-center justify-center gap-2.5" aria-hidden="true">
+            <span className="rule-fade w-16" />
+            <Diamond size={5} />
+            <span className="rule-fade w-16" />
+          </div>
+
+          <p className="mt-4 text-center text-sm text-[var(--text-muted)]">
+            {isFiltered ? (
+              <Link href="/" className="font-semibold text-[var(--brand)] hover:underline">
+                Return to all departments
+              </Link>
+            ) : (
+              `${allPublished.length} courses available`
+            )}
+          </p>
+
+          <div className="mb-10 mt-8">
+            <DepartmentFilter categories={usedCategories} active={category} />
           </div>
 
           {courses.length === 0 ? (
@@ -158,33 +166,22 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
   );
 }
 
-function CategoryChip({
-  href,
-  label,
-  active,
-  color,
-}: {
-  href: string;
-  label: string;
-  active: boolean;
-  color?: string;
-}) {
+/** Engraved corner mark for the parchment band. */
+function Flourish({ className = "" }: { className?: string }) {
   return (
-    <Link
-      href={href}
-      className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-all duration-300 ${
-        active
-          ? "border-[var(--gold)] bg-[var(--gold-soft)] font-semibold text-[var(--brand)] shadow-[0_0_12px_rgb(212_162_76/0.25)]"
-          : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--text)]"
-      }`}
+    <svg
+      viewBox="0 0 40 40"
+      aria-hidden="true"
+      className={`pointer-events-none absolute h-9 w-9 text-[var(--gold)] opacity-45 ${className}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.1"
+      strokeLinecap="round"
     >
-      {color && (
-        <span
-          className="h-2 w-2 rotate-45"
-          style={{ background: active ? "var(--gold)" : color }}
-        />
-      )}
-      {label}
-    </Link>
+      <path d="M1 12V4a3 3 0 0 1 3-3h8" />
+      <path d="M6 16V9a3 3 0 0 1 3-3h7" strokeWidth="0.8" opacity="0.7" />
+      <path d="M12 6c4 0 7 1.5 9 4" strokeWidth="0.8" opacity="0.5" />
+      <circle cx="4.5" cy="4.5" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
   );
 }
