@@ -1,26 +1,157 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------
+   Design tokens.
+
+   Light is defined on bare :root so it is always the fallback.
+   Dark is redefined twice: once for system preference (guarded so an
+   explicit light choice wins) and once for the explicit [data-theme]
+   attribute set by the toggle.
+   --------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #ffffff;
+  --bg-subtle: #f6f5fb;
+  --surface: #ffffff;
+  --surface-2: #faf9fe;
+  --border: #e8e6f2;
+  --border-strong: #d6d2e8;
+
+  --text: #17143a;
+  --text-muted: #6b6790;
+  --text-faint: #9b97b8;
+
+  --brand: #6d3ded;
+  --brand-hover: #5b2fd4;
+  --brand-soft: #f1ebff;
+  --brand-contrast: #ffffff;
+
+  --ring: #6d3ded;
+
+  /* Hero backdrop blobs */
+  --blob-a: #e9e0ff;
+  --blob-b: #ffe6f3;
+  --blob-c: #e0f7f1;
+
+  --shadow-card: 0 1px 2px rgb(23 20 58 / 0.04), 0 8px 24px rgb(23 20 58 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(23 20 58 / 0.05), 0 18px 40px rgb(23 20 58 / 0.12);
+  --shadow-panel: 0 4px 12px rgb(23 20 58 / 0.04), 0 32px 64px rgb(23 20 58 / 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d0b1c;
+    --bg-subtle: #131029;
+    --surface: #17143a;
+    --surface-2: #1d1947;
+    --border: #2b2560;
+    --border-strong: #3b3480;
+
+    --text: #f3f1ff;
+    --text-muted: #a9a3d0;
+    --text-faint: #7d77a8;
+
+    --brand: #8b5cf6;
+    --brand-hover: #a181f8;
+    --brand-soft: #241d52;
+    --brand-contrast: #ffffff;
+
+    --ring: #8b5cf6;
+
+    --blob-a: #2a1f5c;
+    --blob-b: #3d1f45;
+    --blob-c: #14364a;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.35);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 18px 40px rgb(0 0 0 / 0.5);
+    --shadow-panel: 0 4px 12px rgb(0 0 0 / 0.3), 0 32px 64px rgb(0 0 0 / 0.45);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d0b1c;
+  --bg-subtle: #131029;
+  --surface: #17143a;
+  --surface-2: #1d1947;
+  --border: #2b2560;
+  --border-strong: #3b3480;
+
+  --text: #f3f1ff;
+  --text-muted: #a9a3d0;
+  --text-faint: #7d77a8;
+
+  --brand: #8b5cf6;
+  --brand-hover: #a181f8;
+  --brand-soft: #241d52;
+  --brand-contrast: #ffffff;
+
+  --ring: #8b5cf6;
+
+  --blob-a: #2a1f5c;
+  --blob-b: #3d1f45;
+  --blob-c: #14364a;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.35);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 18px 40px rgb(0 0 0 / 0.5);
+  --shadow-panel: 0 4px 12px rgb(0 0 0 / 0.3), 0 32px 64px rgb(0 0 0 / 0.45);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border-token: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-contrast: var(--brand-contrast);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Prevent the toggle from animating every color on first paint */
+.theme-ready * {
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+/* The gradient wordmark / headline treatment */
+.text-gradient {
+  background: linear-gradient(100deg, #7c3aed 0%, #d946ef 45%, #fb7185 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-gradient {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d3ded 50%, #4f46e5 100%);
+}
+
+/* Focus ring used across inputs and buttons */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

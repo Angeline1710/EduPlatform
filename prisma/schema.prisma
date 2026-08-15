@@ -27,6 +27,7 @@ model Course {
   title        String
   description  String
   price        Int      // stored in cents
+  category     String   @default("General")
   thumbnailUrl String?
   published    Boolean  @default(false)
   createdBy    User     @relation("CourseCreatedBy", fields: [createdById], references: [id])
