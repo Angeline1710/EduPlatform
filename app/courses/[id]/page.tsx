@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
+import { categoryTheme } from "@/lib/categories";
 import BuyButton from "@/components/BuyButton";
+import Icon from "@/components/Icon";
 
 export default async function CoursePage({ params }: PageProps<"/courses/[id]">) {
   const { id } = await params;
@@ -24,48 +26,126 @@ export default async function CoursePage({ params }: PageProps<"/courses/[id]">)
       )
     : false;
 
+  const theme = categoryTheme(course.category);
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <Link href="/" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
-        ← Back to courses
-      </Link>
+    <div className="relative">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 opacity-60 blur-3xl"
+        style={{ background: `linear-gradient(120deg, ${theme.from}33, ${theme.to}22)` }}
+      />
 
-      <div className="rounded-lg border border-gray-200 bg-white p-8">
-        <h1 className="mb-3 text-3xl font-bold">{course.title}</h1>
-        <p className="mb-6 text-gray-600">{course.description}</p>
+      <div className="mx-auto max-w-5xl px-6 py-10">
+        <Link
+          href="/"
+          className="focus-ring mb-8 inline-flex items-center gap-2 rounded-full text-sm font-medium text-[var(--text-muted)] transition hover:text-[var(--text)]"
+        >
+          <span className="rotate-180">
+            <Icon name="arrowRight" className="h-4 w-4" />
+          </span>
+          Back to courses
+        </Link>
 
-        <div className="mb-8 flex items-center gap-4">
-          <span className="text-2xl font-bold">{formatPrice(course.price)}</span>
-          {enrolled ? (
-            <Link
-              href={`/learn/${course.id}`}
-              className="rounded bg-green-600 px-5 py-2 font-medium text-white hover:bg-green-700"
-            >
-              Go to course
-            </Link>
-          ) : session?.user ? (
-            <BuyButton courseId={course.id} />
-          ) : (
-            <Link
-              href="/login"
-              className="rounded bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700"
-            >
-              Sign in to buy
-            </Link>
-          )}
+        <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
+          <div>
+            <div className="mb-5 flex items-center gap-4">
+              <span
+                className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl text-white shadow-lg"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+                }}
+              >
+                <Icon name={theme.icon} className="h-7 w-7" />
+              </span>
+              <span
+                className="accent text-xs font-bold uppercase tracking-widest"
+                style={
+                  {
+                    "--accent-light": theme.text,
+                    "--accent-dark": theme.textDark,
+                  } as React.CSSProperties
+                }
+              >
+                {course.category}
+              </span>
+            </div>
+
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+              {course.title}
+            </h1>
+            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">
+              {course.description}
+            </p>
+
+            <div className="mt-10">
+              <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+                Course content
+                <span className="text-sm font-normal text-[var(--text-muted)]">
+                  {course.lessons.length} lessons
+                </span>
+              </h2>
+
+              <ol className="card divide-y divide-[var(--border)] overflow-hidden">
+                {course.lessons.map((lesson, i) => (
+                  <li key={lesson.id} className="flex items-center gap-4 px-5 py-4">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-sm font-semibold text-[var(--text-muted)]">
+                      {i + 1}
+                    </span>
+                    <span className="flex-1 font-medium">{lesson.title}</span>
+                    <span className="text-[var(--text-faint)]">
+                      <Icon name={enrolled ? "play" : "lock"} className="h-4 w-4" />
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+
+          {/* Purchase panel */}
+          <aside className="card sticky top-24 p-6">
+            <p className="text-4xl font-extrabold tracking-tight">
+              {formatPrice(course.price)}
+            </p>
+            <p className="mt-1 text-sm text-[var(--text-muted)]">
+              One-time payment · lifetime access
+            </p>
+
+            <div className="mt-6">
+              {enrolled ? (
+                <Link
+                  href={`/learn/${course.id}`}
+                  className="btn btn-primary w-full"
+                >
+                  Go to course
+                  <Icon name="arrowRight" className="h-4 w-4" />
+                </Link>
+              ) : session?.user ? (
+                <BuyButton courseId={course.id} />
+              ) : (
+                <Link href="/login" className="btn btn-primary w-full">
+                  Sign in to buy
+                </Link>
+              )}
+            </div>
+
+            <ul className="mt-6 space-y-3 text-sm text-[var(--text-muted)]">
+              {[
+                `${course.lessons.length} on-demand lessons`,
+                "Lifetime access",
+                "Certificate of completion",
+                "Learn on any device",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2.5">
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)]">
+                    <Icon name="check" className="h-3 w-3" />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </aside>
         </div>
-
-        <h2 className="mb-3 text-lg font-semibold">
-          Course content · {course.lessons.length} lessons
-        </h2>
-        <ol className="divide-y divide-gray-100 rounded border border-gray-200">
-          {course.lessons.map((lesson, i) => (
-            <li key={lesson.id} className="flex items-center gap-3 px-4 py-3 text-sm">
-              <span className="w-6 text-gray-400">{i + 1}</span>
-              <span>{lesson.title}</span>
-            </li>
-          ))}
-        </ol>
       </div>
     </div>
   );

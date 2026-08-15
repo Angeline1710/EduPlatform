@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
+import { CATEGORY_NAMES } from "@/lib/categories";
 
 const schema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().min(1).max(2000),
   price: z.number().int().min(0),
+  category: z.enum(CATEGORY_NAMES),
   thumbnailUrl: z.string().url().optional().or(z.literal("")),
   published: z.boolean(),
 });
@@ -21,11 +23,18 @@ export async function PUT(req: Request, { params }: RouteContext<"/api/admin/cou
     return NextResponse.json({ error: "Invalid course data." }, { status: 400 });
   }
 
-  const { title, description, price, thumbnailUrl, published } = parsed.data;
+  const { title, description, price, category, thumbnailUrl, published } = parsed.data;
 
   await prisma.course.update({
     where: { id },
-    data: { title, description, price, thumbnailUrl: thumbnailUrl || null, published },
+    data: {
+      title,
+      description,
+      price,
+      category,
+      thumbnailUrl: thumbnailUrl || null,
+      published,
+    },
   });
 
   return NextResponse.json({ ok: true });

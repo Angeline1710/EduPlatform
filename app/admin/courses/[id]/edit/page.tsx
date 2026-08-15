@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
 import CourseForm from "@/components/CourseForm";
 import LessonManager from "@/components/LessonManager";
+import Icon from "@/components/Icon";
 
 export default async function EditCoursePage({ params }: PageProps<"/admin/courses/[id]/edit">) {
   const admin = await requireAdmin();
@@ -18,15 +19,22 @@ export default async function EditCoursePage({ params }: PageProps<"/admin/cours
   if (!course) notFound();
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
-      <Link href="/admin" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
-        ← Back to dashboard
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <Link
+        href="/admin"
+        className="focus-ring mb-6 inline-flex items-center gap-2 rounded-full text-sm font-medium text-[var(--text-muted)] transition hover:text-[var(--text)]"
+      >
+        <span className="rotate-180">
+          <Icon name="arrowRight" className="h-4 w-4" />
+        </span>
+        Back to dashboard
       </Link>
-      <h1 className="mb-6 text-3xl font-bold">Edit course</h1>
+
+      <h1 className="mb-8 text-4xl font-extrabold tracking-tight">Edit course</h1>
 
       <CourseForm course={course} />
 
-      <h2 className="mb-4 mt-10 text-2xl font-bold">Lessons</h2>
+      <h2 className="mb-4 mt-12 text-2xl font-bold tracking-tight">Lessons</h2>
       <LessonManager courseId={course.id} lessons={course.lessons} />
     </div>
   );

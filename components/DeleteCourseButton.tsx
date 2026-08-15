@@ -26,7 +26,7 @@ export default function DeleteCourseButton({ courseId }: { courseId: string }) {
     <button
       onClick={handleDelete}
       disabled={loading}
-      className="text-red-600 hover:underline disabled:opacity-50"
+      className="focus-ring rounded-full px-3 py-1.5 font-semibold text-red-500 transition hover:bg-red-500/10 disabled:opacity-50"
     >
       {loading ? "Deleting..." : "Delete"}
     </button>

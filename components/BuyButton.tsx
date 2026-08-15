@@ -32,11 +32,15 @@ export default function BuyButton({ courseId }: { courseId: string }) {
       <button
         onClick={handleBuy}
         disabled={loading}
-        className="rounded bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+        className="btn btn-primary w-full"
       >
         {loading ? "Redirecting..." : "Buy this course"}
       </button>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="mt-2 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-500">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

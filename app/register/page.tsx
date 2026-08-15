@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AuthShell from "@/components/AuthShell";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -38,60 +39,73 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-4">
-      <h1 className="mb-2 text-2xl font-bold">Create your account</h1>
-      <p className="mb-6 text-sm text-gray-600">Start learning in a couple of clicks.</p>
-
+    <AuthShell
+      title="Create your account"
+      subtitle="Start learning in a couple of clicks."
+      footer={
+        <p>
+          Already have an account?{" "}
+          <Link href="/login" className="font-semibold text-[var(--brand)] hover:underline">
+            Sign in
+          </Link>
+        </p>
+      }
+    >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium">Name</label>
+          <label htmlFor="name" className="label">
+            Name
+          </label>
           <input
+            id="name"
             required
+            autoComplete="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2"
+            className="input"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Email</label>
+          <label htmlFor="email" className="label">
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             required
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2"
+            className="input"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Password</label>
+          <label htmlFor="password" className="label">
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             required
             minLength={8}
+            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2"
+            className="input"
           />
-          <p className="mt-1 text-xs text-gray-500">At least 8 characters.</p>
+          <p className="mt-1.5 text-xs text-[var(--text-faint)]">At least 8 characters.</p>
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && (
+          <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-500">
+            {error}
+          </p>
+        )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded bg-blue-600 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading} className="btn btn-primary w-full">
           {loading ? "Creating account..." : "Create account"}
         </button>
       </form>
-
-      <p className="mt-4 text-sm text-gray-600">
-        Already have an account?{" "}
-        <Link href="/login" className="text-blue-600 hover:underline">
-          Sign in
-        </Link>
-      </p>
-    </div>
+    </AuthShell>
   );
 }

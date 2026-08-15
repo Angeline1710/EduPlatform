@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AuthShell from "@/components/AuthShell";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -38,51 +39,63 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-4">
-      <div className="mb-6 rounded border-l-4 border-gray-800 bg-gray-100 px-4 py-3">
-        <h1 className="text-2xl font-bold">Admin login</h1>
-        <p className="text-sm text-gray-600">Restricted area — staff accounts only.</p>
-      </div>
-
+    <AuthShell
+      variant="admin"
+      title="Admin login"
+      subtitle="Restricted area — staff accounts only."
+      footer={
+        <p>
+          Student?{" "}
+          <Link href="/login" className="font-semibold text-[var(--brand)] hover:underline">
+            Go to student login
+          </Link>
+        </p>
+      }
+    >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium">Email</label>
+          <label htmlFor="email" className="label">
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             required
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2"
+            className="input"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Password</label>
+          <label htmlFor="password" className="label">
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             required
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2"
+            className="input"
           />
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && (
+          <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-500">
+            {error}
+          </p>
+        )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-gray-900 py-2 font-medium text-white hover:bg-black disabled:opacity-50"
+          className="btn w-full bg-slate-800 text-white shadow-md hover:bg-slate-900 disabled:opacity-55 dark:bg-slate-700"
         >
           {loading ? "Signing in..." : "Sign in as admin"}
         </button>
       </form>
-
-      <p className="mt-4 text-sm text-gray-600">
-        Student?{" "}
-        <Link href="/login" className="text-blue-600 hover:underline">
-          Go to student login
-        </Link>
-      </p>
-    </div>
+    </AuthShell>
   );
 }

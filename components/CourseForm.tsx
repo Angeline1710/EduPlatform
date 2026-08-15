@@ -2,12 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { CATEGORY_NAMES, categoryTheme } from "@/lib/categories";
+import Icon from "@/components/Icon";
 
 type Course = {
   id: string;
   title: string;
   description: string;
   price: number;
+  category: string;
   thumbnailUrl: string | null;
   published: boolean;
 };
@@ -17,6 +20,7 @@ export default function CourseForm({ course }: { course?: Course }) {
   const [title, setTitle] = useState(course?.title ?? "");
   const [description, setDescription] = useState(course?.description ?? "");
   const [price, setPrice] = useState(course ? (course.price / 100).toFixed(2) : "49.00");
+  const [category, setCategory] = useState(course?.category ?? "Development");
   const [thumbnailUrl, setThumbnailUrl] = useState(course?.thumbnailUrl ?? "");
   const [published, setPublished] = useState(course?.published ?? false);
   const [error, setError] = useState("");
@@ -31,6 +35,7 @@ export default function CourseForm({ course }: { course?: Course }) {
       title,
       description,
       price: Math.round(parseFloat(price) * 100),
+      category,
       thumbnailUrl,
       published,
     };
@@ -56,69 +61,131 @@ export default function CourseForm({ course }: { course?: Course }) {
     router.refresh();
   }
 
+  const theme = categoryTheme(category);
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-gray-200 bg-white p-6">
+    <form onSubmit={handleSubmit} className="card space-y-5 p-6">
       <div>
-        <label className="mb-1 block text-sm font-medium">Title</label>
+        <label htmlFor="title" className="label">
+          Title
+        </label>
         <input
+          id="title"
           required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded border border-gray-300 px-3 py-2"
+          className="input"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Description</label>
+        <label htmlFor="description" className="label">
+          Description
+        </label>
         <textarea
+          id="description"
           required
           rows={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full rounded border border-gray-300 px-3 py-2"
+          className="input resize-y"
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label className="label">Category</label>
+        <div className="flex flex-wrap gap-2">
+          {CATEGORY_NAMES.map((name) => {
+            const t = categoryTheme(name);
+            const active = category === name;
+            return (
+              <button
+                key={name}
+                type="button"
+                onClick={() => setCategory(name)}
+                aria-pressed={active}
+                className={`focus-ring inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition ${
+                  active
+                    ? "border-transparent text-white shadow-sm"
+                    : "border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)]"
+                }`}
+                style={
+                  active
+                    ? { backgroundImage: `linear-gradient(135deg, ${t.from}, ${t.to})` }
+                    : undefined
+                }
+              >
+                <Icon name={t.icon} className="h-4 w-4" />
+                {name}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium">Price (USD)</label>
+          <label htmlFor="price" className="label">
+            Price (USD)
+          </label>
           <input
+            id="price"
             type="number"
             step="0.01"
             min="0"
             required
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2"
+            className="input"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Thumbnail URL (optional)</label>
+          <label htmlFor="thumb" className="label">
+            Thumbnail URL <span className="font-normal text-[var(--text-faint)]">(optional)</span>
+          </label>
           <input
+            id="thumb"
             type="url"
             value={thumbnailUrl}
             onChange={(e) => setThumbnailUrl(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2"
+            className="input"
           />
         </div>
       </div>
 
-      <label className="flex items-center gap-2 text-sm">
+      {/* Live preview of the card tile the student will see */}
+      <div className="flex items-center gap-3 rounded-2xl border border-dashed border-[var(--border-strong)] p-4">
+        <span
+          className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-white shadow-md"
+          style={{ backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}
+        >
+          <Icon name={theme.icon} className="h-5 w-5" />
+        </span>
+        <div className="min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-faint)]">
+            {category}
+          </p>
+          <p className="truncate font-bold">{title || "Course title"}</p>
+        </div>
+      </div>
+
+      <label className="flex items-center gap-2.5 text-sm font-medium">
         <input
           type="checkbox"
           checked={published}
           onChange={(e) => setPublished(e.target.checked)}
+          className="h-4 w-4 accent-[var(--brand)]"
         />
         Published (visible to students)
       </label>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-500">
+          {error}
+        </p>
+      )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded bg-gray-900 px-5 py-2 font-medium text-white hover:bg-black disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className="btn btn-primary">
         {loading ? "Saving..." : course ? "Save changes" : "Create course"}
       </button>
     </form>

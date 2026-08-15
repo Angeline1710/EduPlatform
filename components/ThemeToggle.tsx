@@ -8,8 +8,13 @@ export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
+    // The inline script in <head> has already resolved and applied the theme.
+    // Read that back rather than re-deriving it, so the button label can never
+    // disagree with what is actually on screen.
+    const applied = document.documentElement.getAttribute("data-theme") as Theme | null;
     const stored = localStorage.getItem("theme") as Theme | null;
     const initial =
+      applied ??
       stored ??
       (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     setTheme(initial);

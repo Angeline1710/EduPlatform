@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Icon from "@/components/Icon";
 
 type Lesson = { id: string; title: string; content: string; order: number };
 
@@ -73,20 +74,27 @@ export default function LessonManager({
 
   return (
     <div className="space-y-4">
-      <ol className="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white">
+      <ol className="card divide-y divide-[var(--border)] overflow-hidden">
         {lessons.length === 0 && (
-          <li className="px-4 py-4 text-sm text-gray-500">No lessons yet.</li>
+          <li className="px-5 py-6 text-center text-sm text-[var(--text-muted)]">
+            No lessons yet.
+          </li>
         )}
         {lessons.map((lesson, i) => (
-          <li key={lesson.id} className="flex items-center gap-3 px-4 py-3 text-sm">
-            <span className="w-6 text-gray-400">{i + 1}</span>
-            <span className="flex-1">{lesson.title}</span>
-            <button onClick={() => startEdit(lesson)} className="text-blue-600 hover:underline">
+          <li key={lesson.id} className="flex items-center gap-3 px-5 py-3.5 text-sm">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-xs font-semibold text-[var(--text-muted)]">
+              {i + 1}
+            </span>
+            <span className="flex-1 font-medium">{lesson.title}</span>
+            <button
+              onClick={() => startEdit(lesson)}
+              className="focus-ring rounded-full px-3 py-1.5 font-semibold text-[var(--brand)] transition hover:bg-[var(--brand-soft)]"
+            >
               Edit
             </button>
             <button
               onClick={() => handleDelete(lesson.id)}
-              className="text-red-600 hover:underline"
+              className="focus-ring rounded-full px-3 py-1.5 font-semibold text-red-500 transition hover:bg-red-500/10"
             >
               Delete
             </button>
@@ -95,53 +103,57 @@ export default function LessonManager({
       </ol>
 
       {editingId ? (
-        <form onSubmit={handleSave} className="space-y-3 rounded-lg border border-gray-200 bg-white p-5">
-          <h3 className="font-semibold">{editingId === "new" ? "Add lesson" : "Edit lesson"}</h3>
+        <form onSubmit={handleSave} className="card space-y-4 p-5">
+          <h3 className="font-bold">{editingId === "new" ? "Add lesson" : "Edit lesson"}</h3>
           <div>
-            <label className="mb-1 block text-sm font-medium">Lesson title</label>
+            <label htmlFor="lesson-title" className="label">
+              Lesson title
+            </label>
             <input
+              id="lesson-title"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded border border-gray-300 px-3 py-2"
+              className="input"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium">Content (text or video URL)</label>
+            <label htmlFor="lesson-content" className="label">
+              Content <span className="font-normal text-[var(--text-faint)]">(text or video URL)</span>
+            </label>
             <textarea
+              id="lesson-content"
               required
               rows={5}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full rounded border border-gray-300 px-3 py-2"
+              className="input resize-y"
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && (
+            <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-500">
+              {error}
+            </p>
+          )}
 
           <div className="flex gap-3">
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-black disabled:opacity-50"
-            >
+            <button type="submit" disabled={loading} className="btn btn-primary">
               {loading ? "Saving..." : "Save lesson"}
             </button>
             <button
               type="button"
               onClick={() => setEditingId(null)}
-              className="rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+              className="btn btn-secondary"
             >
               Cancel
             </button>
           </div>
         </form>
       ) : (
-        <button
-          onClick={startAdd}
-          className="rounded border border-gray-300 bg-white px-4 py-2 text-sm hover:bg-gray-50"
-        >
-          + Add lesson
+        <button onClick={startAdd} className="btn btn-secondary">
+          <Icon name="plus" className="h-4 w-4" />
+          Add lesson
         </button>
       )}
     </div>
