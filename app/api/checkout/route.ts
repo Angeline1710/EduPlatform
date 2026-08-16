@@ -17,6 +17,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
+  // A suspended account keeps its data but must not be able to transact.
+  const buyer = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { status: true },
+  });
+  if (buyer?.status === "SUSPENDED") {
+    return NextResponse.json(
+      { error: "This account is suspended and cannot enroll." },
+      { status: 403 },
+    );
+  }
+
   const course = await prisma.course.findUnique({ where: { id: parsed.data.courseId } });
   if (!course || !course.published) {
     return NextResponse.json({ error: "Course not found." }, { status: 404 });
@@ -27,6 +39,28 @@ export async function POST(req: Request) {
   });
   if (existing) {
     return NextResponse.json({ error: "You already own this course." }, { status: 409 });
+  }
+
+  // Free courses have nothing to charge, so there is no payment provider to
+  // wait on. Enrol immediately and record a settled zero-value payment, so
+  // the ledger still shows one row per enrollment.
+  if (course.price === 0) {
+    await prisma.$transaction([
+      prisma.enrollment.create({
+        data: { userId: session.user.id, courseId: course.id },
+      }),
+      prisma.payment.create({
+        data: {
+          userId: session.user.id,
+          courseId: course.id,
+          stripeSessionId: `free_${session.user.id}_${course.id}`,
+          amount: 0,
+          status: "PAID",
+        },
+      }),
+    ]);
+
+    return NextResponse.json({ enrolled: true, courseId: course.id });
   }
 
   const origin = process.env.NEXTAUTH_URL ?? new URL(req.url).origin;
@@ -50,7 +84,9 @@ export async function POST(req: Request) {
         },
       ],
       metadata: { userId: session.user.id, courseId: course.id },
-      success_url: `${origin}/dashboard?purchase=success`,
+      // Return to the course, so the admission sequence plays against the
+      // thing that was actually bought.
+      success_url: `${origin}/courses/${course.id}?purchase=success`,
       cancel_url: `${origin}/courses/${course.id}?purchase=cancelled`,
     });
   } catch (err) {

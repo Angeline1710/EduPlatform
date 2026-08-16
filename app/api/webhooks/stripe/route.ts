@@ -18,22 +18,39 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const userId = session.metadata?.userId;
-    const courseId = session.metadata?.courseId;
+  const session = event.data.object as Stripe.Checkout.Session;
 
-    if (userId && courseId) {
+  switch (event.type) {
+    case "checkout.session.completed": {
+      const userId = session.metadata?.userId;
+      const courseId = session.metadata?.courseId;
+      if (!userId || !courseId) break;
+
+      // Mark paid and grant access together, so access can never be granted
+      // against a payment row that failed to settle.
+      await prisma.$transaction([
+        prisma.payment.updateMany({
+          where: { stripeSessionId: session.id },
+          data: { status: "PAID" },
+        }),
+        prisma.enrollment.upsert({
+          where: { userId_courseId: { userId, courseId } },
+          update: {},
+          create: { userId, courseId },
+        }),
+      ]);
+      break;
+    }
+
+    // An abandoned or failed session must not sit as PENDING forever —
+    // it would inflate the pending figure on the admin dashboard.
+    case "checkout.session.expired":
+    case "checkout.session.async_payment_failed": {
       await prisma.payment.updateMany({
-        where: { stripeSessionId: session.id },
-        data: { status: "PAID" },
+        where: { stripeSessionId: session.id, status: "PENDING" },
+        data: { status: "FAILED" },
       });
-
-      await prisma.enrollment.upsert({
-        where: { userId_courseId: { userId, courseId } },
-        update: {},
-        create: { userId, courseId },
-      });
+      break;
     }
   }
 

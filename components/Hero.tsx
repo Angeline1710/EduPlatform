@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import Castle from "@/components/Castle";
+import AcademyPlate from "@/components/art/AcademyPlate";
 import { Diamond, Star } from "@/components/Ornament";
 import MagicParticles from "@/components/magic/MagicParticles";
 import LivingInk from "@/components/magic/LivingInk";
@@ -72,7 +72,7 @@ export default function Hero({ courseCount }: { courseCount: number }) {
 
         {/* Academy */}
         <div className="relative hidden lg:block">
-          <Castle className="h-[330px] w-full animate-float-gentle" />
+          <AcademyPlate className="h-[340px] w-full" />
         </div>
 
         {/* Stats panel */}

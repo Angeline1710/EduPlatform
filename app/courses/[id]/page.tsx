@@ -4,11 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import { categoryTheme } from "@/lib/categories";
-import BuyButton from "@/components/BuyButton";
+import EnrollmentFlow from "@/components/magic/EnrollmentFlow";
 import Icon from "@/components/Icon";
 
-export default async function CoursePage({ params }: PageProps<"/courses/[id]">) {
+export default async function CoursePage({
+  params,
+  searchParams,
+}: PageProps<"/courses/[id]">) {
   const { id } = await params;
+  const { purchase } = await searchParams;
   const session = await auth();
 
   const course = await prisma.course.findUnique({
@@ -142,24 +146,20 @@ export default async function CoursePage({ params }: PageProps<"/courses/[id]">)
             </p>
 
             <div className="mt-8">
-              {enrolled ? (
-                <div className="text-center animate-fade-up border border-[var(--gold)] bg-[var(--surface-2)] p-6 rounded-lg shadow-[0_0_12px_var(--academy-glow)]">
-                  <p className="font-serif text-lg font-bold text-[var(--brand)] mb-4">You are a student of this course.</p>
-                  <Link
-                    href={`/learn/${course.id}`}
-                    className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-5 py-2.5 font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110 w-full justify-center"
-                  >
-                    Enter Study Chamber
-                    <Icon name="arrowRight" className="h-4 w-4" />
-                  </Link>
-                </div>
-              ) : session?.user ? (
-                <BuyButton courseId={course.id} />
-              ) : (
-                <Link href="/login" className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110 w-full justify-center">
-                  Sign in to Apply
-                </Link>
+              {enrolled && (
+                <p className="mb-3 text-center font-serif text-sm font-bold text-[var(--brand)]">
+                  You are a student of this course.
+                </p>
               )}
+              <EnrollmentFlow
+                courseId={course.id}
+                courseTitle={course.title}
+                priceLabel={formatPrice(course.price)}
+                isFree={course.price === 0}
+                initiallyEnrolled={enrolled}
+                signedIn={Boolean(session?.user)}
+                returningFromCheckout={purchase === "success"}
+              />
             </div>
 
             <ul className="mt-8 space-y-4 text-sm text-[var(--text-muted)]">

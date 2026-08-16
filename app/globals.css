@@ -685,6 +685,48 @@ body {
   100% { opacity: 0; transform: scale(0.8); }
 }
 
+/* ---- Engraved plate: the illustration breathing ---- */
+
+/* Mist rolls very slowly, so the scene is never quite still. */
+@keyframes mist-roll {
+  0%, 100% { transform: translateX(0) scaleY(1); opacity: 0.85; }
+  50%      { transform: translateX(-14px) scaleY(1.08); opacity: 1; }
+}
+
+/* Birds cross the plate on a long loop. */
+@keyframes bird-drift {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  10%  { opacity: 0.55; }
+  85%  { opacity: 0.4; }
+  100% { transform: translate(150px, -34px); opacity: 0; }
+}
+
+.plate-mist { animation: mist-roll 14s ease-in-out infinite; transform-origin: bottom; }
+.bird-drift { animation: bird-drift 26s linear infinite; }
+
+/* ---- Ambient layer that persists across the whole site ---- */
+
+/* Ink blooming outward, as though dropped on wet paper. */
+@keyframes ink-bloom {
+  0%   { transform: scale(0.6); opacity: 0; }
+  30%  { opacity: 0.5; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Constellation lines drawing themselves in. */
+@keyframes constellation-draw {
+  0%   { stroke-dashoffset: 260; opacity: 0; }
+  20%  { opacity: 0.5; }
+  70%  { opacity: 0.45; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.ambient-bloom { animation: ink-bloom 18s ease-out infinite; }
+.ambient-line {
+  stroke-dasharray: 260;
+  animation: constellation-draw 22s ease-in-out infinite;
+}
+
 .animate-fade-up { animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-fade-in { animation: fade-in 0.5s ease both; }
 .animate-pop-in  { animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -797,8 +839,21 @@ body {
 
   /* Ambient decoration is pure motion — drop it rather than freeze it */
   .animate-ember,
-  .animate-sparkle {
+  .animate-sparkle,
+  .ambient-bloom,
+  .bird-drift {
     display: none !important;
+  }
+
+  /* Keep the mist visible, just still — it is part of the drawing */
+  .plate-mist,
+  .ambient-line {
+    animation: none !important;
+  }
+
+  .ambient-line {
+    stroke-dashoffset: 0 !important;
+    opacity: 0.28 !important;
   }
 
   .gold-leaf {
