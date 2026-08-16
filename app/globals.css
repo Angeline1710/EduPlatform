@@ -382,6 +382,35 @@
   animation: spark-fly var(--t-sweep) var(--ease-academy) forwards;
 }
 
+/* ---- The owl companion ---- */
+
+/* A slow breath, so the bird reads as alive without demanding attention. */
+@keyframes owl-breathe {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-3px) rotate(-1.5deg); }
+}
+
+@keyframes owl-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.08); }
+}
+
+/* The speech card unfolds from the owl's shoulder. */
+@keyframes owl-speak {
+  from { opacity: 0; transform: translateY(8px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes owl-pip {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+
+.owl-roost svg { animation: owl-breathe 5.5s ease-in-out infinite; }
+.owl-eyes { animation: owl-blink 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.owl-speak { animation: owl-speak var(--t-emphasis) var(--ease-academy) both; transform-origin: bottom left; }
+.owl-pip { animation: owl-pip 2.2s ease-in-out infinite; }
+
 @keyframes spark-fly {
   from {
     transform: translateX(0) scale(0.3);
@@ -1042,7 +1071,10 @@
 
   /* Keep the mist visible, just still — it is part of the drawing */
   .plate-mist,
-  .ambient-line {
+  .ambient-line,
+  .owl-roost svg,
+  .owl-eyes,
+  .owl-pip {
     animation: none !important;
   }
 

@@ -48,6 +48,7 @@ export default async function AdminDashboard() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            <AdminLink href="/admin/insights" icon="chart" label="Interest" />
             <AdminLink href="/admin/users" icon="user" label="Users" />
             <AdminLink href="/courses" icon="book" label="View site" />
             <Link

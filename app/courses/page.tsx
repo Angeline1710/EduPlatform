@@ -6,6 +6,7 @@ import DepartmentFilter from "@/components/DepartmentFilter";
 import QuillSearch from "@/components/magic/QuillSearch";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
+import SignalOnView from "@/components/owl/SignalOnView";
 import { CATEGORY_NAMES } from "@/lib/categories";
 
 export const metadata = {
@@ -61,6 +62,10 @@ export default async function CoursesPage({ searchParams }: PageProps<"/courses"
 
   return (
     <>
+      {/* A search or a department filter is a statement of interest. */}
+      {query && <SignalOnView kind="search" value={query} category={category || undefined} />}
+      {category && !query && <SignalOnView kind="category_view" value={category} category={category} />}
+
       <PageHeader
         eyebrow="The Academy"
         title="The Archives"

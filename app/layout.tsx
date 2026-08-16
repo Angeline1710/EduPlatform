@@ -7,6 +7,7 @@ import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import Heartbeat from "@/components/Heartbeat";
 import AmbientCanvas from "@/components/art/AmbientCanvas";
+import OwlCompanion from "@/components/owl/OwlCompanion";
 import PageTransition from "@/components/magic/PageTransition";
 
 const geistSans = Geist({
@@ -54,6 +55,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Heartbeat />
           {/* Living backdrop, so the artwork continues past the hero */}
           <AmbientCanvas />
+          {/* The messenger owl, present on every page */}
+          <OwlCompanion />
           {/* Rail + column. The rail is its own scroll context so the main
               column scrolls independently, as in the reference layout. */}
           <div className="flex min-h-screen">

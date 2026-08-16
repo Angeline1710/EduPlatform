@@ -27,6 +27,7 @@ model User {
   bookmarks      Bookmark[]
   notes          Note[]
   achievements   Achievement[]
+  signals        Signal[]
 
   currentStreak  Int       @default(0)
   lastStudyDate  DateTime?
@@ -141,6 +142,31 @@ model Note {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// One recorded act of interest.
+///
+/// Signals are what the owl reasons over, and what the admin brief
+/// aggregates. Anonymous visitors are grouped by `anonId` (a value the
+/// client keeps locally) so a browsing session still forms a profile before
+/// anyone signs in; once they do, `userId` carries it.
+model Signal {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Set only when there is no signed-in user.
+  anonId    String?
+  /// "search" | "course_view" | "category_view" | "enroll_intent" | "enrolled"
+  kind      String
+  /// The search term, or the course title — whatever was actually acted on.
+  value     String
+  courseId  String?
+  category  String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([anonId, createdAt])
+  @@index([kind, createdAt])
 }
 
 model Achievement {

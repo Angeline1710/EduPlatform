@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import { categoryTheme } from "@/lib/categories";
 import EnrollmentFlow from "@/components/magic/EnrollmentFlow";
+import SignalOnView from "@/components/owl/SignalOnView";
 import Icon from "@/components/Icon";
 
 export default async function CoursePage({
@@ -34,6 +35,14 @@ export default async function CoursePage({
 
   return (
     <div className="relative">
+      {/* Tells the owl this course was actually opened. */}
+      <SignalOnView
+        kind="course_view"
+        value={course.title}
+        courseId={course.id}
+        category={course.category}
+      />
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 opacity-60 blur-3xl"
