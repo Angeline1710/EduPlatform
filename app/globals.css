@@ -21,6 +21,9 @@
   --t-emphasis: 500ms;
   --t-magical: 700ms;
   --t-major: 900ms;
+  /* The theme wave. Long enough that the palette visibly eases over while
+     it travels, rather than the change landing before it arrives. */
+  --t-sweep: 1150ms;
   --ease-academy: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-ink: cubic-bezier(0.65, 0, 0.35, 1);
 
@@ -273,9 +276,15 @@
   letter-spacing: 0.01em;
 }
 
-/* Prevent the toggle from animating every color on first paint */
+/* Prevent the toggle from animating every colour on first paint.
+   The duration is deliberately close to the sweep's: the palette should be
+   visibly easing over while the wave crosses the page, not landing before
+   it arrives or snapping after it has gone. */
 .theme-ready * {
-  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  transition: background-color 620ms var(--ease-academy),
+              border-color 620ms var(--ease-academy),
+              color 620ms var(--ease-academy),
+              fill 620ms var(--ease-academy);
 }
 
 /* ---------------------------------------------------------------
@@ -290,17 +299,16 @@
    --------------------------------------------------------------- */
 
 /*
- * The sweep is two stacked discs expanding from the click point: an opaque
- * one carrying the incoming ground colour, and a gold rim on its edge.
+ * The theme change, as a wave of light rather than a curtain.
  *
- * This replaced a View Transitions implementation. That is the more elegant
- * mechanism on paper, but Chrome left descendants resolving the previous
- * values of the inherited custom properties, so `--shell` flipped on :root
- * while every surface kept painting the old palette. A direct attribute
- * change repaints correctly, so the theme is applied under cover of the disc.
+ * An earlier version expanded an OPAQUE disc of the incoming ground colour
+ * and swapped the palette underneath it. That is what made the change read
+ * as a flash: for half a second the page was simply covered. Nothing here is
+ * opaque now. The palette is applied at the moment the wave starts and eases
+ * across on a long colour transition, so the surfaces are visibly turning
+ * over *while* the wave passes rather than being hidden and revealed.
  */
-.sweep-disc,
-.sweep-rim {
+.sweep-wave {
   position: fixed;
   border-radius: 9999px;
   transform: translate(-50%, -50%);
@@ -308,31 +316,85 @@
   z-index: 2147483646;
   width: 0;
   height: 0;
+  /* Light lives only in the rim; the middle stays clear so the page is
+     never covered. */
+  background: radial-gradient(
+    circle,
+    transparent 58%,
+    var(--academy-glow) 70%,
+    var(--gold-bright) 76%,
+    var(--academy-glow) 82%,
+    transparent 90%
+  );
+  animation: sweep-wave var(--t-sweep) var(--ease-academy) forwards;
 }
 
-.sweep-disc {
-  animation: sweep-grow var(--t-major) var(--ease-academy) forwards;
-}
-
-.sweep-rim {
+/* A finer, faster ring just ahead of the wave, for a little depth. */
+.sweep-wave--lead {
   z-index: 2147483647;
-  border: 2px solid var(--gold-bright);
-  box-shadow: 0 0 34px 12px var(--academy-glow), inset 0 0 26px var(--academy-glow);
-  animation: sweep-grow var(--t-major) var(--ease-academy) forwards;
+  background: radial-gradient(
+    circle,
+    transparent 70%,
+    var(--gold-bright) 79%,
+    transparent 86%
+  );
+  opacity: 0.55;
+  animation-duration: calc(var(--t-sweep) * 0.86);
 }
 
-@keyframes sweep-grow {
+@keyframes sweep-wave {
   from {
     width: 0;
     height: 0;
+    opacity: 0;
+  }
+  10% {
     opacity: 1;
   }
-  70% {
+  80% {
+    opacity: 0.85;
+  }
+  to {
+    width: 300vmax;
+    height: 300vmax;
+    opacity: 0;
+  }
+}
+
+/*
+ * Motes riding the curve. Each is a rotated arm pinned to the click point,
+ * with the spark flying outward along it — so they stay on the wavefront
+ * instead of drifting independently of it.
+ */
+.sweep-spark {
+  position: fixed;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+  z-index: 2147483647;
+}
+
+.sweep-spark i {
+  display: block;
+  border-radius: 9999px;
+  background: var(--gold-bright);
+  animation: spark-fly var(--t-sweep) var(--ease-academy) forwards;
+}
+
+@keyframes spark-fly {
+  from {
+    transform: translateX(0) scale(0.3);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  72% {
     opacity: 1;
   }
   to {
-    width: 320vmax;
-    height: 320vmax;
+    transform: translateX(148vmax) scale(1.25);
     opacity: 0;
   }
 }

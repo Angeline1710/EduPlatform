@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 
 type Theme = "light" | "dark";
 
-/** Must match --t-major in globals.css. */
-const SWEEP_MS = 900;
+/** Must match --t-sweep in globals.css. */
+const SWEEP_MS = 1150;
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme | null>(null);
@@ -32,38 +32,59 @@ export default function ThemeToggle() {
   }
 
   /**
-   * The wipe: a disc of the incoming theme's ground colour expands from the
-   * click point across the whole viewport, with a gold rim on its edge.
+   * A wave of light crossing the page, with motes riding its curve.
    *
-   * This replaced a View Transitions implementation. That approach looked
-   * right on paper — the browser snapshots the whole document — but in
-   * practice Chrome left descendants resolving the *previous* values of the
-   * inherited custom properties, so the tokens flipped while the page kept
-   * its old palette. A plain attribute change repaints correctly, so the
-   * theme is applied directly and the sweep is drawn over the top.
+   * Nothing opaque is drawn. An earlier version expanded a solid disc of the
+   * incoming ground colour and swapped the palette beneath it — which is
+   * exactly what made it read as a flash, since the page was simply covered
+   * for half a second. Here the palette is applied as the wave *starts* and
+   * eases over on a long colour transition, so every surface is visibly
+   * turning while the wave travels.
    */
   function sweep(x: number, y: number, to: Theme) {
-    const ground = to === "dark" ? "#150E20" : "#F3E4E6";
+    const spawned: HTMLElement[] = [];
 
-    const disc = document.createElement("span");
-    disc.className = "sweep-disc";
-    disc.style.left = `${x}px`;
-    disc.style.top = `${y}px`;
-    disc.style.background = ground;
-    document.body.appendChild(disc);
+    const ring = (lead: boolean) => {
+      const el = document.createElement("span");
+      el.className = lead ? "sweep-wave sweep-wave--lead" : "sweep-wave";
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      document.body.appendChild(el);
+      spawned.push(el);
+    };
 
-    const rim = document.createElement("span");
-    rim.className = "sweep-rim";
-    rim.style.left = `${x}px`;
-    rim.style.top = `${y}px`;
-    document.body.appendChild(rim);
+    ring(false);
+    ring(true);
 
-    // Flip the palette under the cover of the disc, at its widest.
-    window.setTimeout(() => apply(to), SWEEP_MS * 0.5);
-    window.setTimeout(() => {
-      disc.remove();
-      rim.remove();
-    }, SWEEP_MS + 120);
+    // Motes spread around the circle, each pinned to the origin on its own
+    // rotated arm so it stays on the wavefront rather than drifting off it.
+    const COUNT = 22;
+    for (let i = 0; i < COUNT; i++) {
+      // Jitter the angle so the ring of sparks never looks like a clock face.
+      const angle = (360 / COUNT) * i + (Math.random() * 10 - 5);
+      const arm = document.createElement("span");
+      arm.className = "sweep-spark";
+      arm.style.left = `${x}px`;
+      arm.style.top = `${y}px`;
+      arm.style.transform = `rotate(${angle}deg)`;
+
+      const spark = document.createElement("i");
+      const size = 2 + Math.random() * 3;
+      spark.style.width = `${size}px`;
+      spark.style.height = `${size}px`;
+      spark.style.boxShadow = `0 0 ${6 + size * 2}px ${size / 2}px var(--academy-glow)`;
+      // Spread the departures slightly so they twinkle rather than march.
+      spark.style.animationDelay = `${Math.random() * 90}ms`;
+      arm.appendChild(spark);
+
+      document.body.appendChild(arm);
+      spawned.push(arm);
+    }
+
+    // The palette changes with the wave, not behind it.
+    apply(to);
+
+    window.setTimeout(() => spawned.forEach((el) => el.remove()), SWEEP_MS + 400);
   }
 
   function toggle() {
