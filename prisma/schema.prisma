@@ -163,9 +163,18 @@ model Profile {
   dateOfBirth DateTime?
 
   // Contact and place
-  phone   String?
-  country String?
-  city    String?
+  phone    String?
+  country  String?
+  city     String?
+  timezone String?
+  pronouns String?
+  /// Comma-separated; free text rather than a fixed list, since a fixed one
+  /// would inevitably exclude someone.
+  languages String?
+
+  /// Whether the scholar's page is visible to anyone with the link. Off by
+  /// default — a record is private until its owner decides otherwise.
+  isPublic Boolean @default(false)
 
   // Education
   /// "SECONDARY" | "DIPLOMA" | "BACHELORS" | "MASTERS" | "DOCTORATE" | "SELF_TAUGHT" | "OTHER"

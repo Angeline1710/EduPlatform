@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { getProfile } from "@/lib/profile";
 import ProfileForm from "@/components/ProfileForm";
 import PageHeader from "@/components/PageHeader";
-import Icon from "@/components/Icon";
+import ProfileTabs from "@/components/profile/ProfileTabs";
 
 export const metadata = { title: "Edit Record · EduPlatform" };
 
@@ -27,21 +27,17 @@ export default async function EditProfilePage() {
 
       <section className="paper min-h-[60vh] px-6 py-12 xl:px-10">
         <div className="mx-auto max-w-[900px]">
-          <Link
-            href="/profile"
-            className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[var(--text-muted)] transition hover:text-[var(--text)]"
-          >
-            <span className="rotate-180">
-              <Icon name="arrowRight" className="h-4 w-4" />
-            </span>
-            Back to my record
-          </Link>
+          <ProfileTabs />
 
           <ProfileForm
             initial={{
               name: user.name,
               headline: profile?.headline ?? "",
               bio: profile?.bio ?? "",
+              avatarUrl: profile?.avatarUrl ?? "",
+              pronouns: profile?.pronouns ?? "",
+              languages: profile?.languages ?? "",
+              timezone: profile?.timezone ?? "",
               // <input type="date"> needs YYYY-MM-DD.
               dateOfBirth: profile?.dateOfBirth
                 ? profile.dateOfBirth.toISOString().slice(0, 10)

@@ -31,6 +31,11 @@ const schema = z.object({
   ),
 
   phone: optionalText(40),
+  timezone: optionalText(60),
+  pronouns: optionalText(40),
+  languages: optionalText(160),
+  avatarUrl: optionalUrl,
+  isPublic: z.boolean().optional(),
   country: optionalText(80),
   city: optionalText(80),
 

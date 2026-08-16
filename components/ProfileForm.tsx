@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Icon from "@/components/Icon";
 import { DepartmentCrest } from "@/components/Crests";
+import Avatar from "@/components/profile/Avatar";
 import { CATEGORY_NAMES, categoryTheme } from "@/lib/categories";
 import { EDUCATION_LEVELS, EXPERIENCE_LEVELS, ACCOLADE_KINDS } from "@/lib/profile-fields";
 
@@ -21,6 +22,10 @@ export type ProfileFormValues = {
   name: string;
   headline: string;
   bio: string;
+  avatarUrl: string;
+  pronouns: string;
+  languages: string;
+  timezone: string;
   dateOfBirth: string;
   phone: string;
   country: string;
@@ -100,6 +105,23 @@ export default function ProfileForm({
     <form onSubmit={save} className="space-y-6">
       {/* Identity */}
       <Section title="Who you are" note="Shown on your record">
+        {/* Picture, with a live preview so a broken link is obvious here
+            rather than after saving. */}
+        <div className="flex flex-wrap items-center gap-5">
+          <Avatar name={v.name || "?"} src={v.avatarUrl || null} size={80} />
+          <div className="min-w-0 flex-1">
+            <Field label="Picture" hint="A link to an image. Square looks best.">
+              <input
+                type="url"
+                value={v.avatarUrl}
+                onChange={(e) => set("avatarUrl", e.target.value)}
+                placeholder="https://..."
+                className="input"
+              />
+            </Field>
+          </div>
+        </div>
+
         <Grid>
           <Field label="Name" required>
             <input
@@ -148,6 +170,32 @@ export default function ProfileForm({
               value={v.country}
               onChange={(e) => set("country", e.target.value)}
               maxLength={80}
+              className="input"
+            />
+          </Field>
+          <Field label="Pronouns" hint="e.g. she/her">
+            <input
+              value={v.pronouns}
+              onChange={(e) => set("pronouns", e.target.value)}
+              maxLength={40}
+              className="input"
+            />
+          </Field>
+          <Field label="Languages" hint="Comma separated">
+            <input
+              value={v.languages}
+              onChange={(e) => set("languages", e.target.value)}
+              maxLength={160}
+              placeholder="English, Tamil"
+              className="input"
+            />
+          </Field>
+          <Field label="Time zone" hint="Helps us time reminders">
+            <input
+              value={v.timezone}
+              onChange={(e) => set("timezone", e.target.value)}
+              maxLength={60}
+              placeholder="Asia/Kolkata"
               className="input"
             />
           </Field>

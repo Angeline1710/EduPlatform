@@ -12,6 +12,8 @@ import { formatIssueDate } from "@/lib/certificates";
 import { categoryTheme } from "@/lib/categories";
 import { DepartmentCrest } from "@/components/Crests";
 import PageHeader from "@/components/PageHeader";
+import ProfileTabs from "@/components/profile/ProfileTabs";
+import Avatar from "@/components/profile/Avatar";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
 
@@ -44,14 +46,21 @@ export default async function ProfilePage() {
 
       <section className="paper min-h-[60vh] px-6 py-12 xl:px-10">
         <div className="mx-auto max-w-[1100px]">
+          <ProfileTabs />
+
           {/* Identity */}
           <div className="mb-6 flex flex-wrap items-start gap-6 rounded-sm border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-card)]">
-            <span className="grid h-20 w-20 shrink-0 place-items-center rounded-full border-2 border-[var(--gold)] bg-[var(--surface-2)] font-serif text-3xl font-bold text-[var(--brand)]">
-              {initial}
-            </span>
+            <Avatar name={user.name} src={profile?.avatarUrl} size={88} />
 
             <div className="min-w-0 flex-1">
-              <h2 className="font-serif text-3xl font-bold text-[var(--text)]">{user.name}</h2>
+              <h2 className="font-serif text-3xl font-bold text-[var(--text)]">
+                {user.name}
+                {profile?.pronouns && (
+                  <span className="ml-2 align-middle text-sm font-normal text-[var(--text-faint)]">
+                    ({profile.pronouns})
+                  </span>
+                )}
+              </h2>
               {profile?.headline && (
                 <p className="mt-0.5 text-[var(--text-muted)]">{profile.headline}</p>
               )}
