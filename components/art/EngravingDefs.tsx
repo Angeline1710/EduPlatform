@@ -70,26 +70,26 @@ export default function EngravingDefs({ idPrefix = "eng" }: { idPrefix?: string 
 
       {/* ---- Tonal washes ---- */}
       <linearGradient id={`${p}-sky`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#1B1019" stopOpacity="0.95" />
-        <stop offset="45%" stopColor="#3A1825" stopOpacity="0.7" />
-        <stop offset="100%" stopColor="#542638" stopOpacity="0.25" />
+        <stop offset="0%" stopColor="var(--plate-ink)" stopOpacity="0.95" />
+        <stop offset="45%" stopColor="var(--plate-stone)" stopOpacity="0.7" />
+        <stop offset="100%" stopColor="var(--plate-roof)" stopOpacity="0.25" />
       </linearGradient>
 
       <radialGradient id={`${p}-glow`} cx="50%" cy="50%">
-        <stop offset="0%" stopColor="#E4BD68" stopOpacity="0.55" />
-        <stop offset="55%" stopColor="#C99632" stopOpacity="0.18" />
-        <stop offset="100%" stopColor="#C99632" stopOpacity="0" />
+        <stop offset="0%" stopColor="var(--plate-lit)" stopOpacity="0.55" />
+        <stop offset="55%" stopColor="var(--gold)" stopOpacity="0.18" />
+        <stop offset="100%" stopColor="var(--gold)" stopOpacity="0" />
       </radialGradient>
 
       <linearGradient id={`${p}-mist`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#F4EFE7" stopOpacity="0" />
-        <stop offset="60%" stopColor="#F4EFE7" stopOpacity="0.14" />
-        <stop offset="100%" stopColor="#F4EFE7" stopOpacity="0.3" />
+        <stop offset="0%" stopColor="var(--plate-paper)" stopOpacity="0" />
+        <stop offset="60%" stopColor="var(--plate-paper)" stopOpacity="0.14" />
+        <stop offset="100%" stopColor="var(--plate-paper)" stopOpacity="0.3" />
       </linearGradient>
 
       <linearGradient id={`${p}-shaft`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#E4BD68" stopOpacity="0.42" />
-        <stop offset="100%" stopColor="#E4BD68" stopOpacity="0" />
+        <stop offset="0%" stopColor="var(--plate-lit)" stopOpacity="0.42" />
+        <stop offset="100%" stopColor="var(--plate-lit)" stopOpacity="0" />
       </linearGradient>
 
       {/* ---- Plate grain: the tooth of the paper the plate was pressed on ---- */}

@@ -42,10 +42,10 @@ export default function AcademySeal({
         style={{ animationDelay: "0.2s" }}
       />
       <div className="animate-seal-press relative flex items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] p-1 shadow-[0_0_24px_var(--academy-glow)]">
-        <div className="flex h-full w-full items-center justify-center rounded-full border-[2px] border-dashed border-[#241026]/30 bg-[var(--gold)]">
+        <div className="flex h-full w-full items-center justify-center rounded-full border-[2px] border-dashed border-[var(--on-gold)]/30 bg-[var(--gold)]">
           {/* Icon takes no style prop; the wrapper carries the size instead. */}
           <span
-            className="block text-[#241026]"
+            className="block text-[var(--on-gold)]"
             style={{ width: size * 0.4, height: size * 0.4 }}
           >
             <Icon name="crown" className="h-full w-full" />

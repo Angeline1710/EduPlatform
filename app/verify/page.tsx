@@ -17,7 +17,7 @@ export default function VerifyLandingPage() {
       </div>
 
       <div className="mx-auto max-w-xl px-6 py-20 text-center">
-        <span className="animate-pop-in mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] shadow-[0_0_24px_var(--academy-glow)]">
+        <span className="animate-pop-in mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[var(--on-gold)] shadow-[0_0_24px_var(--academy-glow)]">
           <Icon name="award" className="h-10 w-10" />
         </span>
 

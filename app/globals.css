@@ -1,35 +1,20 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------
-   MAGICAL EDUCATION THEME
-
-   Dark Mode: Deep burgundy + gold luxury (from user's design)
-   Light Mode: Pastel red + cream + silver + purple glow
-   --------------------------------------------------------------- */
-
-/* ---------------------------------------------------------------
-   Palette sampled from the reference mockup.
-
-   The shell (sidebar, top bar, hero, feature bar) is always the deep
-   plum-and-gold treatment in both themes — that furniture IS the brand.
-   The theme switch changes the *content band*: ivory parchment in light,
-   deep plum in dark.
-   --------------------------------------------------------------- */
-
 /* ===============================================================
    ACADEMY DESIGN TOKENS
 
-   Two art directions, not one palette inverted:
-     Light — "Sunlit Academy": parchment, ivory, plum, emerald, gold
-     Dark  — "Midnight Archive": maroon, plum, silver, muted gold
+   Two complete art directions. Everything moves between them —
+   sidebar, top bar, hero and feature bar included. There is no
+   fixed "shell": switching the theme changes the entire interface.
 
-   The shell (rail, top bar, hero, feature bar) keeps the deep
-   plum-and-gold treatment in both directions — that furniture is the
-   brand. The theme changes the content surfaces around it.
+     Dark  — "Midnight Conservatory": deep purple, verdant green,
+             antique gold and copper.
+     Light — "Silver Hall": light maroon and white, ruled in silver.
    =============================================================== */
 
+/* ---------------- LIGHT: Silver Hall ---------------- */
 :root {
-  /* ---- Animation tokens (§71) ---- */
+  /* Animation tokens */
   --t-micro: 120ms;
   --t-fast: 200ms;
   --t-normal: 300ms;
@@ -39,169 +24,230 @@
   --ease-academy: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-ink: cubic-bezier(0.65, 0, 0.35, 1);
 
-  /* ---- Radius ---- */
   --academy-radius: 4px;
   --academy-radius-lg: 8px;
 
-  /* ---- Shell: fixed in both directions ---- */
-  --shell: #1B1019;
-  --shell-2: #29172F;
-  --shell-line: rgb(201 150 50 / 0.3);
-  --shell-line-soft: rgb(201 150 50 / 0.14);
-  --shell-text: #F4EFE7;
-  --shell-text-muted: #BDB4B9;
+  /* Shell — follows the theme */
+  --shell: #F3E4E6;
+  --shell-2: #EAD6DA;
+  --shell-line: rgb(122 39 64 / 0.22);
+  --shell-line-soft: rgb(122 39 64 / 0.1);
+  --shell-text: #35141F;
+  --shell-text-muted: #6E4B56;
 
-  --hero-from: #29172F;
-  --hero-via: #3A1825;
-  --hero-to: #1B1019;
+  /* Hero wash */
+  --hero-from: #F7EDEF;
+  --hero-via: #EFDDE1;
+  --hero-to: #F9F3F4;
 
-  /* ---- Gold ramp ---- */
-  --academy-gold: #C99632;
-  --gold: #C99632;
-  --gold-bright: #E4BD68;
-  --gold-dim: #9A7024;
-  --gold-soft: rgb(201 150 50 / 0.12);
-  --academy-silver: #AAA5A7;
+  /* Metals */
+  --gold: #A8803C;
+  --gold-bright: #C9A25A;
+  --gold-dim: #7E5D25;
+  --gold-soft: rgb(168 128 60 / 0.12);
+  --copper: #A05A34;
+  --silver: #9AA2AA;
+  --silver-bright: #C4CBD2;
 
-  /* ---- Sunlit Academy (light) ---- */
-  --bg: #F7F1E5;
-  --bg-subtle: #EFE7D6;
-  --surface: #FFFDF7;
-  --surface-2: #F7F1E5;
-  --border: #D8C7A7;
-  --border-strong: #C3AE88;
+  /* Surfaces */
+  --bg: #FBF5F6;
+  --bg-subtle: #F3E7E9;
+  --surface: #FFFFFF;
+  --surface-2: #F7EEF0;
+  --border: #C9D0D7;
+  --border-strong: #A6AEB7;
 
-  --text: #251B25;
-  --text-muted: #756A73;
-  --text-faint: #9C919A;
+  /* Ink */
+  --text: #2E101B;
+  --text-muted: #64444F;
+  --text-faint: #8E7982;
 
-  --academy-purple: #4C285F;
-  --academy-plum: #32152F;
-  --academy-emerald: #376B58;
+  --academy-purple: #5A3570;
+  --academy-plum: #7A2740;
+  --academy-emerald: #2F6B52;
 
-  --brand: #4C285F;
-  --brand-hover: #32152F;
-  --brand-soft: rgb(76 40 95 / 0.1);
-  --brand-contrast: #FFFDF7;
+  --brand: #7A2740;
+  --brand-hover: #5C1A2E;
+  --brand-soft: rgb(122 39 64 / 0.09);
+  --brand-contrast: #FFFFFF;
 
-  --glow: #C99632;
-  --ring: #4C285F;
+  --glow: #A8803C;
+  --ring: #7A2740;
 
-  --academy-shadow: rgb(37 27 37 / 0.1);
-  --academy-glow: rgb(201 150 50 / 0.35);
+  --academy-shadow: rgb(46 16 27 / 0.1);
+  --academy-glow: rgb(168 128 60 / 0.3);
 
-  --shadow-card: 0 1px 2px rgb(37 27 37 / 0.05), 0 10px 28px rgb(37 27 37 / 0.07);
-  --shadow-lift: 0 2px 6px rgb(37 27 37 / 0.09), 0 22px 48px rgb(37 27 37 / 0.15);
-  --shadow-panel: 0 6px 18px rgb(37 27 37 / 0.07), 0 40px 80px rgb(37 27 37 / 0.12);
+  --blob-a: radial-gradient(circle, rgb(122 39 64 / 0.16), transparent 70%);
+  --blob-b: radial-gradient(circle, rgb(168 128 60 / 0.16), transparent 70%);
+  --blob-c: radial-gradient(circle, rgb(154 162 170 / 0.2), transparent 70%);
 
-  /* Parchment grain — a single inline SVG, no network request */
-  --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  --shadow-card: 0 1px 2px rgb(46 16 27 / 0.05), 0 10px 28px rgb(46 16 27 / 0.07);
+  --shadow-lift: 0 2px 6px rgb(46 16 27 / 0.09), 0 22px 48px rgb(46 16 27 / 0.14);
+  --shadow-panel: 0 6px 18px rgb(46 16 27 / 0.07), 0 40px 80px rgb(46 16 27 / 0.12);
+
+  --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+
+  /* Engraved plate, inked for this theme so the illustration is never a
+     dark drawing stranded on a light page. */
+  --plate-sky-top: #DCC9CE;
+  --plate-sky-bottom: #F6EDEF;
+  --plate-stone: #B9BFC6;
+  --plate-roof: #8A5468;
+  --plate-deep: #6E4553;
+  --plate-ink: #4A2A36;
+  --plate-paper: #FBF5F6;
+  --plate-lit: #C9A25A;
+
+  /* Ink for text sitting ON a gold button. Light-mode gold is dark, so it
+     takes white; dark-mode gold is bright, so it takes near-black. */
+  --on-gold: #FFFFFF;
 }
 
-/* ---- Midnight Archive (dark) ---- */
+/* ---------------- DARK: Midnight Conservatory ---------------- */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1B1019;
-    --bg-subtle: #150C14;
-    --surface: #29172F;
-    --surface-2: #3A1825;
-    --border: #542638;
-    --border-strong: #6B3547;
+    --shell: #150E20;
+    --shell-2: #1E1430;
+    --shell-line: rgb(217 164 65 / 0.26);
+    --shell-line-soft: rgb(217 164 65 / 0.12);
+    --shell-text: #F0E9F7;
+    --shell-text-muted: #B7A6CA;
 
-    --text: #F4EFE7;
-    --text-muted: #BDB4B9;
-    --text-faint: #8F868C;
+    --hero-from: #1E1430;
+    --hero-via: #2A1A3E;
+    --hero-to: #14101E;
 
-    --academy-purple: #7A4E92;
-    --academy-plum: #542638;
-    --academy-emerald: #5A9B82;
+    --gold: #D9A441;
+    --gold-bright: #F2C86E;
+    --gold-dim: #9C7326;
+    --gold-soft: rgb(217 164 65 / 0.14);
+    --copper: #B87333;
+    --silver: #9AA2AA;
+    --silver-bright: #C4CBD2;
 
-    --brand: #B88A3B;
-    --brand-hover: #E4BD68;
-    --brand-soft: rgb(184 138 59 / 0.14);
-    --brand-contrast: #1B1019;
+    --bg: #150E20;
+    --bg-subtle: #0F0917;
+    --surface: #241634;
+    --surface-2: #2E1D42;
+    --border: #46305F;
+    --border-strong: #5E4079;
 
-    --gold: #B88A3B;
-    --glow: #E4BD68;
-    --ring: #B88A3B;
+    --text: #F0E9F7;
+    --text-muted: #BFAFD0;
+    --text-faint: #8E7FA0;
+
+    --academy-purple: #9A6FBF;
+    --academy-plum: #3A1F4E;
+    --academy-emerald: #4FA982;
+
+    --brand: #D9A441;
+    --brand-hover: #F2C86E;
+    --brand-soft: rgb(217 164 65 / 0.14);
+    --brand-contrast: #150E20;
+
+    --glow: #F2C86E;
+    --ring: #D9A441;
 
     --academy-shadow: rgb(0 0 0 / 0.5);
-    --academy-glow: rgb(228 189 104 / 0.3);
+    --academy-glow: rgb(242 200 110 / 0.3);
+
+    --blob-a: radial-gradient(circle, rgb(154 111 191 / 0.28), transparent 70%);
+    --blob-b: radial-gradient(circle, rgb(217 164 65 / 0.2), transparent 70%);
+    --blob-c: radial-gradient(circle, rgb(79 169 130 / 0.22), transparent 70%);
 
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.45), 0 10px 28px rgb(0 0 0 / 0.4);
     --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.52);
     --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.48);
 
     --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+
+  /* Engraved plate, inked for this theme so the illustration is never a
+     dark drawing stranded on a light page. */
+  --plate-sky-top: #100A18;
+  --plate-sky-bottom: #3A1F4E;
+  --plate-stone: #2E1D42;
+  --plate-roof: #46305F;
+  --plate-deep: #1B1228;
+  --plate-ink: #0D0814;
+  --plate-paper: #F0E9F7;
+  --plate-lit: #F2C86E;
+  --on-gold: #150E20;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #1B1019;
-  --bg-subtle: #150C14;
-  --surface: #29172F;
-  --surface-2: #3A1825;
-  --border: #542638;
-  --border-strong: #6B3547;
+  --shell: #150E20;
+  --shell-2: #1E1430;
+  --shell-line: rgb(217 164 65 / 0.26);
+  --shell-line-soft: rgb(217 164 65 / 0.12);
+  --shell-text: #F0E9F7;
+  --shell-text-muted: #B7A6CA;
 
-  --text: #F4EFE7;
-  --text-muted: #BDB4B9;
-  --text-faint: #8F868C;
+  --hero-from: #1E1430;
+  --hero-via: #2A1A3E;
+  --hero-to: #14101E;
 
-  --academy-purple: #7A4E92;
-  --academy-plum: #542638;
-  --academy-emerald: #5A9B82;
+  --gold: #D9A441;
+  --gold-bright: #F2C86E;
+  --gold-dim: #9C7326;
+  --gold-soft: rgb(217 164 65 / 0.14);
+  --copper: #B87333;
+  --silver: #9AA2AA;
+  --silver-bright: #C4CBD2;
 
-  --brand: #B88A3B;
-  --brand-hover: #E4BD68;
-  --brand-soft: rgb(184 138 59 / 0.14);
-  --brand-contrast: #1B1019;
+  --bg: #150E20;
+  --bg-subtle: #0F0917;
+  --surface: #241634;
+  --surface-2: #2E1D42;
+  --border: #46305F;
+  --border-strong: #5E4079;
 
-  --gold: #B88A3B;
-  --glow: #E4BD68;
-  --ring: #B88A3B;
+  --text: #F0E9F7;
+  --text-muted: #BFAFD0;
+  --text-faint: #8E7FA0;
+
+  --academy-purple: #9A6FBF;
+  --academy-plum: #3A1F4E;
+  --academy-emerald: #4FA982;
+
+  --brand: #D9A441;
+  --brand-hover: #F2C86E;
+  --brand-soft: rgb(217 164 65 / 0.14);
+  --brand-contrast: #150E20;
+
+  --glow: #F2C86E;
+  --ring: #D9A441;
 
   --academy-shadow: rgb(0 0 0 / 0.5);
-  --academy-glow: rgb(228 189 104 / 0.3);
+  --academy-glow: rgb(242 200 110 / 0.3);
+
+  --blob-a: radial-gradient(circle, rgb(154 111 191 / 0.28), transparent 70%);
+  --blob-b: radial-gradient(circle, rgb(217 164 65 / 0.2), transparent 70%);
+  --blob-c: radial-gradient(circle, rgb(79 169 130 / 0.22), transparent 70%);
 
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.45), 0 10px 28px rgb(0 0 0 / 0.4);
   --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.5), 0 22px 48px rgb(0 0 0 / 0.52);
   --shadow-panel: 0 6px 18px rgb(0 0 0 / 0.4), 0 40px 80px rgb(0 0 0 / 0.48);
 
   --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+
+  /* Engraved plate, inked for this theme so the illustration is never a
+     dark drawing stranded on a light page. */
+  --plate-sky-top: #100A18;
+  --plate-sky-bottom: #3A1F4E;
+  --plate-stone: #2E1D42;
+  --plate-roof: #46305F;
+  --plate-deep: #1B1228;
+  --plate-ink: #0D0814;
+  --plate-paper: #F0E9F7;
+  --plate-lit: #F2C86E;
+  --on-gold: #150E20;
 }
 
 /* Parchment grain applied to content bands */
 .paper {
   background-color: var(--bg);
   background-image: var(--paper-texture);
-}
-
-@theme inline {
-  --color-bg: var(--bg);
-  --color-bg-subtle: var(--bg-subtle);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-border-token: var(--border);
-  --color-border-strong: var(--border-strong);
-
-  --color-text: var(--text);
-  --color-text-muted: var(--text-muted);
-  --color-text-faint: var(--text-faint);
-
-  --color-brand: var(--brand);
-  --color-brand-hover: var(--brand-hover);
-  --color-brand-soft: var(--brand-soft);
-  --color-brand-contrast: var(--brand-contrast);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-display);
-}
-
-body {
-  color: var(--text);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* The display serif carries the wordmark, headlines, and prices. Cormorant
@@ -215,6 +261,70 @@ body {
 /* Prevent the toggle from animating every color on first paint */
 .theme-ready * {
   transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+/* ---------------------------------------------------------------
+   Theme change as a full-viewport reveal.
+
+   The old version washed an overlay over the page, which only ever
+   read as a tint on whatever was in view. This uses the View
+   Transitions API instead: the browser snapshots the ENTIRE document
+   before and after, then wipes between them. Sidebar, top bar, hero
+   and content all change together, in one sweep, from the point the
+   user actually clicked.
+   --------------------------------------------------------------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  /* Both snapshots are painted; the clip-path below does the reveal. */
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* The incoming theme is on top, revealed by an expanding circle. */
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+html.theme-sweeping::view-transition-new(root) {
+  animation: theme-reveal var(--t-major) var(--ease-academy) forwards;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0% at var(--sweep-x, 50%) var(--sweep-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--sweep-x, 50%) var(--sweep-y, 50%));
+  }
+}
+
+/* Gold rim riding the leading edge of the wipe */
+.sweep-rim {
+  position: fixed;
+  border-radius: 9999px;
+  border: 2px solid var(--gold-bright);
+  box-shadow: 0 0 30px 10px var(--academy-glow), inset 0 0 24px var(--academy-glow);
+  pointer-events: none;
+  z-index: 2147483647;
+  animation: sweep-rim var(--t-major) var(--ease-academy) forwards;
+}
+
+@keyframes sweep-rim {
+  from {
+    width: 0;
+    height: 0;
+    opacity: 0.95;
+  }
+  to {
+    width: 320vmax;
+    height: 320vmax;
+    opacity: 0;
+  }
 }
 
 /* ---------------------------------------------------------------

@@ -18,7 +18,7 @@ export const MagicButton = forwardRef<HTMLButtonElement, MagicButtonProps>(
     const isDisabled = disabled || isWorking;
 
     let bgClass =
-      "border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] text-[#241026]";
+      "border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] text-[var(--on-gold)]";
     let shadowClass = "shadow-[0_0_18px_rgb(212_162_76/0.35)]";
 
     if (status === "error") {

@@ -163,7 +163,7 @@ export default async function WhyUsPage() {
         </p>
         <Link
           href="/courses"
-          className="rune-edge mt-8 inline-flex items-center gap-3 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3.5 font-semibold text-[#241026] shadow-[0_0_24px_var(--academy-glow)] transition hover:brightness-110"
+          className="rune-edge mt-8 inline-flex items-center gap-3 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3.5 font-semibold text-[var(--on-gold)] shadow-[0_0_24px_var(--academy-glow)] transition hover:brightness-110"
         >
           Begin Learning
           <Icon name="arrowRight" className="h-4 w-4" />

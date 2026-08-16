@@ -44,7 +44,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
         <div className="mx-auto max-w-[1400px]">
           {purchase === "success" && (
             <div className="animate-pop-in mb-8 flex items-center gap-3 rounded-sm border border-[var(--gold)] bg-[var(--gold-soft)] px-5 py-4">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--gold)] text-[#241026]">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--gold)] text-[var(--on-gold)]">
                 <Icon name="check" className="h-5 w-5" />
               </span>
               <p className="text-sm font-semibold text-[var(--text)]">
@@ -96,7 +96,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                         {s.upNext.remaining} of {s.upNext.total} remaining
                       </p>
                     </div>
-                    <span className="grid h-13 w-13 shrink-0 place-items-center rounded-full bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] p-4 text-[#241026] shadow-[0_0_18px_var(--academy-glow)] transition group-hover:scale-105">
+                    <span className="grid h-13 w-13 shrink-0 place-items-center rounded-full bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] p-4 text-[var(--on-gold)] shadow-[0_0_18px_var(--academy-glow)] transition group-hover:scale-105">
                       <Icon name="arrowRight" className="h-5 w-5" />
                     </span>
                   </Link>
@@ -388,7 +388,7 @@ function EmptyRecord() {
       <p className="mt-2 text-sm text-[var(--text-muted)]">Choose your first course.</p>
       <Link
         href="/courses"
-        className="rune-edge mt-6 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3 font-semibold text-[#241026] transition hover:brightness-110"
+        className="rune-edge mt-6 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3 font-semibold text-[var(--on-gold)] transition hover:brightness-110"
       >
         Explore the archives
         <Icon name="arrowRight" className="h-4 w-4" />

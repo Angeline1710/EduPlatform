@@ -52,7 +52,7 @@ export default async function AdminDashboard() {
             <AdminLink href="/courses" icon="book" label="View site" />
             <Link
               href="/admin/courses/new"
-              className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-4 py-2.5 text-sm font-semibold text-[#241026] shadow-[0_0_16px_var(--academy-glow)] transition hover:brightness-110"
+              className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-4 py-2.5 text-sm font-semibold text-[var(--on-gold)] shadow-[0_0_16px_var(--academy-glow)] transition hover:brightness-110"
             >
               <Icon name="plus" className="h-4 w-4" />
               New course

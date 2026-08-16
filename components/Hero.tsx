@@ -60,7 +60,7 @@ export default function Hero({ courseCount }: { courseCount: number }) {
 
           <Link
             href="#courses"
-            className="rune-edge group mt-8 inline-flex items-center gap-3 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3.5 font-semibold text-[#241026] shadow-[0_0_24px_rgb(212_162_76/0.4)] transition hover:brightness-110"
+            className="rune-edge group mt-8 inline-flex items-center gap-3 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3.5 font-semibold text-[var(--on-gold)] shadow-[0_0_24px_rgb(212_162_76/0.4)] transition hover:brightness-110"
           >
             Explore Courses
             <Icon

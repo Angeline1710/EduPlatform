@@ -134,7 +134,7 @@ export default function LessonViewer({
                   <span
                     className={`grid h-[22px] w-[22px] shrink-0 place-items-center rounded-sm border text-[11px] font-bold transition-all ${
                       isComplete
-                        ? "border-[var(--gold)] bg-[var(--gold)] text-[#241026]"
+                        ? "border-[var(--gold)] bg-[var(--gold)] text-[var(--on-gold)]"
                         : isActive
                           ? "border-[var(--gold)] bg-transparent text-[var(--gold)]"
                           : "border-[var(--border)] bg-transparent text-[var(--text-faint)] group-hover:border-[var(--text-muted)] group-hover:text-[var(--text)]"
@@ -161,7 +161,7 @@ export default function LessonViewer({
                 justEarned ? "animate-pop-in" : ""
               }`}
             >
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] shadow-lg">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[var(--on-gold)] shadow-lg">
                 <Icon name="award" className="h-6 w-6" />
               </span>
               <div className="min-w-0 flex-1">
@@ -205,10 +205,10 @@ export default function LessonViewer({
                 className={`rune-edge group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-md border px-8 py-3 text-[16px] font-semibold transition-all duration-300 w-full sm:w-auto ${
                   isDone
                     ? "border-[var(--gold)] bg-[var(--surface-2)] text-[var(--gold)] shadow-[0_0_12px_var(--academy-glow)]"
-                    : "border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] hover:brightness-110 shadow-[0_0_18px_rgb(212_162_76/0.35)]"
+                    : "border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] text-[var(--on-gold)] hover:brightness-110 shadow-[0_0_18px_rgb(212_162_76/0.35)]"
                 }`}
               >
-                <span className={`grid h-5 w-5 place-items-center rounded-full transition-colors ${isDone ? "bg-[var(--gold)] text-[#241026]" : "bg-black/20 text-[#241026]"}`}>
+                <span className={`grid h-5 w-5 place-items-center rounded-full transition-colors ${isDone ? "bg-[var(--gold)] text-[var(--on-gold)]" : "bg-black/20 text-[var(--on-gold)]"}`}>
                   <Icon name="check" className="h-3 w-3" />
                 </span>
                 {saving ? "Inscribing..." : isDone ? "Mastery Recorded" : "Mark as Mastered"}
@@ -230,7 +230,7 @@ export default function LessonViewer({
             <button
               onClick={() => setActiveIndex((i) => Math.min(lessons.length - 1, i + 1))}
               disabled={activeIndex === lessons.length - 1}
-              className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:bg-[var(--gold)] hover:text-[#241026] disabled:opacity-40 disabled:pointer-events-none"
+              className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:bg-[var(--gold)] hover:text-[var(--on-gold)] disabled:opacity-40 disabled:pointer-events-none"
             >
               Next
               <Icon name="arrowRight" className="h-4 w-4" />

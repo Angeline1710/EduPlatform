@@ -115,7 +115,7 @@ export default function Nav() {
               </Link>
               <Link
                 href="/register"
-                className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-4 py-2 text-sm font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110"
+                className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-4 py-2 text-sm font-semibold text-[var(--on-gold)] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110"
               >
                 Get Started
                 <Icon name="sparkle" className="h-3.5 w-3.5" />

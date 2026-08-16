@@ -80,7 +80,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
                 <h3 className="font-serif text-[22px] font-bold text-[var(--text)]">Python for Data Analysis</h3>
                 <p className="text-[var(--text-muted)] mt-1">Continue from: Data Cleaning</p>
               </div>
-              <Link href="/dashboard" className="rune-edge mt-4 md:mt-0 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-5 py-2.5 font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110">
+              <Link href="/dashboard" className="rune-edge mt-4 md:mt-0 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-5 py-2.5 font-semibold text-[var(--on-gold)] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110">
                 Continue <Icon name="arrowRight" className="h-4 w-4" />
               </Link>
             </div>

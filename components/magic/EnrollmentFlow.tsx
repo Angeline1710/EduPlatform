@@ -155,7 +155,7 @@ export default function EnrollmentFlow({
     return (
       <Link
         href={`/learn/${courseId}`}
-        className="rune-edge flex w-full items-center justify-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3.5 font-semibold text-[#241026] shadow-[0_0_18px_var(--academy-glow)] transition hover:brightness-110"
+        className="rune-edge flex w-full items-center justify-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3.5 font-semibold text-[var(--on-gold)] shadow-[0_0_18px_var(--academy-glow)] transition hover:brightness-110"
       >
         Enter the course
         <Icon name="arrowRight" className="h-4 w-4" />
@@ -170,11 +170,11 @@ export default function EnrollmentFlow({
       <button
         onClick={begin}
         disabled={busy}
-        className="rune-edge flex w-full items-center justify-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3.5 font-semibold text-[#241026] shadow-[0_0_18px_var(--academy-glow)] transition hover:brightness-110 disabled:opacity-60"
+        className="rune-edge flex w-full items-center justify-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3.5 font-semibold text-[var(--on-gold)] shadow-[0_0_18px_var(--academy-glow)] transition hover:brightness-110 disabled:opacity-60"
       >
         {busy ? (
           <>
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#241026] border-t-transparent" />
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--on-gold)] border-t-transparent" />
             {phase === "redirecting" ? "Opening checkout..." : "Preparing..."}
           </>
         ) : (
@@ -284,14 +284,14 @@ function AdmissionOverlay({
             {phase === "sealed" && (
               <>
                 {/* The seal presses down once the name is written */}
-                <span className="animate-seal-press relative mx-auto mt-7 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] shadow-[0_0_28px_var(--academy-glow)]">
+                <span className="animate-seal-press relative mx-auto mt-7 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[var(--on-gold)] shadow-[0_0_28px_var(--academy-glow)]">
                   <span className="absolute inset-0 animate-[seal-ring_1.1s_ease-out_forwards] rounded-full border-2 border-[var(--gold)]" />
                   <Icon name="award" className="h-9 w-9" />
                 </span>
 
                 <Link
                   href={`/learn/${courseId}`}
-                  className="rune-edge mt-8 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3 font-semibold text-[#241026] transition hover:brightness-110"
+                  className="rune-edge mt-8 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3 font-semibold text-[var(--on-gold)] transition hover:brightness-110"
                 >
                   Begin the course
                   <Icon name="arrowRight" className="h-4 w-4" />
