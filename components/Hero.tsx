@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import AcademyPlate from "@/components/art/AcademyPlate";
-import { Diamond, Star } from "@/components/Ornament";
-import MagicParticles from "@/components/magic/MagicParticles";
+import HeroVideo from "@/components/HeroVideo";
+import { Diamond } from "@/components/Ornament";
 import LivingInk from "@/components/magic/LivingInk";
 
 const STATS = [
@@ -14,20 +13,14 @@ const STATS = [
 
 export default function Hero({ courseCount }: { courseCount: number }) {
   return (
-    <section className="hero-panel relative overflow-hidden">
-      {/* One pooled canvas rather than a stack of animated DOM nodes */}
-      <MagicParticles count={44} kind="ember" />
+    <section className="relative isolate overflow-hidden">
+      {/* The film runs behind everything in this section. */}
+      <HeroVideo />
 
-      {/* Scattered sparkles */}
-      <Star className="left-[6%] top-[18%]" size={16} delay={0} />
-      <Star className="left-[42%] top-[10%]" size={10} delay={1.2} />
-      <Star className="right-[38%] top-[26%]" size={12} delay={2.4} />
-      <Star className="left-[18%] bottom-[18%]" size={11} delay={1.8} />
-
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-8 px-6 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_auto] lg:gap-6 lg:py-16 xl:px-10">
-        {/* Copy */}
-        <div className="animate-fade-up">
-          <span className="mb-3 block text-[var(--gold)]" aria-hidden="true">
+      {/* Every piece of copy and the stats board sit above it. */}
+      <div className="relative z-10 mx-auto grid max-w-[1400px] items-center gap-8 px-6 py-20 lg:grid-cols-[minmax(0,1.15fr)_auto] lg:gap-10 lg:py-28 xl:px-10">
+        <div className="animate-fade-up max-w-xl">
+          <span className="mb-3 block text-[var(--gold-bright)]" aria-hidden="true">
             ✦
           </span>
 
@@ -36,7 +29,7 @@ export default function Hero({ courseCount }: { courseCount: number }) {
             <Diamond size={5} />
           </div>
 
-          <h1 className="font-serif text-[44px] font-bold leading-[1.06] tracking-tight text-[var(--shell-text)] sm:text-[54px]">
+          <h1 className="font-serif text-[46px] font-bold leading-[1.05] tracking-tight text-[var(--hero-ink)] drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-[58px]">
             <LivingInk interval={7}>Learn something</LivingInk>
             <br />
             <LivingInk interval={5}>
@@ -44,7 +37,6 @@ export default function Hero({ courseCount }: { courseCount: number }) {
             </LivingInk>
           </h1>
 
-          {/* Ornamental rule under the headline */}
           <div className="mt-5 flex items-center gap-3" aria-hidden="true">
             <span className="rule-fade w-10" />
             <Diamond size={5} />
@@ -53,14 +45,14 @@ export default function Hero({ courseCount }: { courseCount: number }) {
             <span className="rule-fade w-10" />
           </div>
 
-          <p className="mt-6 max-w-sm text-[17px] leading-relaxed text-[var(--shell-text-muted)]">
+          <p className="mt-6 max-w-sm text-[17px] leading-relaxed text-[var(--hero-ink-muted)] drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
             {courseCount} expert-led courses. Buy once,
             <br className="hidden sm:block" /> keep lifetime access.
           </p>
 
           <Link
-            href="#courses"
-            className="rune-edge group mt-8 inline-flex items-center gap-3 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3.5 font-semibold text-[var(--on-gold)] shadow-[0_0_24px_rgb(212_162_76/0.4)] transition hover:brightness-110"
+            href="/courses"
+            className="rune-edge group mt-9 inline-flex items-center gap-3 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-7 py-3.5 font-semibold text-[var(--on-gold)] shadow-[0_0_28px_var(--academy-glow)] transition hover:brightness-110"
           >
             Explore Courses
             <Icon
@@ -70,32 +62,25 @@ export default function Hero({ courseCount }: { courseCount: number }) {
           </Link>
         </div>
 
-        {/* Academy */}
-        <div className="relative hidden lg:block">
-          <AcademyPlate className="h-[340px] w-full" />
-        </div>
-
-        {/* Stats panel */}
-        <div className="ornate animate-fade-up rounded-sm bg-black/25 p-5 backdrop-blur-sm lg:w-[248px]">
+        {/* Stats board — above the film, as requested */}
+        <div className="ornate animate-fade-up rounded-sm border-[var(--gold)]/40 bg-black/45 p-5 backdrop-blur-md lg:w-[262px]">
           <ul className="space-y-4">
             {STATS.map((stat, i) => (
               <li
                 key={stat.label}
                 className="group flex items-center gap-3.5"
                 style={{
-                  animation: `fade-up 0.5s cubic-bezier(0.22,1,0.36,1) ${0.15 + i * 0.09}s both`,
+                  animation: `fade-up 0.5s var(--ease-academy) ${0.15 + i * 0.09}s both`,
                 }}
               >
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-[var(--shell-line)] text-[var(--gold)] transition-all duration-300 group-hover:border-[var(--gold)] group-hover:bg-[var(--gold-soft)] group-hover:shadow-[0_0_14px_rgb(212_162_76/0.35)]">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-[var(--gold)]/50 text-[var(--gold-bright)] transition-all duration-300 group-hover:border-[var(--gold-bright)] group-hover:bg-[var(--gold-soft)] group-hover:shadow-[0_0_14px_var(--academy-glow)]">
                   <Icon name={stat.icon} className="h-[22px] w-[22px]" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block font-serif text-[17px] font-bold leading-tight text-[var(--shell-text)]">
+                  <span className="block font-serif text-[17px] font-bold leading-tight text-[#F6F1EA]">
                     {stat.value}
                   </span>
-                  <span className="block text-[13px] text-[var(--shell-text-muted)]">
-                    {stat.label}
-                  </span>
+                  <span className="block text-[13px] text-[#CFC4CE]">{stat.label}</span>
                 </span>
               </li>
             ))}

@@ -7,11 +7,6 @@ type Theme = "light" | "dark";
 /** Must match --t-major in globals.css. */
 const SWEEP_MS = 900;
 
-/** View Transitions is not in the DOM lib yet. */
-type DocWithVT = Document & {
-  startViewTransition?: (cb: () => void) => { finished: Promise<void> };
-};
-
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme | null>(null);
   const btnRef = useRef<HTMLButtonElement | null>(null);
@@ -36,15 +31,39 @@ export default function ThemeToggle() {
     document.documentElement.setAttribute("data-theme", next);
   }
 
-  /** Expanding gold rim that rides the leading edge of the wipe. */
-  function spawnRim(x: number, y: number) {
+  /**
+   * The wipe: a disc of the incoming theme's ground colour expands from the
+   * click point across the whole viewport, with a gold rim on its edge.
+   *
+   * This replaced a View Transitions implementation. That approach looked
+   * right on paper — the browser snapshots the whole document — but in
+   * practice Chrome left descendants resolving the *previous* values of the
+   * inherited custom properties, so the tokens flipped while the page kept
+   * its old palette. A plain attribute change repaints correctly, so the
+   * theme is applied directly and the sweep is drawn over the top.
+   */
+  function sweep(x: number, y: number, to: Theme) {
+    const ground = to === "dark" ? "#150E20" : "#F3E4E6";
+
+    const disc = document.createElement("span");
+    disc.className = "sweep-disc";
+    disc.style.left = `${x}px`;
+    disc.style.top = `${y}px`;
+    disc.style.background = ground;
+    document.body.appendChild(disc);
+
     const rim = document.createElement("span");
     rim.className = "sweep-rim";
     rim.style.left = `${x}px`;
     rim.style.top = `${y}px`;
-    rim.style.transform = "translate(-50%, -50%)";
     document.body.appendChild(rim);
-    window.setTimeout(() => rim.remove(), SWEEP_MS + 100);
+
+    // Flip the palette under the cover of the disc, at its widest.
+    window.setTimeout(() => apply(to), SWEEP_MS * 0.5);
+    window.setTimeout(() => {
+      disc.remove();
+      rim.remove();
+    }, SWEEP_MS + 120);
   }
 
   function toggle() {
@@ -61,28 +80,7 @@ export default function ThemeToggle() {
     const x = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
     const y = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
 
-    const root = document.documentElement;
-    root.style.setProperty("--sweep-x", `${(x / window.innerWidth) * 100}%`);
-    root.style.setProperty("--sweep-y", `${(y / window.innerHeight) * 100}%`);
-
-    const doc = document as DocWithVT;
-
-    // Without View Transitions the snapshot wipe is impossible; swap plainly
-    // rather than faking it with an overlay that only tints part of the page.
-    if (!doc.startViewTransition) {
-      spawnRim(x, y);
-      apply(next);
-      return;
-    }
-
-    root.classList.add("theme-sweeping");
-    spawnRim(x, y);
-
-    const transition = doc.startViewTransition(() => {
-      apply(next);
-    });
-
-    transition.finished.finally(() => root.classList.remove("theme-sweeping"));
+    sweep(x, y, next);
   }
 
   const isDark = theme === "dark";

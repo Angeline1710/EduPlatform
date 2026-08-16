@@ -98,6 +98,13 @@
   --plate-paper: #FBF5F6;
   --plate-lit: #C9A25A;
 
+  /* Hero film: the text sits on video in both themes, so its ink and the
+     scrims that keep it legible are fixed rather than theme-flipped. */
+  --hero-ink: #FAF6F2;
+  --hero-ink-muted: #DCD2D6;
+  --hero-scrim-strong: rgb(20 12 24 / 0.82);
+  --hero-scrim-soft: rgb(20 12 24 / 0.42);
+
   /* Ink for text sitting ON a gold button. Light-mode gold is dark, so it
      takes white; dark-mode gold is bright, so it takes near-black. */
   --on-gold: #FFFFFF;
@@ -171,6 +178,10 @@
   --plate-ink: #0D0814;
   --plate-paper: #F0E9F7;
   --plate-lit: #F2C86E;
+  --hero-ink: #FAF6F2;
+  --hero-ink-muted: #DCD2D6;
+  --hero-scrim-strong: rgb(12 7 16 / 0.8);
+  --hero-scrim-soft: rgb(12 7 16 / 0.4);
   --on-gold: #150E20;
   }
 }
@@ -241,6 +252,10 @@
   --plate-ink: #0D0814;
   --plate-paper: #F0E9F7;
   --plate-lit: #F2C86E;
+  --hero-ink: #FAF6F2;
+  --hero-ink-muted: #DCD2D6;
+  --hero-scrim-strong: rgb(12 7 16 / 0.8);
+  --hero-scrim-soft: rgb(12 7 16 / 0.4);
   --on-gold: #150E20;
 }
 
@@ -274,34 +289,54 @@
    user actually clicked.
    --------------------------------------------------------------- */
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  /* Both snapshots are painted; the clip-path below does the reveal. */
-  animation: none;
-  mix-blend-mode: normal;
+/*
+ * The sweep is two stacked discs expanding from the click point: an opaque
+ * one carrying the incoming ground colour, and a gold rim on its edge.
+ *
+ * This replaced a View Transitions implementation. That is the more elegant
+ * mechanism on paper, but Chrome left descendants resolving the previous
+ * values of the inherited custom properties, so `--shell` flipped on :root
+ * while every surface kept painting the old palette. A direct attribute
+ * change repaints correctly, so the theme is applied under cover of the disc.
+ */
+.sweep-disc,
+.sweep-rim {
+  position: fixed;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2147483646;
+  width: 0;
+  height: 0;
 }
 
-/* The incoming theme is on top, revealed by an expanding circle. */
-::view-transition-new(root) {
-  z-index: 2;
+.sweep-disc {
+  animation: sweep-grow var(--t-major) var(--ease-academy) forwards;
 }
 
-::view-transition-old(root) {
-  z-index: 1;
+.sweep-rim {
+  z-index: 2147483647;
+  border: 2px solid var(--gold-bright);
+  box-shadow: 0 0 34px 12px var(--academy-glow), inset 0 0 26px var(--academy-glow);
+  animation: sweep-grow var(--t-major) var(--ease-academy) forwards;
 }
 
-html.theme-sweeping::view-transition-new(root) {
-  animation: theme-reveal var(--t-major) var(--ease-academy) forwards;
-}
-
-@keyframes theme-reveal {
+@keyframes sweep-grow {
   from {
-    clip-path: circle(0% at var(--sweep-x, 50%) var(--sweep-y, 50%));
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
   }
   to {
-    clip-path: circle(150% at var(--sweep-x, 50%) var(--sweep-y, 50%));
+    width: 320vmax;
+    height: 320vmax;
+    opacity: 0;
   }
 }
+
 
 /* Gold rim riding the leading edge of the wipe */
 .sweep-rim {
@@ -314,18 +349,6 @@ html.theme-sweeping::view-transition-new(root) {
   animation: sweep-rim var(--t-major) var(--ease-academy) forwards;
 }
 
-@keyframes sweep-rim {
-  from {
-    width: 0;
-    height: 0;
-    opacity: 0.95;
-  }
-  to {
-    width: 320vmax;
-    height: 320vmax;
-    opacity: 0;
-  }
-}
 
 /* ---------------------------------------------------------------
    Ornamental language: gold leaf, hexagons, engraved frames.
