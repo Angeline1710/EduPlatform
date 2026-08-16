@@ -4,6 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 import { Diamond } from "@/components/Ornament";
+import AcademyPlate from "@/components/art/AcademyPlate";
 
 export const metadata = {
   title: "Why the Academy · EduPlatform",
@@ -66,6 +67,14 @@ export default async function WhyUsPage() {
         title="Why Learn Here"
         lead="An academy is judged by what its scholars can do afterwards. Here is how this one is built."
       />
+
+      {/* The academy itself, as an engraved plate. This is where the drawing
+          belongs now that the hero carries the film. */}
+      <section className="shell-panel relative overflow-hidden border-b border-[var(--shell-line)]">
+        <div className="mx-auto max-w-[1400px] px-6 pt-10 xl:px-10">
+          <AcademyPlate className="mx-auto h-[300px] w-full max-w-3xl" />
+        </div>
+      </section>
 
       {/* Real numbers */}
       <section className="shell-panel border-b border-[var(--shell-line)]">

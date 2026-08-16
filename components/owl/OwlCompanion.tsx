@@ -112,13 +112,14 @@ export default function OwlCompanion() {
   if (pathname.startsWith("/verify/") || pathname.startsWith("/certificates/")) return null;
 
   return (
-    <div className="pointer-events-none fixed bottom-5 left-5 z-[80] flex items-end gap-3 lg:bottom-6 lg:left-6">
-      {/* The bird */}
+    <div className="pointer-events-none fixed bottom-4 left-4 z-[80] flex items-end gap-3 lg:bottom-6 lg:left-6">
+      {/* The bird. Smaller on phones, where a 64px disc crowds the thumb and
+          sits over content. */}
       <button
         onClick={toggle}
         aria-expanded={open}
         aria-label={open ? "Close the owl's guidance" : "Ask the owl for guidance"}
-        className="owl-roost pointer-events-auto relative grid h-16 w-16 shrink-0 place-items-center rounded-full border border-[var(--gold)]/50 bg-[var(--surface)]/85 shadow-[0_6px_28px_var(--academy-shadow)] backdrop-blur-md transition-transform duration-300 hover:scale-105 active:scale-95"
+        className="owl-roost pointer-events-auto relative grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[var(--gold)]/50 bg-[var(--surface)]/85 shadow-[0_6px_28px_var(--academy-shadow)] backdrop-blur-md transition-transform duration-300 hover:scale-105 active:scale-95 sm:h-16 sm:w-16"
       >
         <OwlArt />
         {/* A quiet mark when the owl has something to say */}
@@ -295,7 +296,12 @@ export default function OwlCompanion() {
 /** The bird itself — blinking, with a slow breath. */
 function OwlArt() {
   return (
-    <svg width="42" height="42" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 32 32"
+      fill="none"
+      aria-hidden="true"
+      className="h-8 w-8 sm:h-[42px] sm:w-[42px]"
+    >
       <path
         d="M8 15c-1.6 2.4-2 5.4-1 8.2 1.4-.6 2.6-1.8 3.4-3.4M24 15c1.6 2.4 2 5.4 1 8.2-1.4-.6-2.6-1.8-3.4-3.4"
         fill="#EDE7E0"

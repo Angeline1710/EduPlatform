@@ -59,13 +59,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <OwlCompanion />
           {/* Rail + column. The rail is its own scroll context so the main
               column scrolls independently, as in the reference layout. */}
+          {/* First stop for a keyboard visitor, past the rail and the bar. */}
+          <a href="#main" className="skip-link">
+            Skip to content
+          </a>
+
           <div className="flex min-h-screen">
             <Sidebar />
             <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
               <Nav />
-              <PageTransition>
-                {children}
-              </PageTransition>
+              {/* A real landmark, so assistive tech can jump straight here. */}
+              <main id="main" className="flex-1">
+                <PageTransition>{children}</PageTransition>
+              </main>
               <Footer />
             </div>
           </div>

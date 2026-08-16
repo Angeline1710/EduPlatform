@@ -8,6 +8,8 @@ import { Diamond } from "@/components/Ornament";
 import { AcademyCrest } from "@/components/Crests";
 import DepartmentFilter from "@/components/DepartmentFilter";
 import LivingInk from "@/components/magic/LivingInk";
+import { auth } from "@/lib/auth";
+import { getLearningState } from "@/lib/learning";
 import { CATEGORY_NAMES } from "@/lib/categories";
 
 const FEATURES = [
@@ -62,25 +64,45 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
     allPublished.some((c) => c.category === name),
   );
 
+  // Only a signed-in scholar with an unfinished course has a "today's study".
+  // A signed-out visitor is shown nothing here rather than a fabricated one.
+  const session = await auth();
+  const todaysStudy = session?.user
+    ? (await getLearningState(session.user.id)).upNext
+    : null;
+
   return (
     <>
       {!isFiltered && <Hero courseCount={allPublished.length} />}
 
-      {/* Today's Learning preview (if not filtered) */}
-      {!isFiltered && (
-        <section className="border-b border-[var(--border)] bg-[var(--surface-2)] px-6 py-12 xl:px-10">
+      {/* Today's study — only shown when there is a real lesson to resume. */}
+      {!isFiltered && todaysStudy && (
+        <section className="border-b border-[var(--border)] bg-[var(--surface-2)] px-6 py-14 xl:px-10">
           <div className="mx-auto max-w-[1400px]">
-            <h2 className="mb-6 font-serif text-[28px] font-bold text-[var(--brand)] flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 font-serif text-[28px] font-bold text-[var(--brand)]">
               <Icon name="sun" className="h-6 w-6" />
-              Today's Study
+              Today&rsquo;s Study
             </h2>
-            <div className="flex flex-col md:flex-row items-center justify-between bg-[var(--surface)] p-6 rounded-lg border border-[var(--border)] shadow-[var(--shadow-card)]">
-              <div>
-                <p className="text-sm font-semibold text-[var(--gold)] mb-1">18 min recommended</p>
-                <h3 className="font-serif text-[22px] font-bold text-[var(--text)]">Python for Data Analysis</h3>
-                <p className="text-[var(--text-muted)] mt-1">Continue from: Data Cleaning</p>
+            <div className="flex flex-col items-start justify-between gap-4 rounded-sm border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-card)] md:flex-row md:items-center">
+              <div className="min-w-0">
+                <p className="mb-1 text-sm font-semibold text-[var(--gold-dim)]">
+                  {todaysStudy.remaining}{" "}
+                  {todaysStudy.remaining === 1 ? "lesson" : "lessons"} left ·{" "}
+                  {todaysStudy.percent}% done
+                </p>
+                <h3 className="font-serif text-[22px] font-bold text-[var(--text)]">
+                  {todaysStudy.title}
+                </h3>
+                <p className="mt-1 text-[var(--text-muted)]">
+                  {todaysStudy.nextLesson
+                    ? `Continue from: ${todaysStudy.nextLesson.title}`
+                    : "Ready for your final review"}
+                </p>
               </div>
-              <Link href="/dashboard" className="rune-edge mt-4 md:mt-0 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-5 py-2.5 font-semibold text-[var(--on-gold)] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110">
+              <Link
+                href={`/learn/${todaysStudy.id}`}
+                className="rune-edge inline-flex shrink-0 items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-5 py-2.5 font-semibold text-[var(--on-gold)] shadow-[0_0_18px_var(--academy-glow)] transition hover:brightness-110"
+              >
                 Continue <Icon name="arrowRight" className="h-4 w-4" />
               </Link>
             </div>
