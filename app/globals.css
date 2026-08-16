@@ -617,6 +617,74 @@ body {
   100% { opacity: 0; transform: scale(1.9); }
 }
 
+/* ---- The owl alighting on a nav row ---- */
+
+/* Swoops down from upper-right, overshoots, then settles. */
+@keyframes owl-arrive {
+  0%   { opacity: 0; transform: translate(18px, -26px) rotate(14deg) scale(0.7); }
+  55%  { opacity: 1; transform: translate(0, 3px) rotate(-4deg) scale(1.06); }
+  75%  { transform: translate(0, -1px) rotate(2deg) scale(0.99); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* Wings settle a beat after landing. */
+@keyframes owl-settle {
+  0%, 45% { transform: scaleY(1.12) translateY(-1px); }
+  70%     { transform: scaleY(0.96); }
+  100%    { transform: none; }
+}
+
+@keyframes owl-blink {
+  0%, 88%, 100% { transform: scaleY(1); }
+  93%           { transform: scaleY(0.1); }
+}
+
+/* Motes scattered by the landing. */
+@keyframes owl-dust {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  25%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx, -14px), var(--dy, 10px)) scale(1); }
+}
+
+.owl-arrive { animation: owl-arrive 0.42s var(--ease-academy) both; }
+.owl-perch .owl-wing { animation: owl-settle 0.7s var(--ease-academy) both; transform-origin: center top; }
+.owl-perch .owl-eye { animation: owl-blink 3.2s ease-in-out infinite; transform-origin: center; }
+
+.owl-dust {
+  position: absolute;
+  top: 55%;
+  left: 40%;
+  width: 3px;
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--gold-bright);
+  box-shadow: 0 0 6px var(--academy-glow);
+  animation: owl-dust 0.6s ease-out both;
+}
+
+.owl-dust:nth-of-type(2) { --dx: 12px; --dy: 12px; }
+.owl-dust:nth-of-type(3) { --dx: -4px; --dy: 16px; }
+
+/* ---- Theme transition: the academy's hour changing ---- */
+
+@keyframes hour-sweep {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes orb-travel {
+  0%   { transform: translate(-14vw, 24vh) scale(0.7); opacity: 0; }
+  30%  { opacity: 1; }
+  100% { transform: translate(84vw, -22vh) scale(1.15); opacity: 0; }
+}
+
+@keyframes star-bloom {
+  0%   { opacity: 0; transform: scale(0.2); }
+  45%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
 .animate-fade-up { animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-fade-in { animation: fade-in 0.5s ease both; }
 .animate-pop-in  { animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }

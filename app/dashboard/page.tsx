@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getLearningState } from "@/lib/learning";
 import { categoryTheme } from "@/lib/categories";
 import { formatIssueDate } from "@/lib/certificates";
 import Icon from "@/components/Icon";
 import CountUp from "@/components/CountUp";
 import ProgressRing from "@/components/ProgressRing";
 import Reveal from "@/components/Reveal";
-import SuccessFlow from "@/components/magic/SuccessFlow";
-import HoverCard from "@/components/magic/HoverCard";
+import PageHeader from "@/components/PageHeader";
+import { DepartmentCrest } from "@/components/Crests";
 
-function greeting(date: Date) {
-  const hour = date.getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
+export const metadata = { title: "My Learning · EduPlatform" };
+
+function greeting(d: Date) {
+  const h = d.getHours();
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
   return "Good evening";
 }
 
@@ -23,340 +25,374 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   if (!session?.user) redirect("/login");
 
   const { purchase } = await searchParams;
-  const userId = session.user.id;
-
-  const [enrollments, progress, certificates] = await Promise.all([
-    prisma.enrollment.findMany({
-      where: { userId },
-      orderBy: { purchasedAt: "desc" },
-      include: { course: { include: { _count: { select: { lessons: true } } } } },
-    }),
-    prisma.lessonProgress.findMany({
-      where: { userId },
-      select: { lesson: { select: { courseId: true } }, completedAt: true },
-    }),
-    prisma.certificate.findMany({
-      where: { userId, revokedAt: null },
-      orderBy: { issuedAt: "desc" },
-      include: { course: { select: { title: true, category: true } } },
-    }),
-  ]);
-
-  const doneByCourse = new Map<string, number>();
-  for (const p of progress) {
-    const id = p.lesson.courseId;
-    doneByCourse.set(id, (doneByCourse.get(id) ?? 0) + 1);
-  }
-
-  const courses = enrollments.map(({ course }) => {
-    const total = course._count.lessons;
-    const done = doneByCourse.get(course.id) ?? 0;
-    return {
-      id: course.id,
-      title: course.title,
-      description: course.description,
-      category: course.category,
-      total,
-      done,
-      percent: total > 0 ? Math.round((done / total) * 100) : 0,
-    };
-  });
-
-  const totalLessons = courses.reduce((s, c) => s + c.total, 0);
-  const lessonsDone = courses.reduce((s, c) => s + c.done, 0);
-  const completedCourses = courses.filter((c) => c.total > 0 && c.done >= c.total).length;
-  const overall = totalLessons > 0 ? Math.round((lessonsDone / totalLessons) * 100) : 0;
-
-  // Next thing to pick up: the furthest-along course that isn't finished.
-  const inProgress = courses
-    .filter((c) => c.percent < 100)
-    .sort((a, b) => b.percent - a.percent);
-  const continueCourse = inProgress[0] ?? null;
-
-  const firstName = session.user.name?.split(" ")[0] ?? "there";
+  const s = await getLearningState(session.user.id);
+  const firstName = session.user.name?.split(" ")[0] ?? "Scholar";
 
   return (
-    <div className="relative">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 h-96">
-        <div
-          className="absolute -left-24 -top-32 h-96 w-96 rounded-full opacity-60 blur-3xl"
-          style={{ background: "var(--blob-a)" }}
-        />
-        <div
-          className="absolute right-0 top-0 h-80 w-80 rounded-full opacity-50 blur-3xl"
-          style={{ background: "var(--blob-c)" }}
-        />
-      </div>
+    <>
+      <PageHeader
+        eyebrow={greeting(new Date())}
+        title={firstName}
+        lead={
+          s.totals.courses === 0
+            ? "Your record is open and waiting for its first entry."
+            : `${s.totals.lessonsDone} of ${s.totals.totalLessons} lessons mastered · ${s.totals.lessonsLeft} remaining`
+        }
+      />
 
-      <div className="mx-auto max-w-6xl px-6 py-12">
-        {purchase === "success" && (
-          <SuccessFlow studentName={session.user.name ?? "Scholar"} />
-        )}
-
-        <header className="animate-fade-up mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-b border-[var(--border)] pb-8">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-widest text-[var(--gold)] flex items-center gap-2">
-              <Icon name="sun" className="h-4 w-4" /> {greeting(new Date())}
-            </p>
-            <h1 className="mt-2 font-serif text-4xl font-extrabold tracking-tight sm:text-5xl text-[var(--brand)]">
-              Welcome to your desk, <span className="bg-gradient-to-r from-[var(--gold-bright)] to-[var(--gold)] bg-clip-text text-transparent animate-glow-pulse">{firstName}</span>
-            </h1>
-            <p className="mt-4 text-lg text-[var(--text-muted)] max-w-2xl">
-              {courses.length === 0
-                ? "Your scholar's desk awaits its first manuscript."
-                : completedCourses > 0
-                  ? `You have mastered ${completedCourses} of your ${courses.length} tomes. Knowledge grows.`
-                  : `${lessonsDone} pages read across ${courses.length} active manuscripts.`}
-            </p>
-          </div>
-          <div className="flex items-center gap-3 bg-[var(--surface-2)] p-4 rounded-lg border border-[var(--gold)]/30 shadow-[0_0_15px_var(--academy-glow)] relative">
-            {/* Streak Tracker */}
-            <Icon name="sun" className="h-8 w-8 text-[var(--gold)] animate-spin-slow" />
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-faint)]">Scholar's Streak</p>
-              <p className="font-serif text-2xl font-bold text-[var(--gold)]">3 Days</p>
+      <section className="paper min-h-[60vh] px-6 py-12 xl:px-10">
+        <div className="mx-auto max-w-[1400px]">
+          {purchase === "success" && (
+            <div className="animate-pop-in mb-8 flex items-center gap-3 rounded-sm border border-[var(--gold)] bg-[var(--gold-soft)] px-5 py-4">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--gold)] text-[#241026]">
+                <Icon name="check" className="h-5 w-5" />
+              </span>
+              <p className="text-sm font-semibold text-[var(--text)]">
+                Payment confirmed. Your enrollment has been recorded below.
+              </p>
             </div>
-            {/* Particles container */}
-            <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-white shadow-[0_0_8px_4px_white] animate-sparkle" />
-          </div>
-        </header>
-
-        {courses.length > 0 && (
-          <>
-            {/* Stat row */}
-            <div className="stagger mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <StatCard icon="book" label="Courses" value={courses.length} />
-              <StatCard icon="check" label="Lessons done" value={lessonsDone} />
-              <StatCard icon="award" label="Certificates" value={certificates.length} />
-              <StatCard icon="chart" label="Overall" value={overall} suffix="%" highlight />
-            </div>
-
-            {/* Continue learning */}
-            {continueCourse && (
-              <Reveal className="mb-10">
-                <Link
-                  href={`/learn/${continueCourse.id}`}
-                  className="lift press group card relative flex flex-wrap items-center gap-6 overflow-hidden p-6 sm:p-8"
-                >
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-20 blur-3xl"
-                    style={{
-                      background: `linear-gradient(135deg, ${
-                        categoryTheme(continueCourse.category).from
-                      }, ${categoryTheme(continueCourse.category).to})`,
-                    }}
-                  />
-
-                  <ProgressRing
-                    percent={continueCourse.percent}
-                    size={88}
-                    stroke={8}
-                    gradientId="continue-ring"
-                    from={categoryTheme(continueCourse.category).from}
-                    to={categoryTheme(continueCourse.category).to}
-                  />
-
-                  <div className="relative min-w-0 flex-1">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-faint)]">
-                      Continue learning
-                    </p>
-                    <p className="mt-1 truncate text-2xl font-bold tracking-tight">
-                      {continueCourse.title}
-                    </p>
-                    <p className="mt-1 text-sm text-[var(--text-muted)]">
-                      {continueCourse.done} of {continueCourse.total} lessons complete
-                    </p>
-                  </div>
-
-                  <span className="brand-gradient animate-pulse-ring relative grid h-14 w-14 shrink-0 place-items-center rounded-full text-white shadow-lg transition group-hover:scale-105">
-                    <Icon name="arrowRight" className="h-6 w-6" />
-                  </span>
-                </Link>
-              </Reveal>
-            )}
-          </>
-        )}
-
-        {/* Course grid */}
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">My courses</h2>
-          {courses.length > 0 && (
-            <Link
-              href="/"
-              className="focus-ring text-sm font-semibold text-[var(--brand)] hover:underline"
-            >
-              Find more
-            </Link>
           )}
-        </div>
 
-        {courses.length === 0 ? (
-          <div className="card animate-pop-in px-6 py-16 text-center border border-[var(--gold)]/30 bg-[var(--surface-2)] shadow-[0_0_15px_var(--academy-glow)]">
-            <span className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-dim)] text-[#241026] shadow-lg">
-              <Icon name="book" className="h-8 w-8" />
-            </span>
-            <p className="text-xl font-serif font-bold text-[var(--brand)]">Your desk is empty</p>
-            <p className="mt-2 text-[15px] text-[var(--text-muted)]">
-              Visit the archives to find your first manuscript.
-            </p>
-            <Link href="/" className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3 font-semibold text-[#241026] shadow-[0_0_18px_rgb(212_162_76/0.35)] transition hover:brightness-110 mt-8">
-              Browse Archives
-              <Icon name="arrowRight" className="h-4 w-4" />
-            </Link>
+          {/* Standing */}
+          <div className="stagger mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Stat icon="book" label="Courses" value={s.totals.courses} />
+            <Stat icon="check" label="Lessons done" value={s.totals.lessonsDone} />
+            <Stat icon="clock" label="Lessons left" value={s.totals.lessonsLeft} />
+            <Stat icon="award" label="Credentials" value={s.certificates.length} highlight />
           </div>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {courses.map((course, i) => {
-              const theme = categoryTheme(course.category);
-              const finished = course.percent === 100;
-              return (
-                <Reveal key={course.id} delay={i * 0.05}>
-                  <HoverCard className="w-full h-full">
-                    <Link
-                      href={`/learn/${course.id}`}
-                      className="group relative flex h-[280px] w-full flex-col justify-end overflow-hidden rounded-r-xl rounded-l-md border-l-[12px] border-y-2 border-r-2 bg-[var(--surface-2)] p-6 shadow-[10px_10px_20px_rgba(0,0,0,0.4)]"
-                      style={{
-                        borderLeftColor: theme.from,
-                        borderColor: "var(--border)",
-                        backgroundImage: `linear-gradient(to right, ${theme.from}15, transparent)`,
-                      }}
-                    >
-                    {/* Spine details */}
-                    <div className="absolute left-0 top-0 bottom-0 w-8 border-r border-black/20 bg-black/10 mix-blend-overlay" />
-                    <div className="absolute left-2 top-8 h-1 w-6 bg-black/20" />
-                    <div className="absolute left-2 bottom-8 h-1 w-6 bg-black/20" />
-                    
-                    <div className="relative z-10 flex h-full flex-col">
-                      <div className="mb-4 flex items-start justify-between gap-3">
-                        <span
-                          className="grid h-12 w-12 place-items-center rounded-full text-[#241026] shadow-md transition group-hover:scale-105 group-hover:rotate-6"
-                          style={{
-                            backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
-                            boxShadow: `0 0 12px ${theme.from}80`,
-                          }}
-                        >
-                          <Icon name={theme.icon} className="h-6 w-6" />
-                        </span>
 
-                        <ProgressRing
-                          percent={course.percent}
-                          size={52}
-                          stroke={4}
-                          gradientId={`ring-${course.id}`}
-                          from={theme.from}
-                          to={theme.to}
-                        />
-                      </div>
-
-                      <span className="mb-2 text-[11px] font-bold uppercase tracking-widest text-[var(--gold)]">
-                        {course.category}
-                      </span>
-                      <h3 className="mb-2 font-serif text-xl font-bold leading-snug text-[var(--brand)] line-clamp-2">{course.title}</h3>
-                      <p className="line-clamp-2 flex-1 text-[13px] leading-relaxed text-[var(--text-muted)]">
-                        {course.description}
+          <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
+            <div className="min-w-0">
+              {/* What to do next */}
+              {s.upNext && (
+                <Reveal className="mb-10">
+                  <h2 className="mb-3 font-serif text-2xl font-bold text-[var(--brand)]">
+                    Do this next
+                  </h2>
+                  <Link
+                    href={`/learn/${s.upNext.id}`}
+                    className="group relative flex flex-wrap items-center gap-6 overflow-hidden rounded-sm border border-[var(--gold)] bg-[var(--surface)] p-6 shadow-[var(--shadow-lift)] transition hover:-translate-y-1 sm:p-8"
+                  >
+                    <ProgressRing
+                      percent={s.upNext.percent}
+                      size={88}
+                      stroke={8}
+                      gradientId="next-ring"
+                      from={categoryTheme(s.upNext.category).from}
+                      to={categoryTheme(s.upNext.category).to}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--text-faint)]">
+                        {s.upNext.done === 0 ? "Begin" : "Resume"} · {s.upNext.category}
                       </p>
-
-                      <div className="mt-4 flex items-center justify-between border-t border-[var(--border)] pt-4 text-sm font-semibold">
-                        {finished ? (
-                          <span className="inline-flex items-center gap-1.5 text-[var(--gold)]">
-                            <Icon name="check" className="h-4 w-4" />
-                            Mastered
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 text-[var(--text)] group-hover:text-[var(--gold)] transition-colors">
-                            Continue Reading
-                            <Icon
-                              name="arrowRight"
-                              className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                            />
-                          </span>
-                        )}
-                        <span className="font-mono text-[11px] font-normal text-[var(--text-faint)]">
-                          PG {course.done}/{course.total}
-                        </span>
-                      </div>
+                      <p className="mt-1 truncate font-serif text-2xl font-bold text-[var(--text)]">
+                        {s.upNext.title}
+                      </p>
+                      <p className="mt-1 text-sm text-[var(--text-muted)]">
+                        {s.upNext.nextLesson
+                          ? `Next lesson — ${s.upNext.nextLesson.title}`
+                          : "All lessons complete"}
+                        {" · "}
+                        {s.upNext.remaining} of {s.upNext.total} remaining
+                      </p>
                     </div>
-                    </Link>
-                  </HoverCard>
+                    <span className="grid h-13 w-13 shrink-0 place-items-center rounded-full bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] p-4 text-[#241026] shadow-[0_0_18px_var(--academy-glow)] transition group-hover:scale-105">
+                      <Icon name="arrowRight" className="h-5 w-5" />
+                    </span>
+                  </Link>
                 </Reveal>
-              );
-            })}
-          </div>
-        )}
+              )}
 
-        {/* Certificates */}
-        {certificates.length > 0 && (
-          <>
-            <h2 className="mb-4 mt-12 text-2xl font-bold tracking-tight">
-              My certificates
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {certificates.map((cert, i) => {
-                const theme = categoryTheme(cert.course.category);
-                return (
-                  <Reveal key={cert.id} delay={i * 0.05}>
-                    <Link
-                      href={`/certificates/${cert.code}`}
-                      className="lift press group card flex h-full flex-col p-5"
-                    >
-                      <span
-                        className="mb-4 grid h-11 w-11 place-items-center rounded-xl text-white shadow-md transition group-hover:rotate-6"
+              {/* Courses */}
+              <h2 className="mb-4 font-serif text-2xl font-bold text-[var(--brand)]">
+                My courses
+              </h2>
+
+              {s.courses.length === 0 ? (
+                <EmptyRecord />
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {s.courses.map((c, i) => {
+                    const theme = categoryTheme(c.category);
+                    return (
+                      <Reveal key={c.id} delay={(i % 2) * 0.06}>
+                        <Link
+                          href={`/learn/${c.id}`}
+                          className="group flex h-full flex-col rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] transition-all hover:-translate-y-1 hover:border-[var(--gold)]"
+                        >
+                          <div className="flex items-start gap-3">
+                            {c.gifUrl ? (
+                              <span className="h-11 w-11 shrink-0 overflow-hidden rounded-md border border-[var(--gold)]">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={c.gifUrl}
+                                  alt=""
+                                  loading="lazy"
+                                  className="h-full w-full object-cover"
+                                />
+                              </span>
+                            ) : (
+                              <span
+                                className="accent shrink-0"
+                                style={
+                                  {
+                                    "--accent-light": theme.ink,
+                                    "--accent-dark": theme.inkDark,
+                                  } as React.CSSProperties
+                                }
+                              >
+                                <DepartmentCrest name={c.category} className="h-11 w-11" />
+                              </span>
+                            )}
+
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate font-serif text-lg font-bold text-[var(--text)]">
+                                {c.title}
+                              </p>
+                              <p className="text-xs text-[var(--text-faint)]">
+                                {c.done} of {c.total} lessons
+                                {c.complete ? " · complete" : ` · ${c.remaining} left`}
+                              </p>
+                            </div>
+
+                            <span className="shrink-0 font-serif text-lg font-bold text-[var(--brand)]">
+                              {c.percent}%
+                            </span>
+                          </div>
+
+                          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--surface-2)]">
+                            <div
+                              className="h-full rounded-full bg-[var(--gold)] shadow-[0_0_8px_var(--academy-glow)]"
+                              style={{
+                                width: `${c.percent}%`,
+                                transition: "width 0.8s var(--ease-academy)",
+                              }}
+                            />
+                          </div>
+
+                          <p className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-[var(--brand)]">
+                            {c.complete ? (
+                              <>
+                                <Icon name="check" className="h-4 w-4" /> Completed
+                              </>
+                            ) : (
+                              <>
+                                {c.nextLesson ? c.nextLesson.title : "Continue"}
+                                <Icon
+                                  name="arrowRight"
+                                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                                />
+                              </>
+                            )}
+                          </p>
+                        </Link>
+                      </Reveal>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Credentials */}
+              {s.certificates.length > 0 && (
+                <>
+                  <h2
+                    id="credentials"
+                    className="mb-4 mt-12 font-serif text-2xl font-bold text-[var(--brand)]"
+                  >
+                    My credentials
+                  </h2>
+                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    {s.certificates.map((cert, i) => (
+                      <Reveal key={cert.id} delay={(i % 3) * 0.05}>
+                        <Link
+                          href={`/certificates/${cert.code}`}
+                          className="group flex h-full flex-col rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 transition-all hover:-translate-y-1 hover:border-[var(--gold)]"
+                        >
+                          <span className="mb-3 inline-grid h-11 w-11 place-items-center rounded-sm border border-[var(--gold)] text-[var(--gold)] transition group-hover:bg-[var(--gold-soft)]">
+                            <Icon name="award" className="h-5 w-5" />
+                          </span>
+                          <p className="font-serif font-bold text-[var(--text)]">
+                            {cert.course.title}
+                          </p>
+                          <p className="mt-1 font-mono text-xs text-[var(--brand)]">{cert.code}</p>
+                          <p className="mt-auto pt-3 text-xs text-[var(--text-faint)]">
+                            Issued {formatIssueDate(cert.issuedAt)}
+                          </p>
+                        </Link>
+                      </Reveal>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Study aide */}
+            <aside className="space-y-5 lg:sticky lg:top-24">
+              <StreakCard streak={s.streak} studiedToday={s.studiedToday} />
+
+              <div className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)]">
+                <h3 className="mb-3 flex items-center gap-2 font-serif text-lg font-bold text-[var(--text)]">
+                  <Icon name="sparkle" className="h-4 w-4 text-[var(--gold)]" />
+                  Your study aide
+                </h3>
+
+                {s.reminders.length === 0 ? (
+                  <p className="text-sm text-[var(--text-muted)]">Nothing needs your attention.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {s.reminders.map((r) => (
+                      <li
+                        key={r.id}
+                        className="rounded-sm border-l-2 bg-[var(--surface-2)] px-3 py-2.5"
                         style={{
-                          backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+                          borderLeftColor:
+                            r.tone === "urgent"
+                              ? "var(--gold)"
+                              : r.tone === "praise"
+                                ? "var(--academy-emerald)"
+                                : "var(--border-strong)",
                         }}
                       >
-                        <Icon name="award" className="h-5 w-5" />
-                      </span>
-                      <p className="font-bold leading-snug">{cert.course.title}</p>
-                      <p className="mt-1 font-mono text-xs text-[var(--brand)]">
-                        {cert.code}
-                      </p>
-                      <p className="mt-auto pt-4 text-xs text-[var(--text-faint)]">
-                        Issued {formatIssueDate(cert.issuedAt)}
-                      </p>
-                    </Link>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+                        <p className="text-sm font-semibold text-[var(--text)]">{r.title}</p>
+                        <p className="mt-0.5 text-xs leading-relaxed text-[var(--text-muted)]">
+                          {r.body}
+                        </p>
+                        {r.href && (
+                          <Link
+                            href={r.href}
+                            className="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold text-[var(--brand)] hover:underline"
+                          >
+                            {r.cta}
+                            <Icon name="arrowRight" className="h-3 w-3" />
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Overall standing */}
+              <div className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 text-center shadow-[var(--shadow-card)]">
+                <h3 className="mb-4 font-serif text-lg font-bold text-[var(--text)]">
+                  Overall progress
+                </h3>
+                <div className="flex justify-center">
+                  <ProgressRing
+                    percent={s.totals.percent}
+                    size={116}
+                    stroke={9}
+                    gradientId="overall-ring"
+                    from="var(--gold)"
+                    to="var(--gold-dim)"
+                  />
+                </div>
+                <p className="mt-4 text-sm text-[var(--text-muted)]">
+                  {s.totals.completedCourses} of {s.totals.courses} courses complete
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
-function StatCard({
+function Stat({
   icon,
   label,
   value,
-  suffix,
   highlight,
 }: {
   icon: string;
   label: string;
   value: number;
-  suffix?: string;
   highlight?: boolean;
 }) {
   return (
-    <div className="card lift p-5">
+    <div className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)]">
       <span
-        className={`mb-3 grid h-10 w-10 place-items-center rounded-xl ${
+        className={`mb-3 inline-grid h-10 w-10 place-items-center rounded-sm border ${
           highlight
-            ? "brand-gradient text-white shadow-md"
-            : "bg-[var(--brand-soft)] text-[var(--brand)]"
+            ? "border-[var(--gold)] bg-[var(--gold-soft)] text-[var(--gold)]"
+            : "border-[var(--border)] text-[var(--text-muted)]"
         }`}
       >
         <Icon name={icon} className="h-5 w-5" />
       </span>
-      <p className="text-3xl font-bold tracking-tight">
-        <CountUp value={value} suffix={suffix} />
+      <p className="font-serif text-3xl font-bold text-[var(--text)]">
+        <CountUp value={value} />
       </p>
-      <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
+      <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text-faint)]">
         {label}
       </p>
+    </div>
+  );
+}
+
+function StreakCard({ streak, studiedToday }: { streak: number; studiedToday: boolean }) {
+  // Seven candles; the lit ones show this week's consecutive days.
+  const lit = Math.min(streak, 7);
+
+  return (
+    <div className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)]">
+      <div className="flex items-baseline justify-between">
+        <h3 className="font-serif text-lg font-bold text-[var(--text)]">Study streak</h3>
+        <span className="font-serif text-2xl font-bold text-[var(--gold)]">{streak}</span>
+      </div>
+
+      <div className="mt-4 flex items-end justify-between gap-1.5">
+        {Array.from({ length: 7 }, (_, i) => {
+          const isLit = i < lit;
+          return (
+            <span key={i} className="flex flex-1 flex-col items-center gap-1">
+              {/* Flame */}
+              <span
+                className={`h-2.5 w-2.5 rounded-full transition-all ${
+                  isLit ? "animate-flicker bg-[var(--gold-bright)]" : "bg-[var(--surface-2)]"
+                }`}
+                style={isLit ? { boxShadow: "0 0 8px var(--academy-glow)" } : undefined}
+              />
+              {/* Candle */}
+              <span
+                className={`h-7 w-2 rounded-sm ${
+                  isLit ? "bg-[var(--gold-dim)]" : "bg-[var(--surface-2)]"
+                }`}
+              />
+            </span>
+          );
+        })}
+      </div>
+
+      <p className="mt-3 text-xs leading-relaxed text-[var(--text-muted)]">
+        {streak === 0
+          ? "Complete a lesson today to light the first candle."
+          : studiedToday
+            ? "Today is done. The streak holds."
+            : "Study today to keep the streak alive."}
+      </p>
+    </div>
+  );
+}
+
+function EmptyRecord() {
+  return (
+    <div className="rounded-sm border border-dashed border-[var(--border-strong)] px-6 py-14 text-center">
+      <span className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full border border-[var(--gold)] text-[var(--gold)]">
+        <Icon name="book" className="h-6 w-6" />
+      </span>
+      <p className="font-serif text-2xl font-bold text-[var(--brand)]">
+        Your academy journey begins here.
+      </p>
+      <p className="mt-2 text-sm text-[var(--text-muted)]">Choose your first course.</p>
+      <Link
+        href="/courses"
+        className="rune-edge mt-6 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3 font-semibold text-[#241026] transition hover:brightness-110"
+      >
+        Explore the archives
+        <Icon name="arrowRight" className="h-4 w-4" />
+      </Link>
     </div>
   );
 }

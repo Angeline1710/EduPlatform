@@ -30,6 +30,10 @@ model User {
 
   currentStreak  Int       @default(0)
   lastStudyDate  DateTime?
+  /// Touched by a client heartbeat while a session is open. Anyone seen
+  /// inside the presence window counts as online; this is the only source
+  /// for the live count, so it is never estimated.
+  lastSeenAt     DateTime?
 }
 
 model Course {
@@ -39,6 +43,9 @@ model Course {
   price        Int      // stored in cents
   category     String   @default("General")
   thumbnailUrl String?
+  /// Small looping GIF shown above the course title. Optional; courses
+  /// without one simply render the crest as before.
+  gifUrl       String?
   published    Boolean  @default(false)
   createdBy    User     @relation("CourseCreatedBy", fields: [createdById], references: [id])
   createdById  String

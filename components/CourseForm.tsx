@@ -12,6 +12,7 @@ type Course = {
   price: number;
   category: string;
   thumbnailUrl: string | null;
+  gifUrl: string | null;
   published: boolean;
 };
 
@@ -22,6 +23,8 @@ export default function CourseForm({ course }: { course?: Course }) {
   const [price, setPrice] = useState(course ? (course.price / 100).toFixed(2) : "49.00");
   const [category, setCategory] = useState(course?.category ?? "Development");
   const [thumbnailUrl, setThumbnailUrl] = useState(course?.thumbnailUrl ?? "");
+  const [gifUrl, setGifUrl] = useState(course?.gifUrl ?? "");
+  const [gifBroken, setGifBroken] = useState(false);
   const [published, setPublished] = useState(course?.published ?? false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,6 +40,7 @@ export default function CourseForm({ course }: { course?: Course }) {
       price: Math.round(parseFloat(price) * 100),
       category,
       thumbnailUrl,
+      gifUrl,
       published,
     };
 
@@ -167,6 +171,46 @@ export default function CourseForm({ course }: { course?: Course }) {
           </p>
           <p className="truncate font-bold">{title || "Course title"}</p>
         </div>
+      </div>
+
+      {/* Course GIF */}
+      <div>
+        <label htmlFor="gifUrl" className="label">
+          Course GIF
+          <span className="ml-2 font-normal text-[var(--text-faint)]">
+            optional — plays above the course title
+          </span>
+        </label>
+        <input
+          id="gifUrl"
+          type="url"
+          value={gifUrl}
+          onChange={(e) => setGifUrl(e.target.value)}
+          placeholder="https://example.com/spellbook.gif"
+          className="input"
+        />
+
+        {gifUrl && (
+          <div className="mt-3 flex items-center gap-3">
+            <span className="relative block h-16 w-16 shrink-0 overflow-hidden rounded-md border border-[var(--gold)] bg-[var(--surface-2)] shadow-[0_0_12px_var(--academy-glow)]">
+              {/* Plain <img>: the source is an arbitrary admin-supplied URL,
+                  so it cannot go through the optimiser's allowlist. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={gifUrl}
+                alt=""
+                className="h-full w-full object-cover"
+                onError={() => setGifBroken(true)}
+                onLoad={() => setGifBroken(false)}
+              />
+            </span>
+            <p className="text-xs text-[var(--text-muted)]">
+              {gifBroken
+                ? "That URL could not be loaded — check the link."
+                : "Preview. Square, under ~1MB looks best."}
+            </p>
+          </div>
+        )}
       </div>
 
       <label className="flex items-center gap-2.5 text-sm font-medium">

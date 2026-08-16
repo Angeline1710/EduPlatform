@@ -11,14 +11,20 @@ import { categoryTheme } from "@/lib/categories";
 export default function DepartmentFilter({
   categories,
   active,
+  /** Route the chips filter within — the home band and the archives differ. */
+  basePath = "/",
 }: {
   categories: string[];
   active: string;
+  basePath?: string;
 }) {
-  const items = [{ name: "All", href: "/" }, ...categories.map((c) => ({
-    name: c,
-    href: `/?category=${encodeURIComponent(c)}`,
-  }))];
+  const items = [
+    { name: "All", href: basePath },
+    ...categories.map((c) => ({
+      name: c,
+      href: `${basePath}?category=${encodeURIComponent(c)}`,
+    })),
+  ];
 
   return (
     <ul

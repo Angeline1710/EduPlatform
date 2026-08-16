@@ -10,6 +10,7 @@ const schema = z.object({
   price: z.number().int().min(0),
   category: z.enum(CATEGORY_NAMES),
   thumbnailUrl: z.string().url().optional().or(z.literal("")),
+  gifUrl: z.string().url().optional().or(z.literal("")),
   published: z.boolean().optional(),
 });
 
@@ -22,7 +23,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid course data." }, { status: 400 });
   }
 
-  const { title, description, price, category, thumbnailUrl, published } = parsed.data;
+  const { title, description, price, category, thumbnailUrl, gifUrl, published } =
+    parsed.data;
 
   const course = await prisma.course.create({
     data: {
@@ -31,6 +33,7 @@ export async function POST(req: Request) {
       price,
       category,
       thumbnailUrl: thumbnailUrl || null,
+      gifUrl: gifUrl || null,
       published: published ?? false,
       createdById: admin.id,
     },

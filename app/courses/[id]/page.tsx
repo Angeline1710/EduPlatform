@@ -50,14 +50,29 @@ export default async function CoursePage({ params }: PageProps<"/courses/[id]">)
         <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
           <div>
             <div className="mb-5 flex items-center gap-4">
-              <span
-                className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl text-white shadow-lg"
-                style={{
-                  backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
-                }}
-              >
-                <Icon name={theme.icon} className="h-7 w-7" />
-              </span>
+              {course.gifUrl ? (
+                /* Admin-supplied GIF takes the crest's place when present.
+                   Plain <img> because the URL is arbitrary and cannot pass
+                   through the image optimiser's host allowlist. */
+                <span className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl border border-[var(--gold)] shadow-[0_0_16px_var(--academy-glow)]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={course.gifUrl}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </span>
+              ) : (
+                <span
+                  className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl text-white shadow-lg"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+                  }}
+                >
+                  <Icon name={theme.icon} className="h-7 w-7" />
+                </span>
+              )}
               <span
                 className="accent text-xs font-bold uppercase tracking-widest"
                 style={

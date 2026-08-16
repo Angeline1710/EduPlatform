@@ -5,6 +5,7 @@ import Providers from "@/components/Providers";
 import Nav from "@/components/Nav";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import Heartbeat from "@/components/Heartbeat";
 import PageTransition from "@/components/magic/PageTransition";
 
 const geistSans = Geist({
@@ -48,6 +49,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="bg-[var(--shell)] text-[var(--text)]">
         <Providers>
+          {/* Reports presence so the admin's live count is real */}
+          <Heartbeat />
           {/* Rail + column. The rail is its own scroll context so the main
               column scrolls independently, as in the reference layout. */}
           <div className="flex min-h-screen">

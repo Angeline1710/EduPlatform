@@ -12,6 +12,8 @@ type CourseCardProps = {
   price: number;
   category: string;
   lessonCount: number;
+  /** Optional admin-supplied GIF, shown in place of the crest. */
+  gifUrl?: string | null;
 };
 
 export default function CourseCard({
@@ -21,6 +23,7 @@ export default function CourseCard({
   price,
   category,
   lessonCount,
+  gifUrl,
 }: CourseCardProps) {
   const theme = categoryTheme(category);
 
@@ -40,19 +43,28 @@ export default function CourseCard({
         className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[var(--gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       />
 
-      {/* Department crest. Uses the readable ink role, not the gradient hue,
-          so the mark holds up on parchment as well as plum. */}
-      <span
-        className="accent mt-0.5 shrink-0 transition-transform duration-500 group-hover:scale-110"
-        style={
-          {
-            "--accent-light": theme.ink,
-            "--accent-dark": theme.inkDark,
-          } as React.CSSProperties
-        }
-      >
-        <DepartmentCrest name={category} className="h-12 w-12" />
-      </span>
+      {gifUrl ? (
+        /* Admin-supplied GIF replaces the crest. Plain <img>: the URL is
+           arbitrary, so it cannot go through the optimiser's allowlist. */
+        <span className="mt-0.5 block h-12 w-12 shrink-0 overflow-hidden rounded-md border border-[var(--gold)] shadow-[0_0_10px_var(--academy-glow)] transition-transform duration-500 group-hover:scale-110">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={gifUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
+        </span>
+      ) : (
+        /* Department crest. Uses the readable ink role, not the gradient hue,
+           so the mark holds up on parchment as well as plum. */
+        <span
+          className="accent mt-0.5 shrink-0 transition-transform duration-500 group-hover:scale-110"
+          style={
+            {
+              "--accent-light": theme.ink,
+              "--accent-dark": theme.inkDark,
+            } as React.CSSProperties
+          }
+        >
+          <DepartmentCrest name={category} className="h-12 w-12" />
+        </span>
+      )}
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Bookmark sits opposite the title, as in the reference */}
