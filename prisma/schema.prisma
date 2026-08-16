@@ -28,6 +28,7 @@ model User {
   notes          Note[]
   achievements   Achievement[]
   signals        Signal[]
+  profile        Profile?
 
   currentStreak  Int       @default(0)
   lastStudyDate  DateTime?
@@ -142,6 +143,81 @@ model Note {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// The scholar's record.
+///
+/// Every field is optional on purpose: a student can use the platform fully
+/// without disclosing anything, and each thing they do share earns its place
+/// by improving what the owl can suggest. Age is never stored — only the date
+/// of birth, so the figure can never go stale.
+model Profile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Identity
+  headline    String?
+  bio         String?
+  avatarUrl   String?
+  dateOfBirth DateTime?
+
+  // Contact and place
+  phone   String?
+  country String?
+  city    String?
+
+  // Education
+  /// "SECONDARY" | "DIPLOMA" | "BACHELORS" | "MASTERS" | "DOCTORATE" | "SELF_TAUGHT" | "OTHER"
+  educationLevel String?
+  fieldOfStudy   String?
+  institution    String?
+  graduationYear Int?
+  occupation     String?
+  /// "BEGINNER" | "INTERMEDIATE" | "ADVANCED"
+  experienceLevel String?
+
+  /// Departments the scholar says they care about, stored as a JSON array of
+  /// category names. Read alongside behaviour, so a stated preference counts
+  /// even before they have browsed anything.
+  interests   String?
+  goals       String?
+  weeklyHours Int?
+
+  // Links
+  linkedinUrl String?
+  githubUrl   String?
+  websiteUrl  String?
+
+  /// Explicit consent for offers and course suggestions by email. Defaults to
+  /// off; nothing promotional should be sent without it being deliberately on.
+  marketingOptIn Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accolades Accolade[]
+}
+
+/// Something the scholar earned elsewhere — a competition placing, an outside
+/// certification, an award. Distinct from Certificate, which is issued by this
+/// academy and is verifiable; these are self-declared.
+model Accolade {
+  id        String  @id @default(cuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  /// "COMPETITION" | "CERTIFICATION" | "AWARD" | "PUBLICATION" | "PROJECT"
+  kind        String
+  title       String
+  issuer      String?
+  year        Int?
+  url         String?
+  description String?
+
+  createdAt DateTime @default(now())
+
+  @@index([profileId])
 }
 
 /// One recorded act of interest.

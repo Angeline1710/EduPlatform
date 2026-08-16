@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/format";
 import { formatIssueDate } from "@/lib/certificates";
 import { categoryTheme } from "@/lib/categories";
 import UserControls from "@/components/UserControls";
+import ScholarRecord from "@/components/admin/ScholarRecord";
 import Icon from "@/components/Icon";
 
 export default async function AdminUserDetailPage({
@@ -131,6 +132,9 @@ export default async function AdminUserDetailPage({
       </div>
 
       {/* Controls */}
+      {/* The scholar's own record, as they filled it in */}
+      <ScholarRecord userId={user.id} />
+
       <UserControls
         userId={user.id}
         isSelf={user.id === admin.id}

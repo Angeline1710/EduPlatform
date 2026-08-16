@@ -95,9 +95,12 @@ export default function Nav() {
 
           {user ? (
             <>
-              <span className="hidden text-sm text-[var(--shell-text-muted)] lg:inline">
+              <Link
+                href={user.role === "ADMIN" ? "/admin" : "/profile"}
+                className="hidden text-sm text-[var(--shell-text-muted)] transition hover:text-[var(--gold-bright)] lg:inline"
+              >
                 {user.name}
-              </span>
+              </Link>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
                 className="rounded-full px-3 py-2 text-sm text-[var(--shell-text)] transition hover:text-[var(--gold-bright)]"

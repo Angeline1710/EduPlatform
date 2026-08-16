@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { CATEGORY_NAMES } from "@/lib/categories";
+import { parseInterests } from "@/lib/profile-fields";
 
 /**
  * The owl's reasoning.
@@ -77,7 +78,7 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
 
   if (!where) return empty("Tell me what you would like to learn and I will find it.");
 
-  const [signals, enrollments, published] = await Promise.all([
+  const [signals, enrollments, published, profile] = await Promise.all([
     prisma.signal.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -93,9 +94,23 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
       where: { published: true },
       include: { _count: { select: { lessons: true, enrollments: true } } },
     }),
+    who.userId
+      ? prisma.profile.findUnique({
+          where: { userId: who.userId },
+          select: {
+            interests: true,
+            fieldOfStudy: true,
+            experienceLevel: true,
+          },
+        })
+      : Promise.resolve(null),
   ]);
 
-  if (signals.length === 0) {
+  // Stated preferences count even before anyone has browsed, so a scholar who
+  // filled in their record is never told the owl knows nothing about them.
+  const declared = parseInterests(profile?.interests);
+
+  if (signals.length === 0 && declared.length === 0) {
     return empty("Search for a subject and I will point you somewhere worth starting.");
   }
 
@@ -118,6 +133,23 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
       if (term.includes(name.toLowerCase())) {
         const w = WEIGHT.search * decay(s.createdAt, now);
         scores.set(name, (scores.get(name) ?? 0) + w);
+      }
+    }
+  }
+
+  // Declared interests carry real weight and never decay — a stated
+  // preference is a fact about the person, not a passing click.
+  const DECLARED_WEIGHT = 8;
+  for (const name of declared) {
+    scores.set(name, (scores.get(name) ?? 0) + DECLARED_WEIGHT);
+  }
+
+  // A field of study naming a department counts toward it too.
+  if (profile?.fieldOfStudy) {
+    const field = profile.fieldOfStudy.toLowerCase();
+    for (const name of CATEGORY_NAMES) {
+      if (field.includes(name.toLowerCase())) {
+        scores.set(name, (scores.get(name) ?? 0) + 4);
       }
     }
   }
@@ -171,17 +203,25 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
           c.description.toLowerCase().includes(term.toLowerCase()),
       );
 
+      // Beginners should not be handed the longest course in the archive,
+      // and someone advanced should not be sent the shortest.
+      const level = profile?.experienceLevel;
+      let levelFit = 0;
+      if (level === "BEGINNER") levelFit = c._count.lessons <= 5 ? 2 : -1;
+      else if (level === "ADVANCED") levelFit = c._count.lessons >= 5 ? 1.5 : -1;
+
       const score =
         affinity * 1.0 +
         views * 4 +
         (searchHit ? 6 : 0) +
-        // A gentle nudge toward proven courses, so a brand-new profile still
-        // gets something sensible rather than an arbitrary pick.
+        levelFit +
         Math.min(c._count.enrollments, 5) * 0.4;
 
       let reason = "Popular with other scholars";
       if (views > 0) reason = `You looked at this ${views === 1 ? "once" : `${views} times`}`;
       else if (searchHit) reason = "Matches what you searched for";
+      else if (declared.includes(c.category))
+        reason = `You said ${c.category} interests you`;
       else if (affinity > 0 && c.category === topCategory)
         reason = `You keep returning to ${c.category}`;
       else if (affinity > 0) reason = `Close to your interest in ${c.category}`;

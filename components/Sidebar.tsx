@@ -33,9 +33,14 @@ export default function Sidebar() {
 
   const items: Item[] = [
     ...ITEMS,
-    user?.role === "ADMIN"
-      ? { href: "/admin", label: "Admin", icon: "lock" }
-      : { href: "/dashboard", label: "My Learning", icon: "user" },
+    ...(user?.role === "ADMIN"
+      ? [{ href: "/admin", label: "Admin", icon: "lock" }]
+      : user
+        ? [
+            { href: "/dashboard", label: "My Learning", icon: "book" },
+            { href: "/profile", label: "My Record", icon: "user" },
+          ]
+        : []),
   ];
 
   function isActive(href: string) {
