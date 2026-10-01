@@ -21,7 +21,7 @@ export default function CourseForm({ course }: { course?: Course }) {
   const [title, setTitle] = useState(course?.title ?? "");
   const [description, setDescription] = useState(course?.description ?? "");
   const [price, setPrice] = useState(
-    course ? (course.price / 100).toFixed(2) : "49.00",
+    course ? (course.price / 100).toFixed(2) : "300.00",
   );
   const [category, setCategory] = useState(course?.category ?? "Development");
   const [thumbnailUrl, setThumbnailUrl] = useState(course?.thumbnailUrl ?? "");
@@ -134,7 +134,7 @@ export default function CourseForm({ course }: { course?: Course }) {
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="price" className="label">
-            Price (USD)
+            Price (INR)
           </label>
           <input
             id="price"

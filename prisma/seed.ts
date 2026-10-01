@@ -13,7 +13,7 @@ const COURSES = [
     category: "Development",
     description:
       "Learn HTML, CSS, and JavaScript from scratch and build your first responsive website.",
-    price: 4900,
+    price: 40000,
     lessons: [
       "How the web works",
       "HTML structure and semantics",
@@ -27,7 +27,7 @@ const COURSES = [
     category: "Development",
     description:
       "Master modern React with hooks, context, and component patterns used in production apps.",
-    price: 7900,
+    price: 40000,
     lessons: [
       "Components and JSX",
       "State and props",
@@ -41,7 +41,7 @@ const COURSES = [
     category: "Data",
     description:
       "Use pandas, NumPy, and matplotlib to clean, analyze, and visualize real datasets.",
-    price: 6900,
+    price: 40000,
     lessons: [
       "Python refresher",
       "NumPy arrays",
@@ -55,7 +55,7 @@ const COURSES = [
     category: "Data",
     description:
       "Write efficient queries and design normalized schemas that scale with your application.",
-    price: 5900,
+    price: 30000,
     lessons: [
       "SELECT basics",
       "Joins explained",
@@ -69,7 +69,7 @@ const COURSES = [
     category: "Design",
     description:
       "Understand layout, typography, color, and usability to design interfaces people love.",
-    price: 5400,
+    price: 30000,
     lessons: [
       "Design thinking",
       "Layout and grids",
@@ -83,7 +83,7 @@ const COURSES = [
     category: "Data",
     description:
       "A practical introduction to supervised learning, model evaluation, and scikit-learn.",
-    price: 8900,
+    price: 40000,
     lessons: [
       "What is ML?",
       "Linear regression",
@@ -97,7 +97,7 @@ const COURSES = [
     category: "Business",
     description:
       "Grow an audience with SEO, content strategy, email funnels, and paid ads that convert.",
-    price: 4400,
+    price: 30000,
     lessons: [
       "Marketing fundamentals",
       "SEO basics",
@@ -111,7 +111,7 @@ const COURSES = [
     category: "Communication",
     description:
       "Write clear emails, run confident meetings, and present your ideas professionally.",
-    price: 3900,
+    price: 30000,
     lessons: [
       "Professional email writing",
       "Meeting vocabulary",
@@ -125,7 +125,7 @@ const COURSES = [
     category: "Design",
     description:
       "Go from blank canvas to polished design system using Figma's modern workflow.",
-    price: 5900,
+    price: 30000,
     lessons: [
       "Figma interface tour",
       "Frames and layers",
@@ -139,7 +139,7 @@ const COURSES = [
     category: "Development",
     description:
       "Build and ship cross-platform iOS and Android apps from a single codebase.",
-    price: 8400,
+    price: 40000,
     lessons: [
       "Environment setup",
       "Core components",
@@ -153,7 +153,7 @@ const COURSES = [
     category: "Security",
     description:
       "Recognize phishing, secure your accounts, and understand the basics of staying safe online.",
-    price: 3400,
+    price: 30000,
     lessons: [
       "Threat landscape",
       "Passwords and 2FA",
@@ -167,7 +167,7 @@ const COURSES = [
     category: "Communication",
     description:
       "Beat stage fright and deliver talks that hold an audience from first line to last.",
-    price: 4900,
+    price: 30000,
     lessons: [
       "Managing nerves",
       "Structuring a talk",
@@ -232,10 +232,14 @@ async function main() {
       where: { title: course.title },
     });
     if (existing) {
-      // Keep categories in sync for databases seeded before they existed.
       await prisma.course.update({
         where: { id: existing.id },
-        data: { category: course.category },
+        data: {
+          category: course.category,
+          description: course.description,
+          price: course.price,
+          published: true,
+        },
       });
       continue;
     }

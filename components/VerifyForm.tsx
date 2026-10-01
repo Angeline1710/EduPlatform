@@ -23,17 +23,13 @@ export default function VerifyForm({
     <form onSubmit={onSubmit} className="flex flex-col gap-3 sm:flex-row">
       <label className="relative flex-1">
         <span className="sr-only">Credential ID</span>
-        <Icon
-          name="search"
-          className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-faint)]"
-        />
         <input
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder="EDU-XXXX-XXXX-XXXX"
           autoComplete="off"
           spellCheck={false}
-          className="input pl-11 font-mono uppercase tracking-wider"
+          className="input font-mono uppercase tracking-wider"
         />
       </label>
       <button type="submit" className="btn btn-primary press">

@@ -47,16 +47,10 @@ export default function HeroVideo() {
     <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
       <video
         ref={ref}
-        // inset-0 + object-cover fills the section exactly, whatever its
-        // height. An earlier version centred with left/top 50% and a negative
-        // translate, which drifted the frame hundreds of pixels off-box.
         className="absolute inset-0 h-full w-full object-cover"
         style={{
-          // Overscan, pushed down and right so the frame's lower-right corner
-          // — where the generator watermark sits — falls outside the window
-          // and is cropped away, rather than re-encoding the file.
-          transform: "scale(1.2) translate(2.5%, 4.5%)",
-          objectPosition: "50% 42%",
+          transform: "scale(1.08)",
+          objectPosition: "center center",
         }}
         src="/hero-owl.mp4"
         muted

@@ -13,7 +13,7 @@ const STATS = [
 
 export default function Hero({ courseCount }: { courseCount: number }) {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="relative isolate min-h-[72vh] overflow-hidden">
       {/* The film runs behind everything in this section. */}
       <HeroVideo />
 

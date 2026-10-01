@@ -22,12 +22,28 @@ export default function Nav() {
   const router = useRouter();
   const pathname = usePathname();
   const [query, setQuery] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Seed the field from the URL so a shared /?q=… link shows its term. Read
   // from location rather than useSearchParams: that hook forces the whole nav
   // into a Suspense boundary, which leaves it unhydrated and inert.
   useEffect(() => {
     setQuery(new URLSearchParams(window.location.search).get("q") ?? "");
+  }, []);
+
+  useEffect(() => {
+    const syncSidebarState = (event: Event) => {
+      const detail = (event as CustomEvent<{ open: boolean }>).detail;
+      if (detail && typeof detail.open === "boolean") {
+        setSidebarOpen(detail.open);
+      }
+    };
+
+    window.addEventListener("sidebar-state", syncSidebarState);
+
+    return () => {
+      window.removeEventListener("sidebar-state", syncSidebarState);
+    };
   }, []);
 
   function onSearch(e: React.FormEvent) {
@@ -38,6 +54,20 @@ export default function Nav() {
   return (
     <header className="shell-panel sticky top-0 z-50 border-b border-[var(--shell-line)]">
       <nav className="flex items-center gap-5 px-5 py-3 xl:px-8">
+        <button
+          type="button"
+          aria-label={sidebarOpen ? "Hide navigation" : "Open navigation"}
+          onClick={() => {
+            window.dispatchEvent(new Event("toggle-sidebar"));
+          }}
+          className="z-50 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--gold)]/50 bg-[rgba(17,17,17,0.72)] text-[var(--gold-bright)] shadow-[0_10px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl transition hover:scale-105 hover:border-[var(--gold-bright)]"
+        >
+          <Icon
+            name={sidebarOpen ? "arrowLeft" : "arrowRight"}
+            className="h-4 w-4"
+          />
+        </button>
+
         {/* Crest + wordmark */}
         <Link href="/" className="group flex shrink-0 items-center gap-3">
           <span className="transition-transform duration-500 group-hover:scale-105">
