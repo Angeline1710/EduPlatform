@@ -48,12 +48,16 @@ export default async function EditProfilePage() {
               educationLevel: profile?.educationLevel ?? "",
               fieldOfStudy: profile?.fieldOfStudy ?? "",
               institution: profile?.institution ?? "",
-              graduationYear: profile?.graduationYear ? String(profile.graduationYear) : "",
+              graduationYear: profile?.graduationYear
+                ? String(profile.graduationYear)
+                : "",
               occupation: profile?.occupation ?? "",
               experienceLevel: profile?.experienceLevel ?? "",
               interests,
               goals: profile?.goals ?? "",
-              weeklyHours: profile?.weeklyHours ? String(profile.weeklyHours) : "",
+              weeklyHours: profile?.weeklyHours
+                ? String(profile.weeklyHours)
+                : "",
               linkedinUrl: profile?.linkedinUrl ?? "",
               githubUrl: profile?.githubUrl ?? "",
               websiteUrl: profile?.websiteUrl ?? "",

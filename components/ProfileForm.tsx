@@ -6,7 +6,11 @@ import Icon from "@/components/Icon";
 import { DepartmentCrest } from "@/components/Crests";
 import Avatar from "@/components/profile/Avatar";
 import { CATEGORY_NAMES, categoryTheme } from "@/lib/categories";
-import { EDUCATION_LEVELS, EXPERIENCE_LEVELS, ACCOLADE_KINDS } from "@/lib/profile-fields";
+import {
+  EDUCATION_LEVELS,
+  EXPERIENCE_LEVELS,
+  ACCOLADE_KINDS,
+} from "@/lib/profile-fields";
 
 type Accolade = {
   id: string;
@@ -59,7 +63,10 @@ export default function ProfileForm({
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
 
-  function set<K extends keyof ProfileFormValues>(key: K, value: ProfileFormValues[K]) {
+  function set<K extends keyof ProfileFormValues>(
+    key: K,
+    value: ProfileFormValues[K],
+  ) {
     setV((prev) => ({ ...prev, [key]: value }));
     setSaved(false);
   }
@@ -110,7 +117,10 @@ export default function ProfileForm({
         <div className="flex flex-wrap items-center gap-5">
           <Avatar name={v.name || "?"} src={v.avatarUrl || null} size={80} />
           <div className="min-w-0 flex-1">
-            <Field label="Picture" hint="A link to an image. Square looks best.">
+            <Field
+              label="Picture"
+              hint="A link to an image. Square looks best."
+            >
               <input
                 type="url"
                 value={v.avatarUrl}
@@ -140,7 +150,10 @@ export default function ProfileForm({
               className="input"
             />
           </Field>
-          <Field label="Date of birth" hint="Used to pitch courses at the right level">
+          <Field
+            label="Date of birth"
+            hint="Used to pitch courses at the right level"
+          >
             <input
               type="date"
               value={v.dateOfBirth}
@@ -265,14 +278,20 @@ export default function ProfileForm({
           </Field>
         </Grid>
 
-        <Field label="Experience level" hint="Stops beginners being sent advanced material">
+        <Field
+          label="Experience level"
+          hint="Stops beginners being sent advanced material"
+        >
           <div className="flex flex-wrap gap-2">
             {EXPERIENCE_LEVELS.map((l) => (
               <button
                 key={l.value}
                 type="button"
                 onClick={() =>
-                  set("experienceLevel", v.experienceLevel === l.value ? "" : l.value)
+                  set(
+                    "experienceLevel",
+                    v.experienceLevel === l.value ? "" : l.value,
+                  )
                 }
                 aria-pressed={v.experienceLevel === l.value}
                 className={`rounded-sm border px-4 py-2.5 text-left text-sm transition ${
@@ -281,8 +300,12 @@ export default function ProfileForm({
                     : "border-[var(--border)] hover:border-[var(--gold)]"
                 }`}
               >
-                <span className="block font-semibold text-[var(--text)]">{l.label}</span>
-                <span className="block text-xs text-[var(--text-muted)]">{l.hint}</span>
+                <span className="block font-semibold text-[var(--text)]">
+                  {l.label}
+                </span>
+                <span className="block text-xs text-[var(--text-muted)]">
+                  {l.hint}
+                </span>
               </button>
             ))}
           </div>
@@ -290,7 +313,10 @@ export default function ProfileForm({
       </Section>
 
       {/* Learning intent */}
-      <Section title="What you want to learn" note="The strongest signal the owl has">
+      <Section
+        title="What you want to learn"
+        note="The strongest signal the owl has"
+      >
         <Field label="Subjects you care about" hint="Pick any that apply">
           <div className="flex flex-wrap gap-2">
             {CATEGORY_NAMES.filter((n) => n !== "General").map((name) => {
@@ -336,7 +362,10 @@ export default function ProfileForm({
           </Field>
         </Grid>
 
-        <Field label="What you want to achieve" hint="Shapes the order courses are suggested in">
+        <Field
+          label="What you want to achieve"
+          hint="Shapes the order courses are suggested in"
+        >
           <textarea
             value={v.goals}
             onChange={(e) => set("goals", e.target.value)}
@@ -391,8 +420,8 @@ export default function ProfileForm({
             className="mt-1 h-4 w-4 accent-[var(--gold)]"
           />
           <span className="text-sm leading-relaxed text-[var(--text-muted)]">
-            Send me course suggestions and offers by email. Off by default — the owl will
-            still guide you on the site either way.
+            Send me course suggestions and offers by email. Off by default — the
+            owl will still guide you on the site either way.
           </span>
         </label>
       </Section>
@@ -480,16 +509,26 @@ function AccoladeEditor({
       },
       ...accolades,
     ]);
-    setDraft({ kind: "COMPETITION", title: "", issuer: "", year: "", url: "", description: "" });
+    setDraft({
+      kind: "COMPETITION",
+      title: "",
+      issuer: "",
+      year: "",
+      url: "",
+      description: "",
+    });
     setOpen(false);
     router.refresh();
   }
 
   async function remove(id: string) {
     setBusy(true);
-    const res = await fetch(`/api/profile/accolades?id=${encodeURIComponent(id)}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `/api/profile/accolades?id=${encodeURIComponent(id)}`,
+      {
+        method: "DELETE",
+      },
+    );
     setBusy(false);
     if (res.ok) {
       onChange(accolades.filter((a) => a.id !== id));
@@ -510,7 +549,9 @@ function AccoladeEditor({
               className="flex items-start gap-3 rounded-sm border border-[var(--border)] px-4 py-3"
             >
               <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-[var(--text)]">{a.title}</span>
+                <span className="block font-semibold text-[var(--text)]">
+                  {a.title}
+                </span>
                 <span className="block text-xs text-[var(--text-faint)]">
                   {[
                     ACCOLADE_KINDS.find((k) => k.value === a.kind)?.label,
@@ -600,14 +641,18 @@ function AccoladeEditor({
           <Field label="Description">
             <textarea
               value={draft.description}
-              onChange={(e) => setDraft({ ...draft, description: e.target.value })}
+              onChange={(e) =>
+                setDraft({ ...draft, description: e.target.value })
+              }
               rows={2}
               maxLength={500}
               className="input resize-y"
             />
           </Field>
 
-          {err && <p className="mb-3 text-sm font-medium text-red-500">{err}</p>}
+          {err && (
+            <p className="mb-3 text-sm font-medium text-red-500">{err}</p>
+          )}
 
           <div className="flex gap-3">
             <button
@@ -647,7 +692,9 @@ function Section({
   return (
     <section className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-card)]">
       <div className="mb-5">
-        <h2 className="font-serif text-xl font-bold text-[var(--brand)]">{title}</h2>
+        <h2 className="font-serif text-xl font-bold text-[var(--brand)]">
+          {title}
+        </h2>
         {note && <p className="text-xs text-[var(--text-faint)]">{note}</p>}
       </div>
       <div className="space-y-4">{children}</div>
@@ -676,7 +723,9 @@ function Field({
         {label}
         {required && <span className="ml-1 text-[var(--gold)]">*</span>}
         {hint && (
-          <span className="ml-2 font-normal text-xs text-[var(--text-faint)]">{hint}</span>
+          <span className="ml-2 font-normal text-xs text-[var(--text-faint)]">
+            {hint}
+          </span>
         )}
       </span>
       {children}

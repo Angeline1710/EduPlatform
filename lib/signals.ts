@@ -25,11 +25,7 @@ export function anonId() {
 }
 
 export type SignalKind =
-  | "search"
-  | "course_view"
-  | "category_view"
-  | "enroll_intent"
-  | "enrolled";
+  "search" | "course_view" | "category_view" | "enroll_intent" | "enrolled";
 
 /**
  * Records an act of interest. Fire and forget — a dropped signal costs

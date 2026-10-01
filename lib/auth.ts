@@ -26,7 +26,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // A suspended account keeps its data but cannot start a session.
         if (user.status === "SUSPENDED") return null;
 
-        return { id: user.id, name: user.name, email: user.email, role: user.role };
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
   ],

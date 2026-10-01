@@ -77,11 +77,17 @@ export default function HeroVideo() {
       />
       <div
         className="absolute inset-x-0 bottom-0 h-1/3"
-        style={{ background: "linear-gradient(180deg, transparent, var(--hero-scrim-strong))" }}
+        style={{
+          background:
+            "linear-gradient(180deg, transparent, var(--hero-scrim-strong))",
+        }}
       />
       <div
         className="absolute inset-x-0 top-0 h-24"
-        style={{ background: "linear-gradient(180deg, var(--hero-scrim-soft), transparent)" }}
+        style={{
+          background:
+            "linear-gradient(180deg, var(--hero-scrim-soft), transparent)",
+        }}
       />
     </div>
   );

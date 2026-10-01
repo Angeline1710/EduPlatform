@@ -6,7 +6,9 @@ import CourseForm from "@/components/CourseForm";
 import LessonManager from "@/components/LessonManager";
 import Icon from "@/components/Icon";
 
-export default async function EditCoursePage({ params }: PageProps<"/admin/courses/[id]/edit">) {
+export default async function EditCoursePage({
+  params,
+}: PageProps<"/admin/courses/[id]/edit">) {
   const admin = await requireAdmin();
   if (!admin) redirect("/admin/login");
 
@@ -30,7 +32,9 @@ export default async function EditCoursePage({ params }: PageProps<"/admin/cours
         Back to dashboard
       </Link>
 
-      <h1 className="mb-8 text-4xl font-extrabold tracking-tight">Edit course</h1>
+      <h1 className="mb-8 text-4xl font-extrabold tracking-tight">
+        Edit course
+      </h1>
 
       <CourseForm course={course} />
 

@@ -10,7 +10,8 @@ export default auth((req) => {
 
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
     if (!user) return NextResponse.redirect(new URL("/admin/login", req.url));
-    if (user.role !== "ADMIN") return NextResponse.redirect(new URL("/", req.url));
+    if (user.role !== "ADMIN")
+      return NextResponse.redirect(new URL("/", req.url));
   }
 
   if (pathname.startsWith("/dashboard") || pathname.startsWith("/learn")) {

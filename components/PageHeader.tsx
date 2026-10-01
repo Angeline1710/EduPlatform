@@ -24,7 +24,10 @@ export default function PageHeader({
       <MagicParticles count={26} kind="ember" />
 
       <div className="relative mx-auto max-w-[1400px] px-6 py-14 text-center xl:px-10">
-        <div className="mb-4 flex items-center justify-center gap-3" aria-hidden="true">
+        <div
+          className="mb-4 flex items-center justify-center gap-3"
+          aria-hidden="true"
+        >
           <span className="rule-fade w-16 sm:w-24" />
           <span className="text-[var(--gold)]">
             <AcademyCrest size={24} />
@@ -42,7 +45,10 @@ export default function PageHeader({
           </LivingInk>
         </h1>
 
-        <div className="mt-5 flex items-center justify-center gap-2.5" aria-hidden="true">
+        <div
+          className="mt-5 flex items-center justify-center gap-2.5"
+          aria-hidden="true"
+        >
           <span className="rule-fade w-14" />
           <Diamond size={5} />
           <span className="rule-fade w-14" />

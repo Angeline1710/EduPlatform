@@ -45,7 +45,10 @@ export default function RegisterPage() {
       footer={
         <p>
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-[var(--brand)] hover:underline">
+          <Link
+            href="/login"
+            className="font-semibold text-[var(--brand)] hover:underline"
+          >
             Sign in
           </Link>
         </p>
@@ -93,7 +96,9 @@ export default function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="input"
           />
-          <p className="mt-1.5 text-xs text-[var(--text-faint)]">At least 8 characters.</p>
+          <p className="mt-1.5 text-xs text-[var(--text-faint)]">
+            At least 8 characters.
+          </p>
         </div>
 
         {error && (
@@ -102,7 +107,11 @@ export default function RegisterPage() {
           </p>
         )}
 
-        <button type="submit" disabled={loading} className="btn btn-primary w-full">
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn btn-primary w-full"
+        >
           {loading ? "Creating account..." : "Create account"}
         </button>
       </form>

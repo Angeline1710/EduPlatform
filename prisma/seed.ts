@@ -11,86 +11,170 @@ const COURSES = [
   {
     title: "Web Development Fundamentals",
     category: "Development",
-    description: "Learn HTML, CSS, and JavaScript from scratch and build your first responsive website.",
+    description:
+      "Learn HTML, CSS, and JavaScript from scratch and build your first responsive website.",
     price: 4900,
-    lessons: ["How the web works", "HTML structure and semantics", "Styling with CSS", "JavaScript basics", "Your first project"],
+    lessons: [
+      "How the web works",
+      "HTML structure and semantics",
+      "Styling with CSS",
+      "JavaScript basics",
+      "Your first project",
+    ],
   },
   {
     title: "React from Zero to Hero",
     category: "Development",
-    description: "Master modern React with hooks, context, and component patterns used in production apps.",
+    description:
+      "Master modern React with hooks, context, and component patterns used in production apps.",
     price: 7900,
-    lessons: ["Components and JSX", "State and props", "Hooks deep dive", "Context and global state", "Building a full app"],
+    lessons: [
+      "Components and JSX",
+      "State and props",
+      "Hooks deep dive",
+      "Context and global state",
+      "Building a full app",
+    ],
   },
   {
     title: "Python for Data Analysis",
     category: "Data",
-    description: "Use pandas, NumPy, and matplotlib to clean, analyze, and visualize real datasets.",
+    description:
+      "Use pandas, NumPy, and matplotlib to clean, analyze, and visualize real datasets.",
     price: 6900,
-    lessons: ["Python refresher", "NumPy arrays", "pandas DataFrames", "Cleaning messy data", "Plotting results"],
+    lessons: [
+      "Python refresher",
+      "NumPy arrays",
+      "pandas DataFrames",
+      "Cleaning messy data",
+      "Plotting results",
+    ],
   },
   {
     title: "SQL and Database Design",
     category: "Data",
-    description: "Write efficient queries and design normalized schemas that scale with your application.",
+    description:
+      "Write efficient queries and design normalized schemas that scale with your application.",
     price: 5900,
-    lessons: ["SELECT basics", "Joins explained", "Aggregations and grouping", "Indexes and performance", "Schema normalization"],
+    lessons: [
+      "SELECT basics",
+      "Joins explained",
+      "Aggregations and grouping",
+      "Indexes and performance",
+      "Schema normalization",
+    ],
   },
   {
     title: "UI/UX Design Principles",
     category: "Design",
-    description: "Understand layout, typography, color, and usability to design interfaces people love.",
+    description:
+      "Understand layout, typography, color, and usability to design interfaces people love.",
     price: 5400,
-    lessons: ["Design thinking", "Layout and grids", "Typography", "Color theory", "Usability testing"],
+    lessons: [
+      "Design thinking",
+      "Layout and grids",
+      "Typography",
+      "Color theory",
+      "Usability testing",
+    ],
   },
   {
     title: "Machine Learning Basics",
     category: "Data",
-    description: "A practical introduction to supervised learning, model evaluation, and scikit-learn.",
+    description:
+      "A practical introduction to supervised learning, model evaluation, and scikit-learn.",
     price: 8900,
-    lessons: ["What is ML?", "Linear regression", "Classification", "Model evaluation", "Avoiding overfitting"],
+    lessons: [
+      "What is ML?",
+      "Linear regression",
+      "Classification",
+      "Model evaluation",
+      "Avoiding overfitting",
+    ],
   },
   {
     title: "Digital Marketing Essentials",
     category: "Business",
-    description: "Grow an audience with SEO, content strategy, email funnels, and paid ads that convert.",
+    description:
+      "Grow an audience with SEO, content strategy, email funnels, and paid ads that convert.",
     price: 4400,
-    lessons: ["Marketing fundamentals", "SEO basics", "Content strategy", "Email marketing", "Running paid ads"],
+    lessons: [
+      "Marketing fundamentals",
+      "SEO basics",
+      "Content strategy",
+      "Email marketing",
+      "Running paid ads",
+    ],
   },
   {
     title: "Business English Communication",
     category: "Communication",
-    description: "Write clear emails, run confident meetings, and present your ideas professionally.",
+    description:
+      "Write clear emails, run confident meetings, and present your ideas professionally.",
     price: 3900,
-    lessons: ["Professional email writing", "Meeting vocabulary", "Presentation skills", "Negotiation phrases", "Cross-cultural etiquette"],
+    lessons: [
+      "Professional email writing",
+      "Meeting vocabulary",
+      "Presentation skills",
+      "Negotiation phrases",
+      "Cross-cultural etiquette",
+    ],
   },
   {
     title: "Graphic Design with Figma",
     category: "Design",
-    description: "Go from blank canvas to polished design system using Figma's modern workflow.",
+    description:
+      "Go from blank canvas to polished design system using Figma's modern workflow.",
     price: 5900,
-    lessons: ["Figma interface tour", "Frames and layers", "Components and variants", "Auto layout", "Prototyping"],
+    lessons: [
+      "Figma interface tour",
+      "Frames and layers",
+      "Components and variants",
+      "Auto layout",
+      "Prototyping",
+    ],
   },
   {
     title: "Mobile App Development with React Native",
     category: "Development",
-    description: "Build and ship cross-platform iOS and Android apps from a single codebase.",
+    description:
+      "Build and ship cross-platform iOS and Android apps from a single codebase.",
     price: 8400,
-    lessons: ["Environment setup", "Core components", "Navigation", "Working with APIs", "Publishing your app"],
+    lessons: [
+      "Environment setup",
+      "Core components",
+      "Navigation",
+      "Working with APIs",
+      "Publishing your app",
+    ],
   },
   {
     title: "Cybersecurity Awareness",
     category: "Security",
-    description: "Recognize phishing, secure your accounts, and understand the basics of staying safe online.",
+    description:
+      "Recognize phishing, secure your accounts, and understand the basics of staying safe online.",
     price: 3400,
-    lessons: ["Threat landscape", "Passwords and 2FA", "Phishing red flags", "Safe browsing", "Incident response basics"],
+    lessons: [
+      "Threat landscape",
+      "Passwords and 2FA",
+      "Phishing red flags",
+      "Safe browsing",
+      "Incident response basics",
+    ],
   },
   {
     title: "Public Speaking Masterclass",
     category: "Communication",
-    description: "Beat stage fright and deliver talks that hold an audience from first line to last.",
+    description:
+      "Beat stage fright and deliver talks that hold an audience from first line to last.",
     price: 4900,
-    lessons: ["Managing nerves", "Structuring a talk", "Voice and body language", "Handling questions", "Practice and feedback"],
+    lessons: [
+      "Managing nerves",
+      "Structuring a talk",
+      "Voice and body language",
+      "Handling questions",
+      "Practice and feedback",
+    ],
   },
 ];
 
@@ -141,13 +225,12 @@ async function main() {
         role: "ADMIN",
       },
     });
-    console.log(`Owner admin ready: ${ownerEmail}`);
-  } else {
-    console.log("ADMIN_EMAIL / ADMIN_PASSWORD not set — skipped owner admin.");
   }
 
   for (const course of COURSES) {
-    const existing = await prisma.course.findFirst({ where: { title: course.title } });
+    const existing = await prisma.course.findFirst({
+      where: { title: course.title },
+    });
     if (existing) {
       // Keep categories in sync for databases seeded before they existed.
       await prisma.course.update({
@@ -177,9 +260,7 @@ async function main() {
   }
 
   const count = await prisma.course.count();
-  console.log(`Seed complete. ${count} courses in database.`);
-  console.log("Admin login:   admin@edu.local / admin123");
-  console.log("Student login: student@edu.local / student123");
+  console.log(`Seed complete. ${count} courses available.`);
 }
 
 main()

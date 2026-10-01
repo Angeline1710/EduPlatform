@@ -4,7 +4,13 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
 const schema = z.object({
-  kind: z.enum(["search", "course_view", "category_view", "enroll_intent", "enrolled"]),
+  kind: z.enum([
+    "search",
+    "course_view",
+    "category_view",
+    "enroll_intent",
+    "enrolled",
+  ]),
   value: z.string().min(1).max(200),
   courseId: z.string().max(64).optional(),
   category: z.string().max(64).optional(),

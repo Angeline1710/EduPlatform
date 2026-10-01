@@ -19,7 +19,11 @@ export default async function CertificatePage({
     include: {
       user: { select: { id: true, name: true } },
       course: {
-        select: { title: true, category: true, _count: { select: { lessons: true } } },
+        select: {
+          title: true,
+          category: true,
+          _count: { select: { lessons: true } },
+        },
       },
     },
   });
@@ -48,7 +52,10 @@ export default async function CertificatePage({
         </Link>
 
         <div className="flex items-center gap-3">
-          <Link href={`/verify/${certificate.code}`} className="btn btn-secondary press">
+          <Link
+            href={`/verify/${certificate.code}`}
+            className="btn btn-secondary press"
+          >
             <Icon name="search" className="h-4 w-4" />
             Public link
           </Link>

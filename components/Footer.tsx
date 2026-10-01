@@ -31,16 +31,28 @@ export default function Footer() {
           </Link>
 
           <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-[var(--shell-text-muted)]">
-            <Link href="/" className="transition hover:text-[var(--gold-bright)]">
+            <Link
+              href="/"
+              className="transition hover:text-[var(--gold-bright)]"
+            >
               Courses
             </Link>
-            <Link href="/dashboard" className="transition hover:text-[var(--gold-bright)]">
+            <Link
+              href="/dashboard"
+              className="transition hover:text-[var(--gold-bright)]"
+            >
               My learning
             </Link>
-            <Link href="/verify" className="transition hover:text-[var(--gold-bright)]">
+            <Link
+              href="/verify"
+              className="transition hover:text-[var(--gold-bright)]"
+            >
               Verify credential
             </Link>
-            <Link href="/admin/login" className="transition hover:text-[var(--gold-bright)]">
+            <Link
+              href="/admin/login"
+              className="transition hover:text-[var(--gold-bright)]"
+            >
               Admin
             </Link>
             <a

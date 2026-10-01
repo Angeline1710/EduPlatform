@@ -29,7 +29,9 @@ export default function ProgressRing({
   // Animate from empty to the real value after mount.
   const [shown, setShown] = useState(0);
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (reduced) {
       setShown(clamped);
       return;
@@ -67,7 +69,9 @@ export default function ProgressRing({
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          style={{ transition: "stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1)" }}
+          style={{
+            transition: "stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
         />
       </svg>
       <span className="absolute inset-0 grid place-items-center text-sm font-bold">

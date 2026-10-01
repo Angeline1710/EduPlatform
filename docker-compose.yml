@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "file:./prisma/dev.db"
+      NEXTAUTH_URL: "http://localhost:3000"
+      AUTH_TRUST_HOST: "true"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+      - prisma_data:/app/prisma
+    command: sh -c "npx prisma generate && npx prisma db push && npm run dev"
+
+volumes:
+  node_modules:
+  prisma_data:

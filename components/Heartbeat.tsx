@@ -24,7 +24,9 @@ export default function Heartbeat() {
     const ping = () => {
       if (document.hidden) return;
       // Fire and forget: a missed beat just means a slightly stale figure.
-      fetch("/api/heartbeat", { method: "POST", keepalive: true }).catch(() => {});
+      fetch("/api/heartbeat", { method: "POST", keepalive: true }).catch(
+        () => {},
+      );
     };
 
     ping();

@@ -48,7 +48,15 @@ export default function MagicParticles({
     let raf = 0;
     let running = false;
 
-    type P = { x: number; y: number; vx: number; vy: number; r: number; a: number; tw: number };
+    type P = {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      r: number;
+      a: number;
+      tw: number;
+    };
     let parts: P[] = [];
 
     function resize() {
@@ -109,7 +117,8 @@ export default function MagicParticles({
 
     // Only run while visible on screen.
     const io = new IntersectionObserver(
-      ([entry]) => (entry.isIntersecting && !document.hidden ? start() : stop()),
+      ([entry]) =>
+        entry.isIntersecting && !document.hidden ? start() : stop(),
       { threshold: 0 },
     );
     io.observe(canvas);

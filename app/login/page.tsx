@@ -18,7 +18,11 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const res = await signIn("credentials", { email, password, redirect: false });
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
     setLoading(false);
 
     if (res?.error) {
@@ -37,13 +41,19 @@ export default function LoginPage() {
         <>
           <p>
             No account?{" "}
-            <Link href="/register" className="font-semibold text-[var(--brand)] hover:underline">
+            <Link
+              href="/register"
+              className="font-semibold text-[var(--brand)] hover:underline"
+            >
               Create one
             </Link>
           </p>
           <p>
             Are you an admin?{" "}
-            <Link href="/admin/login" className="font-semibold text-[var(--brand)] hover:underline">
+            <Link
+              href="/admin/login"
+              className="font-semibold text-[var(--brand)] hover:underline"
+            >
               Admin login
             </Link>
           </p>
@@ -86,7 +96,11 @@ export default function LoginPage() {
           </p>
         )}
 
-        <button type="submit" disabled={loading} className="btn btn-primary w-full">
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn btn-primary w-full"
+        >
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>

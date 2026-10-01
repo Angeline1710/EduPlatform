@@ -10,13 +10,23 @@ const schema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("demote") }),
   z.object({ action: z.literal("grant"), courseId: z.string().min(1) }),
   z.object({ action: z.literal("revokeAccess"), courseId: z.string().min(1) }),
-  z.object({ action: z.literal("revokeCertificate"), certificateId: z.string().min(1) }),
-  z.object({ action: z.literal("restoreCertificate"), certificateId: z.string().min(1) }),
+  z.object({
+    action: z.literal("revokeCertificate"),
+    certificateId: z.string().min(1),
+  }),
+  z.object({
+    action: z.literal("restoreCertificate"),
+    certificateId: z.string().min(1),
+  }),
 ]);
 
-export async function PATCH(req: Request, { params }: RouteContext<"/api/admin/users/[id]">) {
+export async function PATCH(
+  req: Request,
+  { params }: RouteContext<"/api/admin/users/[id]">,
+) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  if (!admin)
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
 
   const { id } = await params;
 
@@ -26,7 +36,8 @@ export async function PATCH(req: Request, { params }: RouteContext<"/api/admin/u
   }
 
   const target = await prisma.user.findUnique({ where: { id } });
-  if (!target) return NextResponse.json({ error: "User not found." }, { status: 404 });
+  if (!target)
+    return NextResponse.json({ error: "User not found." }, { status: 404 });
 
   const body = parsed.data;
 
@@ -43,7 +54,10 @@ export async function PATCH(req: Request, { params }: RouteContext<"/api/admin/u
 
   switch (body.action) {
     case "suspend":
-      await prisma.user.update({ where: { id }, data: { status: "SUSPENDED" } });
+      await prisma.user.update({
+        where: { id },
+        data: { status: "SUSPENDED" },
+      });
       break;
 
     case "activate":
@@ -109,11 +123,15 @@ export async function DELETE(
   { params }: RouteContext<"/api/admin/users/[id]">,
 ) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  if (!admin)
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
 
   const { id } = await params;
   if (id === admin.id) {
-    return NextResponse.json({ error: "You cannot delete your own account." }, { status: 409 });
+    return NextResponse.json(
+      { error: "You cannot delete your own account." },
+      { status: 409 },
+    );
   }
 
   const paymentCount = await prisma.payment.count({ where: { userId: id } });

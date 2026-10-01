@@ -26,7 +26,10 @@ export async function POST(req: Request) {
 
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return NextResponse.json({ error: "Check the details and try again." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Check the details and try again." },
+      { status: 400 },
+    );
   }
 
   const { kind, title, issuer, year, url, description } = parsed.data;

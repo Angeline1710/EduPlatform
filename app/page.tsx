@@ -38,9 +38,11 @@ const FEATURES = [
 export default async function HomePage({ searchParams }: PageProps<"/">) {
   const params = await searchParams;
   const rawQuery = params.q;
-  const query = (Array.isArray(rawQuery) ? rawQuery[0] : rawQuery)?.trim() ?? "";
+  const query =
+    (Array.isArray(rawQuery) ? rawQuery[0] : rawQuery)?.trim() ?? "";
   const rawCategory = params.category;
-  const category = (Array.isArray(rawCategory) ? rawCategory[0] : rawCategory)?.trim() ?? "";
+  const category =
+    (Array.isArray(rawCategory) ? rawCategory[0] : rawCategory)?.trim() ?? "";
 
   const allPublished = await prisma.course.findMany({
     where: { published: true },
@@ -123,7 +125,10 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
 
         <div className="mx-auto max-w-[1400px]">
           {/* Crest ornament above the heading */}
-          <div className="mb-5 flex items-center justify-center gap-3" aria-hidden="true">
+          <div
+            className="mb-5 flex items-center justify-center gap-3"
+            aria-hidden="true"
+          >
             <span className="rule-fade w-20 sm:w-28" />
             <span className="text-[var(--gold)]">
               <AcademyCrest size={26} />
@@ -132,10 +137,15 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
           </div>
 
           <h2 className="text-center font-serif text-[38px] leading-none tracking-tight text-[var(--brand)] sm:text-[46px]">
-            <LivingInk>{isFiltered ? "The Archives" : "Popular Courses"}</LivingInk>
+            <LivingInk>
+              {isFiltered ? "The Archives" : "Popular Courses"}
+            </LivingInk>
           </h2>
 
-          <div className="mt-4 flex items-center justify-center gap-2.5" aria-hidden="true">
+          <div
+            className="mt-4 flex items-center justify-center gap-2.5"
+            aria-hidden="true"
+          >
             <span className="rule-fade w-16" />
             <Diamond size={5} />
             <span className="rule-fade w-16" />
@@ -143,7 +153,10 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
 
           <p className="mt-4 text-center text-sm text-[var(--text-muted)]">
             {isFiltered ? (
-              <Link href="/" className="font-semibold text-[var(--brand)] hover:underline">
+              <Link
+                href="/"
+                className="font-semibold text-[var(--brand)] hover:underline"
+              >
                 Return to all departments
               </Link>
             ) : (
@@ -187,21 +200,46 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
       {!isFiltered && (
         <section className="border-b border-[var(--border)] bg-[var(--surface)] px-6 py-16 xl:px-10">
           <div className="mx-auto max-w-[1400px]">
-            <h2 className="text-center font-serif text-[34px] font-bold text-[var(--brand)] mb-12">How Learning Works</h2>
+            <h2 className="text-center font-serif text-[34px] font-bold text-[var(--brand)] mb-12">
+              How Learning Works
+            </h2>
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 relative">
               {/* Optional connecting line can be drawn behind items */}
               {[
-                { step: "DISCOVER", icon: "search", desc: "Find your path in the archives" },
-                { step: "LEARN", icon: "book", desc: "Study expert manuscripts" },
-                { step: "PRACTICE", icon: "code", desc: "Apply knowledge directly" },
-                { step: "MASTER", icon: "award", desc: "Earn your credentials" }
+                {
+                  step: "DISCOVER",
+                  icon: "search",
+                  desc: "Find your path in the archives",
+                },
+                {
+                  step: "LEARN",
+                  icon: "book",
+                  desc: "Study expert manuscripts",
+                },
+                {
+                  step: "PRACTICE",
+                  icon: "code",
+                  desc: "Apply knowledge directly",
+                },
+                {
+                  step: "MASTER",
+                  icon: "award",
+                  desc: "Earn your credentials",
+                },
               ].map((item, i) => (
-                <div key={item.step} className="flex flex-col items-center text-center relative z-10 group">
+                <div
+                  key={item.step}
+                  className="flex flex-col items-center text-center relative z-10 group"
+                >
                   <div className="h-16 w-16 rounded-full border border-[var(--gold)] bg-[var(--surface-2)] text-[var(--gold)] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-[0_0_12px_var(--academy-glow)]">
                     <Icon name={item.icon} className="h-7 w-7" />
                   </div>
-                  <h3 className="font-serif font-bold tracking-wider text-[var(--text)] mb-2">{item.step}</h3>
-                  <p className="text-sm text-[var(--text-muted)] max-w-[200px]">{item.desc}</p>
+                  <h3 className="font-serif font-bold tracking-wider text-[var(--text)] mb-2">
+                    {item.step}
+                  </h3>
+                  <p className="text-sm text-[var(--text-muted)] max-w-[200px]">
+                    {item.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -210,7 +248,10 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
       )}
 
       {/* Dark feature bar */}
-      <section id="why" className="shell-panel border-t border-[var(--shell-line)]">
+      <section
+        id="why"
+        className="shell-panel border-t border-[var(--shell-line)]"
+      >
         <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-9 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 xl:px-10">
           {FEATURES.map((f, i) => (
             <div
@@ -223,7 +264,9 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
                 <Icon name={f.icon} className="h-7 w-7" />
               </span>
               <div className="min-w-0">
-                <p className="font-serif font-bold text-[var(--shell-text)]">{f.title}</p>
+                <p className="font-serif font-bold text-[var(--shell-text)]">
+                  {f.title}
+                </p>
                 <p className="mt-0.5 text-[13px] leading-relaxed text-[var(--shell-text-muted)]">
                   {f.body}
                 </p>

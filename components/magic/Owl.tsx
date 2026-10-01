@@ -27,11 +27,30 @@ export default function Owl({ size = 26 }: { size?: number }) {
       />
 
       {/* Ear tufts */}
-      <path d="M9.6 9.4L7.4 5.6l4 1.6zM22.4 9.4l2.2-3.8-4 1.6z" fill="#F7F4F0" stroke="#D8D0C8" strokeWidth="0.7" />
+      <path
+        d="M9.6 9.4L7.4 5.6l4 1.6zM22.4 9.4l2.2-3.8-4 1.6z"
+        fill="#F7F4F0"
+        stroke="#D8D0C8"
+        strokeWidth="0.7"
+      />
 
       {/* Eyes — the blink is driven by CSS */}
-      <circle cx="12.4" cy="13.4" r="3.4" fill="#FFFFFF" stroke="#D8D0C8" strokeWidth="0.6" />
-      <circle cx="19.6" cy="13.4" r="3.4" fill="#FFFFFF" stroke="#D8D0C8" strokeWidth="0.6" />
+      <circle
+        cx="12.4"
+        cy="13.4"
+        r="3.4"
+        fill="#FFFFFF"
+        stroke="#D8D0C8"
+        strokeWidth="0.6"
+      />
+      <circle
+        cx="19.6"
+        cy="13.4"
+        r="3.4"
+        fill="#FFFFFF"
+        stroke="#D8D0C8"
+        strokeWidth="0.6"
+      />
       <circle cx="12.4" cy="13.4" r="1.7" fill="#2A1428" className="owl-eye" />
       <circle cx="19.6" cy="13.4" r="1.7" fill="#2A1428" className="owl-eye" />
 

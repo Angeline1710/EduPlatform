@@ -41,9 +41,10 @@ export default async function InsightsPage() {
             What people want
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
-            Drawn from {brief.totalSignals.toLocaleString()} recorded actions across{" "}
-            {brief.activeProfiles} visitors in the last {brief.windowDays} days — searches,
-            courses opened, and departments browsed. Nothing here is estimated.
+            Drawn from {brief.totalSignals.toLocaleString()} recorded actions
+            across {brief.activeProfiles} visitors in the last{" "}
+            {brief.windowDays} days — searches, courses opened, and departments
+            browsed. Nothing here is estimated.
           </p>
         </div>
 
@@ -53,8 +54,8 @@ export default async function InsightsPage() {
               No interest recorded yet
             </p>
             <p className="mx-auto mt-2 max-w-md text-sm text-[var(--text-muted)]">
-              Once visitors search and open courses, their intent appears here — by person
-              and in aggregate.
+              Once visitors search and open courses, their intent appears here —
+              by person and in aggregate.
             </p>
           </div>
         ) : (
@@ -66,7 +67,10 @@ export default async function InsightsPage() {
 
             <div className="mb-8 grid gap-5 lg:grid-cols-3">
               {/* Demand by department */}
-              <Panel title="Demand by department" note="Where attention is going">
+              <Panel
+                title="Demand by department"
+                note="Where attention is going"
+              >
                 {brief.demand.length === 0 ? (
                   <Empty>No department signals yet.</Empty>
                 ) : (
@@ -74,7 +78,10 @@ export default async function InsightsPage() {
                     {brief.demand.map((d) => {
                       const theme = categoryTheme(d.category);
                       return (
-                        <li key={d.category} className="flex items-center gap-3">
+                        <li
+                          key={d.category}
+                          className="flex items-center gap-3"
+                        >
                           <span
                             className="accent shrink-0"
                             style={
@@ -84,7 +91,10 @@ export default async function InsightsPage() {
                               } as React.CSSProperties
                             }
                           >
-                            <DepartmentCrest name={d.category} className="h-7 w-7" />
+                            <DepartmentCrest
+                              name={d.category}
+                              className="h-7 w-7"
+                            />
                           </span>
                           <span className="min-w-0 flex-1">
                             <span className="flex items-baseline justify-between gap-2">
@@ -149,7 +159,10 @@ export default async function InsightsPage() {
               </Panel>
 
               {/* Conversion gaps */}
-              <Panel title="Looked at, not bought" note="Lowest conversion first">
+              <Panel
+                title="Looked at, not bought"
+                note="Lowest conversion first"
+              >
                 {brief.conversionGaps.length === 0 ? (
                   <Empty>Not enough views yet to judge conversion.</Empty>
                 ) : (
@@ -183,8 +196,8 @@ export default async function InsightsPage() {
                   </ul>
                 )}
                 <p className="mt-4 text-[11px] leading-relaxed text-[var(--text-faint)]">
-                  A course seen often and bought rarely is usually a price, a title, or a
-                  description problem — not a demand problem.
+                  A course seen often and bought rarely is usually a price, a
+                  title, or a description problem — not a demand problem.
                 </p>
               </Panel>
             </div>
@@ -215,9 +228,15 @@ export default async function InsightsPage() {
                       {people
                         .filter((p) => p.signalCount > 0)
                         .map((p) => (
-                          <tr key={p.id} className="transition hover:bg-[var(--surface-2)]">
+                          <tr
+                            key={p.id}
+                            className="transition hover:bg-[var(--surface-2)]"
+                          >
                             <td className="px-5 py-4">
-                              <Link href={`/admin/users/${p.id}`} className="group block">
+                              <Link
+                                href={`/admin/users/${p.id}`}
+                                className="group block"
+                              >
                                 <span className="block font-semibold text-[var(--text)] group-hover:text-[var(--brand)]">
                                   {p.name}
                                 </span>
@@ -228,7 +247,9 @@ export default async function InsightsPage() {
                             </td>
                             <td className="px-5 py-4">
                               {p.affinities.length === 0 ? (
-                                <span className="text-[var(--text-faint)]">—</span>
+                                <span className="text-[var(--text-faint)]">
+                                  —
+                                </span>
                               ) : (
                                 <span className="flex flex-wrap gap-1.5">
                                   {p.affinities.map((a) => (
@@ -247,14 +268,18 @@ export default async function InsightsPage() {
                             </td>
                             <td className="px-5 py-4 text-[var(--text-muted)]">
                               {p.recentSearches.length === 0 ? (
-                                <span className="text-[var(--text-faint)]">—</span>
+                                <span className="text-[var(--text-faint)]">
+                                  —
+                                </span>
                               ) : (
                                 p.recentSearches.map((s) => `“${s}”`).join(", ")
                               )}
                             </td>
                             <td className="px-5 py-4 text-[var(--text-muted)]">
                               {p.wants.length === 0 ? (
-                                <span className="text-[var(--text-faint)]">—</span>
+                                <span className="text-[var(--text-faint)]">
+                                  —
+                                </span>
                               ) : (
                                 p.wants.join(", ")
                               )}
@@ -288,7 +313,9 @@ function Panel({
   return (
     <div className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)]">
       <div className="mb-4">
-        <h3 className="font-serif text-lg font-bold text-[var(--text)]">{title}</h3>
+        <h3 className="font-serif text-lg font-bold text-[var(--text)]">
+          {title}
+        </h3>
         {note && <p className="text-[11px] text-[var(--text-faint)]">{note}</p>}
       </div>
       {children}

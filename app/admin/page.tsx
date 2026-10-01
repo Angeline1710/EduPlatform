@@ -84,7 +84,9 @@ export default async function AdminDashboard() {
           <Money
             label="Avg. per enrollment"
             value={formatPrice(
-              stats.enrollments > 0 ? Math.round(revenue.captured / stats.enrollments) : 0,
+              stats.enrollments > 0
+                ? Math.round(revenue.captured / stats.enrollments)
+                : 0,
             )}
             sub={`across ${stats.enrollments} enrollments`}
           />
@@ -106,12 +108,31 @@ export default async function AdminDashboard() {
 
         {/* Platform counts */}
         <div className="stagger mb-8 grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          <Tile icon="book" label="Courses" value={stats.courses} note={`${stats.drafts} draft`} />
+          <Tile
+            icon="book"
+            label="Courses"
+            value={stats.courses}
+            note={`${stats.drafts} draft`}
+          />
           <Tile icon="check" label="Published" value={stats.published} />
-          <Tile icon="user" label="Students" value={stats.students} note={`+${stats.signups7} this week`} />
-          <Tile icon="learners" label="Enrollments" value={stats.enrollments} note={`+${stats.enrollments7} this week`} />
+          <Tile
+            icon="user"
+            label="Students"
+            value={stats.students}
+            note={`+${stats.signups7} this week`}
+          />
+          <Tile
+            icon="learners"
+            label="Enrollments"
+            value={stats.enrollments}
+            note={`+${stats.enrollments7} this week`}
+          />
           <Tile icon="award" label="Credentials" value={stats.certificates} />
-          <Tile icon="chart" label="Lessons done" value={stats.lessonsCompleted} />
+          <Tile
+            icon="chart"
+            label="Lessons done"
+            value={stats.lessonsCompleted}
+          />
         </div>
 
         {/* Course performance */}
@@ -124,7 +145,9 @@ export default async function AdminDashboard() {
 
         {top.length === 0 ? (
           <div className="rounded-sm border border-dashed border-[var(--border-strong)] px-6 py-16 text-center">
-            <p className="font-serif text-xl font-bold text-[var(--brand)]">No courses yet</p>
+            <p className="font-serif text-xl font-bold text-[var(--brand)]">
+              No courses yet
+            </p>
             <p className="mt-1 text-sm text-[var(--text-muted)]">
               Create the first course to begin.
             </p>
@@ -155,7 +178,10 @@ export default async function AdminDashboard() {
                   {top.map((c) => {
                     const theme = categoryTheme(c.category);
                     return (
-                      <tr key={c.id} className="transition hover:bg-[var(--surface-2)]">
+                      <tr
+                        key={c.id}
+                        className="transition hover:bg-[var(--surface-2)]"
+                      >
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
                             <span
@@ -165,14 +191,24 @@ export default async function AdminDashboard() {
                               }}
                             />
                             <div className="min-w-0">
-                              <p className="font-semibold text-[var(--text)]">{c.title}</p>
-                              <p className="text-xs text-[var(--text-faint)]">{c.category}</p>
+                              <p className="font-semibold text-[var(--text)]">
+                                {c.title}
+                              </p>
+                              <p className="text-xs text-[var(--text-faint)]">
+                                {c.category}
+                              </p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-5 py-4 font-medium">{formatPrice(c.price)}</td>
-                        <td className="px-5 py-4 text-[var(--text-muted)]">{c.lessons}</td>
-                        <td className="px-5 py-4 text-[var(--text-muted)]">{c.enrollments}</td>
+                        <td className="px-5 py-4 font-medium">
+                          {formatPrice(c.price)}
+                        </td>
+                        <td className="px-5 py-4 text-[var(--text-muted)]">
+                          {c.lessons}
+                        </td>
+                        <td className="px-5 py-4 text-[var(--text-muted)]">
+                          {c.enrollments}
+                        </td>
                         <td className="px-5 py-4 font-serif font-bold text-[var(--gold-dim)]">
                           {formatPrice(c.revenue)}
                         </td>
@@ -218,7 +254,15 @@ export default async function AdminDashboard() {
   );
 }
 
-function AdminLink({ href, icon, label }: { href: string; icon: string; label: string }) {
+function AdminLink({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: string;
+  label: string;
+}) {
   return (
     <Link
       href={href}
@@ -295,11 +339,15 @@ function Tile({
       <span className="mb-2.5 inline-grid h-9 w-9 place-items-center rounded-sm border border-[var(--border)] text-[var(--text-muted)]">
         <Icon name={icon} className="h-4 w-4" />
       </span>
-      <p className="font-serif text-2xl font-bold text-[var(--text)]">{value}</p>
+      <p className="font-serif text-2xl font-bold text-[var(--text)]">
+        {value}
+      </p>
       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-faint)]">
         {label}
       </p>
-      {note && <p className="mt-1 text-[11px] text-[var(--academy-emerald)]">{note}</p>}
+      {note && (
+        <p className="mt-1 text-[11px] text-[var(--academy-emerald)]">{note}</p>
+      )}
     </div>
   );
 }

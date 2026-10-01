@@ -20,7 +20,10 @@ export default function Hero({ courseCount }: { courseCount: number }) {
       {/* Every piece of copy and the stats board sit above it. */}
       <div className="relative z-10 mx-auto grid max-w-[1400px] items-center gap-8 px-6 py-20 lg:grid-cols-[minmax(0,1.15fr)_auto] lg:gap-10 lg:py-28 xl:px-10">
         <div className="animate-fade-up max-w-xl">
-          <span className="mb-3 block text-[var(--gold-bright)]" aria-hidden="true">
+          <span
+            className="mb-3 block text-[var(--gold-bright)]"
+            aria-hidden="true"
+          >
             ✦
           </span>
 
@@ -80,7 +83,9 @@ export default function Hero({ courseCount }: { courseCount: number }) {
                   <span className="block font-serif text-[17px] font-bold leading-tight text-[#F6F1EA]">
                     {stat.value}
                   </span>
-                  <span className="block text-[13px] text-[#CFC4CE]">{stat.label}</span>
+                  <span className="block text-[13px] text-[#CFC4CE]">
+                    {stat.label}
+                  </span>
                 </span>
               </li>
             ))}

@@ -20,7 +20,9 @@ export default async function NewCoursePage() {
         Back to dashboard
       </Link>
 
-      <h1 className="mb-8 text-4xl font-extrabold tracking-tight">New course</h1>
+      <h1 className="mb-8 text-4xl font-extrabold tracking-tight">
+        New course
+      </h1>
       <CourseForm />
     </div>
   );

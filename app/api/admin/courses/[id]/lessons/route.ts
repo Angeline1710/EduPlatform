@@ -8,14 +8,21 @@ const schema = z.object({
   content: z.string().min(1).max(20000),
 });
 
-export async function POST(req: Request, { params }: RouteContext<"/api/admin/courses/[id]/lessons">) {
+export async function POST(
+  req: Request,
+  { params }: RouteContext<"/api/admin/courses/[id]/lessons">,
+) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  if (!admin)
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
 
   const { id: courseId } = await params;
   const parsed = schema.safeParse(await req.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid lesson data." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid lesson data." },
+      { status: 400 },
+    );
   }
 
   const last = await prisma.lesson.findFirst({

@@ -27,7 +27,9 @@ const PATHS: Record<string, React.ReactNode> = {
     </>
   ),
   shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
-  chat: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
+  chat: (
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  ),
   book: (
     <>
       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -54,7 +56,11 @@ const PATHS: Record<string, React.ReactNode> = {
     </>
   ),
   sparkle: (
-    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" fill="currentColor" stroke="none" />
+    <path
+      d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"
+      fill="currentColor"
+      stroke="none"
+    />
   ),
   infinity: (
     <path d="M6 12c0-2 1.5-3.5 3.5-3.5S13 10 14.5 12s3 3.5 5 3.5S22 14 22 12s-1.5-3.5-3.5-3.5S15 10 13.5 12 10.5 15.5 8.5 15.5 5 14 5 12z" />

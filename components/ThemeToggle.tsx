@@ -15,12 +15,16 @@ export default function ThemeToggle() {
     // The inline script in <head> has already resolved and applied the theme.
     // Read that back rather than re-deriving it, so the button label can never
     // disagree with what is actually on screen.
-    const applied = document.documentElement.getAttribute("data-theme") as Theme | null;
+    const applied = document.documentElement.getAttribute(
+      "data-theme",
+    ) as Theme | null;
     const stored = localStorage.getItem("theme") as Theme | null;
     const initial =
       applied ??
       stored ??
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      (window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light");
     setTheme(initial);
     document.documentElement.classList.add("theme-ready");
   }, []);
@@ -84,7 +88,10 @@ export default function ThemeToggle() {
     // The palette changes with the wave, not behind it.
     apply(to);
 
-    window.setTimeout(() => spawned.forEach((el) => el.remove()), SWEEP_MS + 400);
+    window.setTimeout(
+      () => spawned.forEach((el) => el.remove()),
+      SWEEP_MS + 400,
+    );
   }
 
   function toggle() {

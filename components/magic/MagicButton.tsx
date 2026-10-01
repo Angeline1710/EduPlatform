@@ -13,7 +13,17 @@ interface MagicButtonProps extends HTMLMotionProps<"button"> {
 }
 
 export const MagicButton = forwardRef<HTMLButtonElement, MagicButtonProps>(
-  ({ children, status = "idle", fullWidth = false, className = "", disabled, ...props }, ref) => {
+  (
+    {
+      children,
+      status = "idle",
+      fullWidth = false,
+      className = "",
+      disabled,
+      ...props
+    },
+    ref,
+  ) => {
     const isWorking = status === "loading" || status === "success";
     const isDisabled = disabled || isWorking;
 
@@ -22,7 +32,8 @@ export const MagicButton = forwardRef<HTMLButtonElement, MagicButtonProps>(
     let shadowClass = "shadow-[0_0_18px_rgb(212_162_76/0.35)]";
 
     if (status === "error") {
-      bgClass = "border-[#6B3547] bg-gradient-to-b from-[#542638] to-[#3A1825] text-[var(--text)]";
+      bgClass =
+        "border-[#6B3547] bg-gradient-to-b from-[#542638] to-[#3A1825] text-[var(--text)]";
       shadowClass = "shadow-[0_0_18px_rgba(84,38,56,0.5)]";
     }
 
@@ -30,7 +41,9 @@ export const MagicButton = forwardRef<HTMLButtonElement, MagicButtonProps>(
       <motion.button
         ref={ref}
         disabled={isDisabled}
-        whileHover={isDisabled ? {} : { scale: 1.02, filter: "brightness(1.1)" }}
+        whileHover={
+          isDisabled ? {} : { scale: 1.02, filter: "brightness(1.1)" }
+        }
         whileTap={isDisabled ? {} : { scale: 0.96 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
         className={`
@@ -48,7 +61,10 @@ export const MagicButton = forwardRef<HTMLButtonElement, MagicButtonProps>(
         {status === "loading" && (
           <span className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-[2px]">
             {/* We use a custom spinner or icon */}
-            <Icon name="grid" className="h-5 w-5 animate-spin text-current opacity-80" />
+            <Icon
+              name="grid"
+              className="h-5 w-5 animate-spin text-current opacity-80"
+            />
           </span>
         )}
 
@@ -72,6 +88,6 @@ export const MagicButton = forwardRef<HTMLButtonElement, MagicButtonProps>(
         </span>
       </motion.button>
     );
-  }
+  },
 );
 MagicButton.displayName = "MagicButton";

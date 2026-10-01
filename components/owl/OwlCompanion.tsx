@@ -23,7 +23,12 @@ type Profile = {
   affinities: { category: string; score: number; share: number }[];
   topCategory: string | null;
   recentSearches: string[];
-  viewedCourses: { id: string; title: string; category: string; views: number }[];
+  viewedCourses: {
+    id: string;
+    title: string;
+    category: string;
+    views: number;
+  }[];
   recommendations: Recommendation[];
   nudge: string;
 };
@@ -57,9 +62,12 @@ export default function OwlCompanion() {
     setLoading(true);
     try {
       const id = anonId();
-      const res = await fetch(`/api/owl${id ? `?anonId=${encodeURIComponent(id)}` : ""}`, {
-        cache: "no-store",
-      });
+      const res = await fetch(
+        `/api/owl${id ? `?anonId=${encodeURIComponent(id)}` : ""}`,
+        {
+          cache: "no-store",
+        },
+      );
       if (res.ok) setProfile(await res.json());
     } catch {
       // Advice is a nicety; failing to fetch it must not disturb the page.
@@ -85,7 +93,10 @@ export default function OwlCompanion() {
     }
     if (Date.now() < quietUntil) return;
 
-    nudgeTimer.current = window.setTimeout(() => setNudging(true), NUDGE_DELAY_MS);
+    nudgeTimer.current = window.setTimeout(
+      () => setNudging(true),
+      NUDGE_DELAY_MS,
+    );
     return () => {
       if (nudgeTimer.current) window.clearTimeout(nudgeTimer.current);
     };
@@ -109,7 +120,8 @@ export default function OwlCompanion() {
   }
 
   // The owl has no place on the credential pages a stranger might be sent to.
-  if (pathname.startsWith("/verify/") || pathname.startsWith("/certificates/")) return null;
+  if (pathname.startsWith("/verify/") || pathname.startsWith("/certificates/"))
+    return null;
 
   return (
     <div className="pointer-events-none fixed bottom-4 left-4 z-[80] flex items-end gap-3 lg:bottom-6 lg:left-6">
@@ -118,7 +130,9 @@ export default function OwlCompanion() {
       <button
         onClick={toggle}
         aria-expanded={open}
-        aria-label={open ? "Close the owl's guidance" : "Ask the owl for guidance"}
+        aria-label={
+          open ? "Close the owl's guidance" : "Ask the owl for guidance"
+        }
         className="owl-roost pointer-events-auto relative grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[var(--gold)]/50 bg-[var(--surface)]/85 shadow-[0_6px_28px_var(--academy-shadow)] backdrop-blur-md transition-transform duration-300 hover:scale-105 active:scale-95 sm:h-16 sm:w-16"
       >
         <OwlArt />
@@ -133,7 +147,9 @@ export default function OwlCompanion() {
       {/* The unprompted word */}
       {nudging && !open && profile && (
         <div className="owl-speak pointer-events-auto relative mb-2 max-w-[16rem] rounded-lg rounded-bl-none border border-[var(--gold)]/40 bg-[var(--surface)] p-3.5 shadow-[var(--shadow-lift)] sm:max-w-xs">
-          <p className="text-[13px] leading-relaxed text-[var(--text)]">{profile.nudge}</p>
+          <p className="text-[13px] leading-relaxed text-[var(--text)]">
+            {profile.nudge}
+          </p>
           <div className="mt-2.5 flex items-center gap-3">
             <button
               onClick={toggle}
@@ -156,7 +172,9 @@ export default function OwlCompanion() {
         <div className="owl-speak pointer-events-auto mb-2 w-[min(22rem,calc(100vw-6rem))] overflow-hidden rounded-lg rounded-bl-none border border-[var(--gold)]/40 bg-[var(--surface)] shadow-[var(--shadow-panel)]">
           <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface-2)] px-4 py-2.5">
             <p className="font-serif text-sm font-bold text-[var(--brand)]">
-              {profile?.name ? `A word for ${profile.name}` : "A word from the owl"}
+              {profile?.name
+                ? `A word for ${profile.name}`
+                : "A word from the owl"}
             </p>
             <button
               onClick={() => setOpen(false)}
@@ -169,12 +187,15 @@ export default function OwlCompanion() {
 
           <div className="max-h-[min(26rem,60vh)] overflow-y-auto p-4">
             {loading && !profile ? (
-              <p className="text-sm text-[var(--text-muted)]">Consulting the archives…</p>
+              <p className="text-sm text-[var(--text-muted)]">
+                Consulting the archives…
+              </p>
             ) : !profile?.hasHistory ? (
               <>
                 <p className="text-sm leading-relaxed text-[var(--text-muted)]">
-                  I have not seen enough of your reading to advise you yet. Search for a
-                  subject, or open a course, and I will learn what suits you.
+                  I have not seen enough of your reading to advise you yet.
+                  Search for a subject, or open a course, and I will learn what
+                  suits you.
                 </p>
                 <Link
                   href="/courses"
@@ -198,7 +219,9 @@ export default function OwlCompanion() {
                       <span className="font-semibold text-[var(--text)]">
                         {profile.topCategory}
                       </span>
-                      {profile.affinities[0] && ` (${profile.affinities[0].share}% of it)`}.
+                      {profile.affinities[0] &&
+                        ` (${profile.affinities[0].share}% of it)`}
+                      .
                     </li>
                   )}
                   {profile.recentSearches.length > 0 && (
@@ -206,7 +229,9 @@ export default function OwlCompanion() {
                       You searched for{" "}
                       {profile.recentSearches.slice(0, 3).map((t, i, a) => (
                         <span key={t}>
-                          <span className="font-semibold text-[var(--text)]">“{t}”</span>
+                          <span className="font-semibold text-[var(--text)]">
+                            “{t}”
+                          </span>
                           {i < a.length - 1 ? ", " : ""}
                         </span>
                       ))}
@@ -282,7 +307,8 @@ export default function OwlCompanion() {
                 )}
 
                 <p className="mt-4 text-[10px] text-[var(--text-faint)]">
-                  Drawn from {profile.signalCount} of your own actions on this site.
+                  Drawn from {profile.signalCount} of your own actions on this
+                  site.
                 </p>
               </>
             )}
@@ -320,8 +346,22 @@ function OwlArt() {
         stroke="#D8D0C8"
         strokeWidth="0.7"
       />
-      <circle cx="12.4" cy="13.4" r="3.5" fill="#FFFFFF" stroke="#D8D0C8" strokeWidth="0.6" />
-      <circle cx="19.6" cy="13.4" r="3.5" fill="#FFFFFF" stroke="#D8D0C8" strokeWidth="0.6" />
+      <circle
+        cx="12.4"
+        cy="13.4"
+        r="3.5"
+        fill="#FFFFFF"
+        stroke="#D8D0C8"
+        strokeWidth="0.6"
+      />
+      <circle
+        cx="19.6"
+        cy="13.4"
+        r="3.5"
+        fill="#FFFFFF"
+        stroke="#D8D0C8"
+        strokeWidth="0.6"
+      />
       <g className="owl-eyes">
         <circle cx="12.4" cy="13.4" r="1.8" fill="#2A1428" />
         <circle cx="19.6" cy="13.4" r="1.8" fill="#2A1428" />

@@ -41,12 +41,14 @@ export default function LessonManager({
 
     const isNew = editingId === "new";
     const res = await fetch(
-      isNew ? `/api/admin/courses/${courseId}/lessons` : `/api/admin/lessons/${editingId}`,
+      isNew
+        ? `/api/admin/courses/${courseId}/lessons`
+        : `/api/admin/lessons/${editingId}`,
       {
         method: isNew ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, content }),
-      }
+      },
     );
 
     setLoading(false);
@@ -64,11 +66,14 @@ export default function LessonManager({
   async function handleDelete(lessonId: string) {
     if (!confirm("Delete this lesson?")) return;
 
-    const res = await fetch(`/api/admin/lessons/${lessonId}`, { method: "DELETE" });
+    const res = await fetch(`/api/admin/lessons/${lessonId}`, {
+      method: "DELETE",
+    });
     if (!res.ok) {
-      alert("Could not delete lesson.");
+      setError("Could not delete lesson.");
       return;
     }
+
     router.refresh();
   }
 
@@ -81,7 +86,10 @@ export default function LessonManager({
           </li>
         )}
         {lessons.map((lesson, i) => (
-          <li key={lesson.id} className="flex items-center gap-3 px-5 py-3.5 text-sm">
+          <li
+            key={lesson.id}
+            className="flex items-center gap-3 px-5 py-3.5 text-sm"
+          >
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-xs font-semibold text-[var(--text-muted)]">
               {i + 1}
             </span>
@@ -104,7 +112,9 @@ export default function LessonManager({
 
       {editingId ? (
         <form onSubmit={handleSave} className="card space-y-4 p-5">
-          <h3 className="font-bold">{editingId === "new" ? "Add lesson" : "Edit lesson"}</h3>
+          <h3 className="font-bold">
+            {editingId === "new" ? "Add lesson" : "Edit lesson"}
+          </h3>
           <div>
             <label htmlFor="lesson-title" className="label">
               Lesson title
@@ -119,7 +129,10 @@ export default function LessonManager({
           </div>
           <div>
             <label htmlFor="lesson-content" className="label">
-              Content <span className="font-normal text-[var(--text-faint)]">(text or video URL)</span>
+              Content{" "}
+              <span className="font-normal text-[var(--text-faint)]">
+                (text or video URL)
+              </span>
             </label>
             <textarea
               id="lesson-content"
@@ -138,7 +151,11 @@ export default function LessonManager({
           )}
 
           <div className="flex gap-3">
-            <button type="submit" disabled={loading} className="btn btn-primary">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn btn-primary"
+            >
               {loading ? "Saving..." : "Save lesson"}
             </button>
             <button

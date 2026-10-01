@@ -59,7 +59,10 @@ export default async function AdminUserDetailPage({
   });
   const doneByCourse = new Map<string, number>();
   for (const p of progress) {
-    doneByCourse.set(p.lesson.courseId, (doneByCourse.get(p.lesson.courseId) ?? 0) + 1);
+    doneByCourse.set(
+      p.lesson.courseId,
+      (doneByCourse.get(p.lesson.courseId) ?? 0) + 1,
+    );
   }
 
   const paidTotal = user.payments
@@ -91,7 +94,9 @@ export default async function AdminUserDetailPage({
           {user.name.charAt(0).toUpperCase()}
         </span>
         <div className="min-w-0 flex-1">
-          <h1 className="text-3xl font-extrabold tracking-tight">{user.name}</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">
+            {user.name}
+          </h1>
           <p className="text-[var(--text-muted)]">{user.email}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span
@@ -126,9 +131,22 @@ export default async function AdminUserDetailPage({
 
       {/* Stats */}
       <div className="stagger mb-6 grid gap-4 sm:grid-cols-3">
-        <Stat label="Courses" value={String(user.enrollments.length)} icon="book" />
-        <Stat label="Certificates" value={String(user.certificates.length)} icon="award" />
-        <Stat label="Lifetime spend" value={formatPrice(paidTotal)} icon="chart" highlight />
+        <Stat
+          label="Courses"
+          value={String(user.enrollments.length)}
+          icon="book"
+        />
+        <Stat
+          label="Certificates"
+          value={String(user.certificates.length)}
+          icon="award"
+        />
+        <Stat
+          label="Lifetime spend"
+          value={formatPrice(paidTotal)}
+          icon="chart"
+          highlight
+        />
       </div>
 
       {/* Controls */}
@@ -154,7 +172,9 @@ export default async function AdminUserDetailPage({
       />
 
       {/* Enrolled courses with progress */}
-      <h2 className="mb-4 mt-10 text-2xl font-bold tracking-tight">Enrolled courses</h2>
+      <h2 className="mb-4 mt-10 text-2xl font-bold tracking-tight">
+        Enrolled courses
+      </h2>
       {user.enrollments.length === 0 ? (
         <div className="card px-6 py-10 text-center text-[var(--text-muted)]">
           No enrollments yet.
@@ -183,7 +203,9 @@ export default async function AdminUserDetailPage({
                       {done} / {total} lessons
                     </p>
                   </div>
-                  <span className="text-sm font-bold text-[var(--brand)]">{pct}%</span>
+                  <span className="text-sm font-bold text-[var(--brand)]">
+                    {pct}%
+                  </span>
                 </div>
                 <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--surface-2)]">
                   <div

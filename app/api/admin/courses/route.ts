@@ -16,15 +16,26 @@ const schema = z.object({
 
 export async function POST(req: Request) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  if (!admin)
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
 
   const parsed = schema.safeParse(await req.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid course data." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid course data." },
+      { status: 400 },
+    );
   }
 
-  const { title, description, price, category, thumbnailUrl, gifUrl, published } =
-    parsed.data;
+  const {
+    title,
+    description,
+    price,
+    category,
+    thumbnailUrl,
+    gifUrl,
+    published,
+  } = parsed.data;
 
   const course = await prisma.course.create({
     data: {

@@ -14,19 +14,28 @@ export const metadata = {
 
 /** Written by hand rather than derived — each department needs a voice. */
 const BLURB: Record<string, string> = {
-  Development: "The craft of building. Languages, frameworks, and the habits of shipping real software.",
+  Development:
+    "The craft of building. Languages, frameworks, and the habits of shipping real software.",
   Data: "Reading meaning from numbers. Analysis, modelling, and the tools that make data speak.",
-  Design: "Form and clarity. Layout, typography, colour, and interfaces people actually enjoy.",
-  Business: "Turning work into value. Strategy, marketing, and the mechanics of growth.",
-  Security: "Guarding what matters. Threats, defences, and staying safe by default.",
-  Communication: "Being understood. Writing, speaking, and carrying a room with confidence.",
+  Design:
+    "Form and clarity. Layout, typography, colour, and interfaces people actually enjoy.",
+  Business:
+    "Turning work into value. Strategy, marketing, and the mechanics of growth.",
+  Security:
+    "Guarding what matters. Threats, defences, and staying safe by default.",
+  Communication:
+    "Being understood. Writing, speaking, and carrying a room with confidence.",
   General: "Foundations that serve every discipline in the academy.",
 };
 
 export default async function CategoriesPage() {
   const courses = await prisma.course.findMany({
     where: { published: true },
-    select: { category: true, price: true, _count: { select: { lessons: true } } },
+    select: {
+      category: true,
+      price: true,
+      _count: { select: { lessons: true } },
+    },
   });
 
   const departments = CATEGORY_NAMES.map((name) => {
@@ -117,7 +126,9 @@ export default async function CategoriesPage() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dd className="font-serif text-lg font-bold text-[var(--text)]">{value}</dd>
+      <dd className="font-serif text-lg font-bold text-[var(--text)]">
+        {value}
+      </dd>
       <dt className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-faint)]">
         {label}
       </dt>

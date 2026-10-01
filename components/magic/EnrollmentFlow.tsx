@@ -46,14 +46,19 @@ export default function EnrollmentFlow({
   returningFromCheckout?: boolean;
 }) {
   const router = useRouter();
-  const [phase, setPhase] = useState<Phase>(initiallyEnrolled ? "owned" : "idle");
+  const [phase, setPhase] = useState<Phase>(
+    initiallyEnrolled ? "owned" : "idle",
+  );
   const [error, setError] = useState("");
   const [holder, setHolder] = useState<string | null>(null);
   const pollRef = useRef<number | null>(null);
 
-  useEffect(() => () => {
-    if (pollRef.current) window.clearInterval(pollRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (pollRef.current) window.clearInterval(pollRef.current);
+    },
+    [],
+  );
 
   /**
    * Waits for the webhook to land. Stripe redirects the student back before
@@ -146,7 +151,9 @@ export default function EnrollmentFlow({
       setPhase("redirecting");
       window.location.href = data.url;
     } catch {
-      setError("Could not reach the academy. Check your connection and try again.");
+      setError(
+        "Could not reach the academy. Check your connection and try again.",
+      );
       setPhase("error");
     }
   }
@@ -190,11 +197,15 @@ export default function EnrollmentFlow({
           <p className="text-sm font-semibold text-red-500">
             Enrollment could not be completed.
           </p>
-          <p className="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">{error}</p>
+          <p className="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
+            {error}
+          </p>
         </div>
       )}
 
-      {(phase === "confirming" || phase === "inscribing" || phase === "sealed") && (
+      {(phase === "confirming" ||
+        phase === "inscribing" ||
+        phase === "sealed") && (
         <AdmissionOverlay
           phase={phase}
           courseTitle={courseTitle}

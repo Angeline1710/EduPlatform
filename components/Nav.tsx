@@ -78,7 +78,9 @@ export default function Nav() {
                       ? "opacity-100"
                       : "opacity-0 scale-x-0 group-hover:scale-x-100 group-hover:opacity-60"
                   }`}
-                  style={{ boxShadow: active ? "0 0 8px var(--gold)" : undefined }}
+                  style={{
+                    boxShadow: active ? "0 0 8px var(--gold)" : undefined,
+                  }}
                 />
               </Link>
             );

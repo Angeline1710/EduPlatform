@@ -31,8 +31,13 @@ export async function GET(req: Request) {
   const userId = session.user.id;
 
   const [user, enrollment, latestPayment] = await Promise.all([
-    prisma.user.findUnique({ where: { id: userId }, select: { status: true, name: true } }),
-    prisma.enrollment.findUnique({ where: { userId_courseId: { userId, courseId } } }),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { status: true, name: true },
+    }),
+    prisma.enrollment.findUnique({
+      where: { userId_courseId: { userId, courseId } },
+    }),
     prisma.payment.findFirst({
       where: { userId, courseId },
       orderBy: { createdAt: "desc" },

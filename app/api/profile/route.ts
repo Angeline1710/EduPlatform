@@ -6,7 +6,8 @@ import { CATEGORY_NAMES } from "@/lib/categories";
 import { EDUCATION_LEVELS, EXPERIENCE_LEVELS } from "@/lib/profile";
 
 /** Empty strings from the form mean "clear this", not "reject this". */
-const blankToNull = (v: unknown) => (typeof v === "string" && v.trim() === "" ? null : v);
+const blankToNull = (v: unknown) =>
+  typeof v === "string" && v.trim() === "" ? null : v;
 
 const optionalUrl = z.preprocess(
   blankToNull,
@@ -84,7 +85,10 @@ export async function PUT(req: Request) {
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json(
-      { error: parsed.error.issues[0]?.message ?? "Some details were not valid." },
+      {
+        error:
+          parsed.error.issues[0]?.message ?? "Some details were not valid.",
+      },
       { status: 400 },
     );
   }
@@ -100,7 +104,10 @@ export async function PUT(req: Request) {
   else if (dateOfBirth) {
     const d = new Date(`${dateOfBirth}T00:00:00Z`);
     if (Number.isNaN(d.getTime())) {
-      return NextResponse.json({ error: "That date is not valid." }, { status: 400 });
+      return NextResponse.json(
+        { error: "That date is not valid." },
+        { status: 400 },
+      );
     }
     const years = (Date.now() - d.getTime()) / (365.25 * 86_400_000);
     if (years < 5 || years > 120) {
@@ -119,7 +126,9 @@ export async function PUT(req: Request) {
   };
 
   await prisma.$transaction([
-    ...(name ? [prisma.user.update({ where: { id: userId }, data: { name } })] : []),
+    ...(name
+      ? [prisma.user.update({ where: { id: userId }, data: { name } })]
+      : []),
     prisma.profile.upsert({
       where: { userId },
       update: data,

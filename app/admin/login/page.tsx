@@ -18,7 +18,11 @@ export default function AdminLoginPage() {
     setError("");
     setLoading(true);
 
-    const res = await signIn("credentials", { email, password, redirect: false });
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
 
     if (res?.error) {
       setError("Invalid email or password.");
@@ -46,7 +50,10 @@ export default function AdminLoginPage() {
       footer={
         <p>
           Student?{" "}
-          <Link href="/login" className="font-semibold text-[var(--brand)] hover:underline">
+          <Link
+            href="/login"
+            className="font-semibold text-[var(--brand)] hover:underline"
+          >
             Go to student login
           </Link>
         </p>

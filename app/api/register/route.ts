@@ -14,14 +14,20 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid name, email, or password (min 8 chars)." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid name, email, or password (min 8 chars)." },
+      { status: 400 },
+    );
   }
 
   const { name, email, password } = parsed.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return NextResponse.json({ error: "An account with that email already exists." }, { status: 409 });
+    return NextResponse.json(
+      { error: "An account with that email already exists." },
+      { status: 409 },
+    );
   }
 
   await prisma.user.create({

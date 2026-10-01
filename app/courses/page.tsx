@@ -16,7 +16,9 @@ export const metadata = {
 
 type SortKey = "newest" | "price-asc" | "price-desc" | "lessons";
 
-export default async function CoursesPage({ searchParams }: PageProps<"/courses">) {
+export default async function CoursesPage({
+  searchParams,
+}: PageProps<"/courses">) {
   const params = await searchParams;
   const one = (v: string | string[] | undefined) =>
     (Array.isArray(v) ? v[0] : v)?.trim() ?? "";
@@ -63,8 +65,20 @@ export default async function CoursesPage({ searchParams }: PageProps<"/courses"
   return (
     <>
       {/* A search or a department filter is a statement of interest. */}
-      {query && <SignalOnView kind="search" value={query} category={category || undefined} />}
-      {category && !query && <SignalOnView kind="category_view" value={category} category={category} />}
+      {query && (
+        <SignalOnView
+          kind="search"
+          value={query}
+          category={category || undefined}
+        />
+      )}
+      {category && !query && (
+        <SignalOnView
+          kind="category_view"
+          value={category}
+          category={category}
+        />
+      )}
 
       <PageHeader
         eyebrow="The Academy"
@@ -184,7 +198,13 @@ function SortLinks({
 }
 
 /** Designed empty state, with real alternatives to try. */
-function EmptyArchive({ query, categories }: { query: string; categories: string[] }) {
+function EmptyArchive({
+  query,
+  categories,
+}: {
+  query: string;
+  categories: string[];
+}) {
   return (
     <div className="mx-auto mt-10 max-w-lg rounded-sm border border-dashed border-[var(--border-strong)] px-6 py-14 text-center">
       <span className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-full border border-[var(--gold)] text-[var(--gold)]">

@@ -12,7 +12,11 @@ type RevealProps = {
 /**
  * Fades and floats content up as it scrolls into view using Framer Motion.
  */
-export default function Reveal({ children, delay = 0, className = "" }: RevealProps) {
+export default function Reveal({
+  children,
+  delay = 0,
+  className = "",
+}: RevealProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}

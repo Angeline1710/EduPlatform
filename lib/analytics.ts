@@ -25,9 +25,21 @@ export function daysAgo(n: number) {
  */
 export async function getRevenue() {
   const [paid, pending, failed, last30] = await Promise.all([
-    prisma.payment.aggregate({ where: { status: "PAID" }, _sum: { amount: true }, _count: true }),
-    prisma.payment.aggregate({ where: { status: "PENDING" }, _sum: { amount: true }, _count: true }),
-    prisma.payment.aggregate({ where: { status: "FAILED" }, _sum: { amount: true }, _count: true }),
+    prisma.payment.aggregate({
+      where: { status: "PAID" },
+      _sum: { amount: true },
+      _count: true,
+    }),
+    prisma.payment.aggregate({
+      where: { status: "PENDING" },
+      _sum: { amount: true },
+      _count: true,
+    }),
+    prisma.payment.aggregate({
+      where: { status: "FAILED" },
+      _sum: { amount: true },
+      _count: true,
+    }),
     prisma.payment.findMany({
       where: { status: "PAID", createdAt: { gte: daysAgo(29) } },
       select: { amount: true, createdAt: true },
@@ -45,13 +57,21 @@ export async function getRevenue() {
     if (buckets.has(key)) buckets.set(key, (buckets.get(key) ?? 0) + p.amount);
   }
 
-  const series = [...buckets.entries()].map(([date, amount]) => ({ date, amount }));
+  const series = [...buckets.entries()].map(([date, amount]) => ({
+    date,
+    amount,
+  }));
 
   // Trend: this 15-day half against the previous one.
   const half = Math.floor(series.length / 2);
   const recent = series.slice(half).reduce((s, d) => s + d.amount, 0);
   const prior = series.slice(0, half).reduce((s, d) => s + d.amount, 0);
-  const trendPct = prior === 0 ? (recent > 0 ? 100 : 0) : Math.round(((recent - prior) / prior) * 100);
+  const trendPct =
+    prior === 0
+      ? recent > 0
+        ? 100
+        : 0
+      : Math.round(((recent - prior) / prior) * 100);
 
   return {
     captured: paid._sum.amount ?? 0,
@@ -80,18 +100,27 @@ export async function getLiveUsers() {
 }
 
 export async function getPlatformStats() {
-  const [courses, published, students, admins, enrollments, certificates, completions] =
-    await Promise.all([
-      prisma.course.count(),
-      prisma.course.count({ where: { published: true } }),
-      prisma.user.count({ where: { role: "STUDENT" } }),
-      prisma.user.count({ where: { role: "ADMIN" } }),
-      prisma.enrollment.count(),
-      prisma.certificate.count({ where: { revokedAt: null } }),
-      prisma.lessonProgress.count(),
-    ]);
+  const [
+    courses,
+    published,
+    students,
+    admins,
+    enrollments,
+    certificates,
+    completions,
+  ] = await Promise.all([
+    prisma.course.count(),
+    prisma.course.count({ where: { published: true } }),
+    prisma.user.count({ where: { role: "STUDENT" } }),
+    prisma.user.count({ where: { role: "ADMIN" } }),
+    prisma.enrollment.count(),
+    prisma.certificate.count({ where: { revokedAt: null } }),
+    prisma.lessonProgress.count(),
+  ]);
 
-  const signups7 = await prisma.user.count({ where: { createdAt: { gte: daysAgo(6) } } });
+  const signups7 = await prisma.user.count({
+    where: { createdAt: { gte: daysAgo(6) } },
+  });
   const enrollments7 = await prisma.enrollment.count({
     where: { purchasedAt: { gte: daysAgo(6) } },
   });

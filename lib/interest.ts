@@ -46,7 +46,12 @@ export type InterestProfile = {
   affinities: { category: string; score: number; share: number }[];
   topCategory: string | null;
   recentSearches: string[];
-  viewedCourses: { id: string; title: string; category: string; views: number }[];
+  viewedCourses: {
+    id: string;
+    title: string;
+    category: string;
+    views: number;
+  }[];
   recommendations: Recommendation[];
   /** One short encouraging line for the proactive nudge. */
   nudge: string;
@@ -76,7 +81,8 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
     nudge,
   });
 
-  if (!where) return empty("Tell me what you would like to learn and I will find it.");
+  if (!where)
+    return empty("Tell me what you would like to learn and I will find it.");
 
   const [signals, enrollments, published, profile] = await Promise.all([
     prisma.signal.findMany({
@@ -111,7 +117,9 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
   const declared = parseInterests(profile?.interests);
 
   if (signals.length === 0 && declared.length === 0) {
-    return empty("Search for a subject and I will point you somewhere worth starting.");
+    return empty(
+      "Search for a subject and I will point you somewhere worth starting.",
+    );
   }
 
   const now = Date.now();
@@ -168,7 +176,10 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
   // --- recent searches, de-duplicated, newest first ---
   const recentSearches = [
     ...new Set(
-      signals.filter((s) => s.kind === "search").map((s) => s.value.trim()).filter(Boolean),
+      signals
+        .filter((s) => s.kind === "search")
+        .map((s) => s.value.trim())
+        .filter(Boolean),
     ),
   ].slice(0, 6);
 
@@ -208,7 +219,8 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
       const level = profile?.experienceLevel;
       let levelFit = 0;
       if (level === "BEGINNER") levelFit = c._count.lessons <= 5 ? 2 : -1;
-      else if (level === "ADVANCED") levelFit = c._count.lessons >= 5 ? 1.5 : -1;
+      else if (level === "ADVANCED")
+        levelFit = c._count.lessons >= 5 ? 1.5 : -1;
 
       const score =
         affinity * 1.0 +
@@ -218,7 +230,8 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
         Math.min(c._count.enrollments, 5) * 0.4;
 
       let reason = "Popular with other scholars";
-      if (views > 0) reason = `You looked at this ${views === 1 ? "once" : `${views} times`}`;
+      if (views > 0)
+        reason = `You looked at this ${views === 1 ? "once" : `${views} times`}`;
       else if (searchHit) reason = "Matches what you searched for";
       else if (declared.includes(c.category))
         reason = `You said ${c.category} interests you`;
@@ -239,7 +252,9 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
     .sort((a, b) => b.score - a.score)
     .slice(0, 4);
 
-  const recommendations: Recommendation[] = ranked.map(({ score: _score, ...r }) => r);
+  const recommendations: Recommendation[] = ranked.map(
+    ({ score: _score, ...r }) => r,
+  );
 
   return {
     hasHistory: true,
@@ -249,7 +264,12 @@ export async function getInterestProfile(who: Who): Promise<InterestProfile> {
     recentSearches,
     viewedCourses,
     recommendations,
-    nudge: buildNudge({ topCategory, viewedCourses, recentSearches, recommendations }),
+    nudge: buildNudge({
+      topCategory,
+      viewedCourses,
+      recentSearches,
+      recommendations,
+    }),
   };
 }
 

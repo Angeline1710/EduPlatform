@@ -45,10 +45,26 @@ const PILLARS = [
 ];
 
 const STEPS = [
-  { n: "I", title: "Discover", body: "Search the archives or browse a department until something catches you." },
-  { n: "II", title: "Learn", body: "Work through lessons at your own pace. Progress saves as you go." },
-  { n: "III", title: "Practise", body: "Apply each lesson to real exercises rather than only reading." },
-  { n: "IV", title: "Master", body: "Finish the course and your credential is sealed and issued." },
+  {
+    n: "I",
+    title: "Discover",
+    body: "Search the archives or browse a department until something catches you.",
+  },
+  {
+    n: "II",
+    title: "Learn",
+    body: "Work through lessons at your own pace. Progress saves as you go.",
+  },
+  {
+    n: "III",
+    title: "Practise",
+    body: "Apply each lesson to real exercises rather than only reading.",
+  },
+  {
+    n: "IV",
+    title: "Master",
+    body: "Finish the course and your credential is sealed and issued.",
+  },
 ];
 
 export default async function WhyUsPage() {
@@ -102,7 +118,10 @@ export default async function WhyUsPage() {
             <h2 className="font-serif text-3xl font-bold text-[var(--brand)]">
               What you get
             </h2>
-            <div className="mt-3 flex items-center justify-center gap-2.5" aria-hidden="true">
+            <div
+              className="mt-3 flex items-center justify-center gap-2.5"
+              aria-hidden="true"
+            >
               <span className="rule-fade w-14" />
               <Diamond size={5} />
               <span className="rule-fade w-14" />
@@ -116,8 +135,12 @@ export default async function WhyUsPage() {
                   <span className="mb-4 inline-grid h-12 w-12 place-items-center rounded-sm border border-[var(--gold)] text-[var(--gold)] transition-all duration-300 group-hover:bg-[var(--gold-soft)] group-hover:shadow-[0_0_14px_var(--academy-glow)]">
                     <Icon name={p.icon} className="h-6 w-6" />
                   </span>
-                  <h3 className="font-serif text-xl font-bold text-[var(--text)]">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">{p.body}</p>
+                  <h3 className="font-serif text-xl font-bold text-[var(--text)]">
+                    {p.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
+                    {p.body}
+                  </p>
                 </div>
               </Reveal>
             ))}
@@ -131,7 +154,10 @@ export default async function WhyUsPage() {
           <h2 className="text-center font-serif text-3xl font-bold text-[var(--shell-text)]">
             How learning works
           </h2>
-          <div className="mt-3 flex items-center justify-center gap-2.5" aria-hidden="true">
+          <div
+            className="mt-3 flex items-center justify-center gap-2.5"
+            aria-hidden="true"
+          >
             <span className="rule-fade w-14" />
             <Diamond size={5} />
             <span className="rule-fade w-14" />

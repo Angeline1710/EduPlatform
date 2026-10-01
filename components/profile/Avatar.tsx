@@ -24,13 +24,20 @@ export default function Avatar({
   return (
     <span
       className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-[var(--surface-2)] ${
-        ring ? "border-2 border-[var(--gold)] shadow-[0_0_18px_var(--academy-glow)]" : ""
+        ring
+          ? "border-2 border-[var(--gold)] shadow-[0_0_18px_var(--academy-glow)]"
+          : ""
       }`}
       style={{ width: size, height: size }}
     >
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
+        <img
+          src={src}
+          alt=""
+          className="h-full w-full object-cover"
+          loading="lazy"
+        />
       ) : (
         <>
           {/* A faint crest behind the initial, so the fallback still belongs

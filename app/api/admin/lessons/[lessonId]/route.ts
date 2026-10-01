@@ -8,14 +8,21 @@ const schema = z.object({
   content: z.string().min(1).max(20000),
 });
 
-export async function PUT(req: Request, { params }: RouteContext<"/api/admin/lessons/[lessonId]">) {
+export async function PUT(
+  req: Request,
+  { params }: RouteContext<"/api/admin/lessons/[lessonId]">,
+) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  if (!admin)
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
 
   const { lessonId } = await params;
   const parsed = schema.safeParse(await req.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid lesson data." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid lesson data." },
+      { status: 400 },
+    );
   }
 
   await prisma.lesson.update({
@@ -26,9 +33,13 @@ export async function PUT(req: Request, { params }: RouteContext<"/api/admin/les
   return NextResponse.json({ ok: true });
 }
 
-export async function DELETE(_req: Request, { params }: RouteContext<"/api/admin/lessons/[lessonId]">) {
+export async function DELETE(
+  _req: Request,
+  { params }: RouteContext<"/api/admin/lessons/[lessonId]">,
+) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  if (!admin)
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
 
   const { lessonId } = await params;
   await prisma.lesson.delete({ where: { id: lessonId } });

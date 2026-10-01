@@ -14,7 +14,11 @@
  * Everything is a <defs> block, so a plate includes it once and references
  * the patterns by id.
  */
-export default function EngravingDefs({ idPrefix = "eng" }: { idPrefix?: string }) {
+export default function EngravingDefs({
+  idPrefix = "eng",
+}: {
+  idPrefix?: string;
+}) {
   const p = idPrefix;
 
   return (
@@ -27,7 +31,15 @@ export default function EngravingDefs({ idPrefix = "eng" }: { idPrefix?: string 
         patternUnits="userSpaceOnUse"
         patternTransform="rotate(35)"
       >
-        <line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" strokeWidth="0.55" opacity="0.5" />
+        <line
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="7"
+          stroke="currentColor"
+          strokeWidth="0.55"
+          opacity="0.5"
+        />
       </pattern>
 
       <pattern
@@ -37,7 +49,15 @@ export default function EngravingDefs({ idPrefix = "eng" }: { idPrefix?: string 
         patternUnits="userSpaceOnUse"
         patternTransform="rotate(35)"
       >
-        <line x1="0" y1="0" x2="0" y2="4" stroke="currentColor" strokeWidth="0.7" opacity="0.65" />
+        <line
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="4"
+          stroke="currentColor"
+          strokeWidth="0.7"
+          opacity="0.65"
+        />
       </pattern>
 
       <pattern
@@ -47,11 +67,24 @@ export default function EngravingDefs({ idPrefix = "eng" }: { idPrefix?: string 
         patternUnits="userSpaceOnUse"
         patternTransform="rotate(35)"
       >
-        <line x1="0" y1="0" x2="0" y2="2.4" stroke="currentColor" strokeWidth="0.85" opacity="0.8" />
+        <line
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="2.4"
+          stroke="currentColor"
+          strokeWidth="0.85"
+          opacity="0.8"
+        />
       </pattern>
 
       {/* Cross-hatch: the deepest shadows, two burin passes crossing. */}
-      <pattern id={`${p}-cross`} width="4" height="4" patternUnits="userSpaceOnUse">
+      <pattern
+        id={`${p}-cross`}
+        width="4"
+        height="4"
+        patternUnits="userSpaceOnUse"
+      >
         <path
           d="M0 0L4 4M4 0L0 4"
           stroke="currentColor"
@@ -61,7 +94,12 @@ export default function EngravingDefs({ idPrefix = "eng" }: { idPrefix?: string 
       </pattern>
 
       {/* Stipple: soft graded tone, as on skies and distant stone. */}
-      <pattern id={`${p}-stipple`} width="9" height="9" patternUnits="userSpaceOnUse">
+      <pattern
+        id={`${p}-stipple`}
+        width="9"
+        height="9"
+        patternUnits="userSpaceOnUse"
+      >
         <circle cx="1.5" cy="2" r="0.5" fill="currentColor" opacity="0.5" />
         <circle cx="6" cy="4.5" r="0.42" fill="currentColor" opacity="0.42" />
         <circle cx="3.4" cy="7.2" r="0.55" fill="currentColor" opacity="0.55" />
@@ -94,7 +132,12 @@ export default function EngravingDefs({ idPrefix = "eng" }: { idPrefix?: string 
 
       {/* ---- Plate grain: the tooth of the paper the plate was pressed on ---- */}
       <filter id={`${p}-grain`} x="-5%" y="-5%" width="110%" height="110%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="n" />
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.9"
+          numOctaves="4"
+          result="n"
+        />
         <feColorMatrix in="n" type="saturate" values="0" result="g" />
         <feComponentTransfer in="g" result="t">
           <feFuncA type="linear" slope="0.08" />

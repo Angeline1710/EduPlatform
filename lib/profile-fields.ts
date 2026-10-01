@@ -21,8 +21,16 @@ export const EDUCATION_LEVELS = [
 
 export const EXPERIENCE_LEVELS = [
   { value: "BEGINNER", label: "Beginner", hint: "New to the subject" },
-  { value: "INTERMEDIATE", label: "Intermediate", hint: "Comfortable with the basics" },
-  { value: "ADVANCED", label: "Advanced", hint: "Working at a professional level" },
+  {
+    value: "INTERMEDIATE",
+    label: "Intermediate",
+    hint: "Comfortable with the basics",
+  },
+  {
+    value: "ADVANCED",
+    label: "Advanced",
+    hint: "Working at a professional level",
+  },
 ] as const;
 
 export const ACCOLADE_KINDS = [
@@ -56,7 +64,8 @@ export function ageFrom(dob?: Date | null): number | null {
   const now = new Date();
   let age = now.getFullYear() - dob.getFullYear();
   const monthDiff = now.getMonth() - dob.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate())) age--;
+  if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate()))
+    age--;
   return age >= 0 && age < 130 ? age : null;
 }
 
@@ -68,7 +77,8 @@ export function parseInterests(raw?: string | null): string[] {
     if (!Array.isArray(parsed)) return [];
     return parsed.filter(
       (v): v is string =>
-        typeof v === "string" && (CATEGORY_NAMES as readonly string[]).includes(v),
+        typeof v === "string" &&
+        (CATEGORY_NAMES as readonly string[]).includes(v),
     );
   } catch {
     return [];
@@ -99,62 +109,63 @@ type ProfileLike = {
  * instead of nagging for a number.
  */
 export function completeness(profile: ProfileLike | null) {
-  const checks: { key: string; label: string; done: boolean; helps: string }[] = [
-    {
-      key: "headline",
-      label: "A headline",
-      done: Boolean(profile?.headline),
-      helps: "Tells others who you are",
-    },
-    {
-      key: "dateOfBirth",
-      label: "Date of birth",
-      done: Boolean(profile?.dateOfBirth),
-      helps: "Lets us pitch courses at the right level",
-    },
-    {
-      key: "country",
-      label: "Where you are",
-      done: Boolean(profile?.country),
-      helps: "Used for timing and local offers",
-    },
-    {
-      key: "educationLevel",
-      label: "Education level",
-      done: Boolean(profile?.educationLevel),
-      helps: "Sets the depth the owl suggests",
-    },
-    {
-      key: "fieldOfStudy",
-      label: "Field of study",
-      done: Boolean(profile?.fieldOfStudy),
-      helps: "Points the owl at the right department",
-    },
-    {
-      key: "experienceLevel",
-      label: "Experience level",
-      done: Boolean(profile?.experienceLevel),
-      helps: "Stops beginners being sent advanced material",
-    },
-    {
-      key: "interests",
-      label: "Subjects you care about",
-      done: parseInterests(profile?.interests).length > 0,
-      helps: "The strongest signal the owl has",
-    },
-    {
-      key: "goals",
-      label: "What you want to achieve",
-      done: Boolean(profile?.goals),
-      helps: "Shapes the order courses are suggested in",
-    },
-    {
-      key: "accolades",
-      label: "Competitions or certifications",
-      done: (profile?.accolades?.length ?? 0) > 0,
-      helps: "Shows what you have already proven",
-    },
-  ];
+  const checks: { key: string; label: string; done: boolean; helps: string }[] =
+    [
+      {
+        key: "headline",
+        label: "A headline",
+        done: Boolean(profile?.headline),
+        helps: "Tells others who you are",
+      },
+      {
+        key: "dateOfBirth",
+        label: "Date of birth",
+        done: Boolean(profile?.dateOfBirth),
+        helps: "Lets us pitch courses at the right level",
+      },
+      {
+        key: "country",
+        label: "Where you are",
+        done: Boolean(profile?.country),
+        helps: "Used for timing and local offers",
+      },
+      {
+        key: "educationLevel",
+        label: "Education level",
+        done: Boolean(profile?.educationLevel),
+        helps: "Sets the depth the owl suggests",
+      },
+      {
+        key: "fieldOfStudy",
+        label: "Field of study",
+        done: Boolean(profile?.fieldOfStudy),
+        helps: "Points the owl at the right department",
+      },
+      {
+        key: "experienceLevel",
+        label: "Experience level",
+        done: Boolean(profile?.experienceLevel),
+        helps: "Stops beginners being sent advanced material",
+      },
+      {
+        key: "interests",
+        label: "Subjects you care about",
+        done: parseInterests(profile?.interests).length > 0,
+        helps: "The strongest signal the owl has",
+      },
+      {
+        key: "goals",
+        label: "What you want to achieve",
+        done: Boolean(profile?.goals),
+        helps: "Shapes the order courses are suggested in",
+      },
+      {
+        key: "accolades",
+        label: "Competitions or certifications",
+        done: (profile?.accolades?.length ?? 0) > 0,
+        helps: "Shows what you have already proven",
+      },
+    ];
 
   const done = checks.filter((c) => c.done).length;
   return {

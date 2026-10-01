@@ -9,7 +9,11 @@ import EngravingDefs from "./EngravingDefs";
  * hatch density rather than flat fills, and the composition is asymmetric on
  * purpose: a mirrored building looks stamped.
  */
-export default function AcademyPlate({ className = "" }: { className?: string }) {
+export default function AcademyPlate({
+  className = "",
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 520 380"
@@ -24,29 +28,72 @@ export default function AcademyPlate({ className = "" }: { className?: string })
       <g className="text-[var(--plate-stone)]">
         <rect width="520" height="290" fill="url(#plate-sky)" />
         {/* Stippled upper sky, thinning toward the horizon */}
-        <rect width="520" height="150" fill="url(#plate-stipple)" opacity="0.5" />
+        <rect
+          width="520"
+          height="150"
+          fill="url(#plate-stipple)"
+          opacity="0.5"
+        />
       </g>
 
       {/* Moon, low and off-centre */}
       <g>
         <circle cx="404" cy="74" r="46" fill="url(#plate-glow)" />
-        <circle cx="404" cy="74" r="21" fill="var(--plate-paper)" opacity="0.9" />
+        <circle
+          cx="404"
+          cy="74"
+          r="21"
+          fill="var(--plate-paper)"
+          opacity="0.9"
+        />
         {/* Craters, uneven — a clean disc looks printed */}
-        <circle cx="398" cy="68" r="4.5" fill="var(--plate-stone)" opacity="0.55" />
-        <circle cx="409" cy="80" r="3" fill="var(--plate-stone)" opacity="0.45" />
-        <circle cx="411" cy="66" r="2.2" fill="var(--plate-stone)" opacity="0.4" />
+        <circle
+          cx="398"
+          cy="68"
+          r="4.5"
+          fill="var(--plate-stone)"
+          opacity="0.55"
+        />
+        <circle
+          cx="409"
+          cy="80"
+          r="3"
+          fill="var(--plate-stone)"
+          opacity="0.45"
+        />
+        <circle
+          cx="411"
+          cy="66"
+          r="2.2"
+          fill="var(--plate-stone)"
+          opacity="0.4"
+        />
       </g>
 
       {/* Cloud bands, drawn as long shallow curves */}
-      <g stroke="var(--plate-paper)" fill="none" opacity="0.22" strokeLinecap="round">
+      <g
+        stroke="var(--plate-paper)"
+        fill="none"
+        opacity="0.22"
+        strokeLinecap="round"
+      >
         <path d="M40 96c34-13 62 6 96-3 27-7 44-17 72-11" strokeWidth="1.1" />
-        <path d="M300 122c30-10 56 4 84-4 22-6 38-14 62-9" strokeWidth="0.9" opacity="0.7" />
+        <path
+          d="M300 122c30-10 56 4 84-4 22-6 38-14 62-9"
+          strokeWidth="0.9"
+          opacity="0.7"
+        />
         <path d="M12 140c40-11 70 8 108-2" strokeWidth="0.7" opacity="0.5" />
       </g>
 
       {/* Constellation, faint */}
       <g stroke="var(--plate-lit)" fill="var(--plate-lit)" opacity="0.4">
-        <path d="M96 44l30 18 26-9 22 22" strokeWidth="0.45" fill="none" strokeDasharray="1.5 4" />
+        <path
+          d="M96 44l30 18 26-9 22 22"
+          strokeWidth="0.45"
+          fill="none"
+          strokeDasharray="1.5 4"
+        />
         <circle cx="96" cy="44" r="1.5" />
         <circle cx="126" cy="62" r="1.1" />
         <circle cx="152" cy="53" r="1.3" />
@@ -90,30 +137,82 @@ export default function AcademyPlate({ className = "" }: { className?: string })
           opacity="0.6"
         />
         {/* Telescope slit, angled */}
-        <path d="M112 142c4-3 9-3 13 0l-5 24h-4z" fill="var(--plate-ink)" opacity="0.85" />
+        <path
+          d="M112 142c4-3 9-3 13 0l-5 24h-4z"
+          fill="var(--plate-ink)"
+          opacity="0.85"
+        />
         {/* Finial */}
-        <path d="M118 130v-12M113 122h10" stroke="var(--gold)" strokeWidth="1.3" strokeLinecap="round" />
+        <path
+          d="M118 130v-12M113 122h10"
+          stroke="var(--gold)"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+        />
         <circle cx="118" cy="116" r="2.4" fill="var(--plate-lit)" />
       </g>
 
       {/* ---------------- The great hall (centre) ---------------- */}
       <g>
         {/* Body, with a subtle batter to the walls */}
-        <path d="M196 300c-2-44-1-70 0-92h128c1 22 2 48 0 92z" fill="var(--plate-stone)" />
-        <path d="M196 300c-2-44-1-70 0-92h128c1 22 2 48 0 92z" fill="url(#plate-hatch-mid)" opacity="0.5" />
+        <path
+          d="M196 300c-2-44-1-70 0-92h128c1 22 2 48 0 92z"
+          fill="var(--plate-stone)"
+        />
+        <path
+          d="M196 300c-2-44-1-70 0-92h128c1 22 2 48 0 92z"
+          fill="url(#plate-hatch-mid)"
+          opacity="0.5"
+        />
 
         {/* Gable roof as a shallow curve rather than a triangle */}
-        <path d="M190 208c22-34 44-52 70-52s48 18 70 52c-24-8-46-11-70-11s-46 3-70 11z" fill="var(--plate-roof)" />
-        <path d="M190 208c22-34 44-52 70-52s48 18 70 52c-24-8-46-11-70-11s-46 3-70 11z" fill="url(#plate-hatch-dark)" opacity="0.45" />
+        <path
+          d="M190 208c22-34 44-52 70-52s48 18 70 52c-24-8-46-11-70-11s-46 3-70 11z"
+          fill="var(--plate-roof)"
+        />
+        <path
+          d="M190 208c22-34 44-52 70-52s48 18 70 52c-24-8-46-11-70-11s-46 3-70 11z"
+          fill="url(#plate-hatch-dark)"
+          opacity="0.45"
+        />
 
         {/* Arched entrance — the light source of the whole plate */}
-        <path d="M246 300v-38c0-8 6-14 14-14s14 6 14 14v38z" fill="var(--plate-lit)" opacity="0.92" filter="url(#plate-bloom)" />
-        <path d="M246 300v-38c0-8 6-14 14-14s14 6 14 14v38z" fill="none" stroke="var(--gold)" strokeWidth="1.1" />
-        <path d="M260 248v52" stroke="var(--gold-dim)" strokeWidth="0.8" opacity="0.5" />
+        <path
+          d="M246 300v-38c0-8 6-14 14-14s14 6 14 14v38z"
+          fill="var(--plate-lit)"
+          opacity="0.92"
+          filter="url(#plate-bloom)"
+        />
+        <path
+          d="M246 300v-38c0-8 6-14 14-14s14 6 14 14v38z"
+          fill="none"
+          stroke="var(--gold)"
+          strokeWidth="1.1"
+        />
+        <path
+          d="M260 248v52"
+          stroke="var(--gold-dim)"
+          strokeWidth="0.8"
+          opacity="0.5"
+        />
 
         {/* Rose window */}
-        <circle cx="260" cy="226" r="13" fill="var(--plate-lit)" opacity="0.8" filter="url(#plate-bloom)" />
-        <circle cx="260" cy="226" r="13" fill="none" stroke="var(--gold)" strokeWidth="1" />
+        <circle
+          cx="260"
+          cy="226"
+          r="13"
+          fill="var(--plate-lit)"
+          opacity="0.8"
+          filter="url(#plate-bloom)"
+        />
+        <circle
+          cx="260"
+          cy="226"
+          r="13"
+          fill="none"
+          stroke="var(--gold)"
+          strokeWidth="1"
+        />
         <path
           d="M260 213v26M247 226h26M251 217l18 18M269 217l-18 18"
           stroke="var(--gold-dim)"
@@ -141,10 +240,20 @@ export default function AcademyPlate({ className = "" }: { className?: string })
 
       {/* ---------------- Library wing (right, lower) ---------------- */}
       <g>
-        <path d="M336 300c-1-30 0-46 1-62h92c1 16 2 32 1 62z" fill="var(--plate-stone)" />
-        <path d="M336 300c-1-30 0-46 1-62h92c1 16 2 32 1 62z" fill="url(#plate-hatch-light)" opacity="0.6" />
+        <path
+          d="M336 300c-1-30 0-46 1-62h92c1 16 2 32 1 62z"
+          fill="var(--plate-stone)"
+        />
+        <path
+          d="M336 300c-1-30 0-46 1-62h92c1 16 2 32 1 62z"
+          fill="url(#plate-hatch-light)"
+          opacity="0.6"
+        />
         {/* Curved eaves */}
-        <path d="M330 238c20-22 40-32 52-32s32 10 52 32c-20-6-36-8-52-8s-32 2-52 8z" fill="var(--plate-roof)" />
+        <path
+          d="M330 238c20-22 40-32 52-32s32 10 52 32c-20-6-36-8-52-8s-32 2-52 8z"
+          fill="var(--plate-roof)"
+        />
         {[352, 372, 396, 416].map((x, i) => (
           <path
             key={x}
@@ -159,7 +268,11 @@ export default function AcademyPlate({ className = "" }: { className?: string })
 
       {/* ---------------- Light shafts from the door ---------------- */}
       <g opacity="0.5">
-        <path d="M250 300l-40 66h100l-36-66z" fill="url(#plate-shaft)" transform="rotate(180 260 333)" />
+        <path
+          d="M250 300l-40 66h100l-36-66z"
+          fill="url(#plate-shaft)"
+          transform="rotate(180 260 333)"
+        />
       </g>
 
       {/* ---------------- Trees: closed beziers, no triangles ---------------- */}
@@ -169,7 +282,12 @@ export default function AcademyPlate({ className = "" }: { className?: string })
           d="M62 300c-14-4-22-16-20-30 1-9 7-15 6-24-1-11 6-20 16-20s17 9 16 20c-1 9 5 15 6 24 2 14-6 26-20 30z"
           fill="var(--plate-deep)"
         />
-        <path d="M64 300v-34" stroke="var(--plate-ink)" strokeWidth="2.4" strokeLinecap="round" />
+        <path
+          d="M64 300v-34"
+          stroke="var(--plate-ink)"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+        />
         <path
           d="M62 300c-14-4-22-16-20-30 1-9 7-15 6-24-1-11 6-20 16-20s17 9 16 20c-1 9 5 15 6 24 2 14-6 26-20 30z"
           fill="url(#plate-cross)"
@@ -182,7 +300,12 @@ export default function AcademyPlate({ className = "" }: { className?: string })
           d="M470 300c-16-6-24-20-20-34 3-10 9-14 9-24 0-12 8-20 17-20s17 8 17 20c0 10 6 14 9 24 4 14-4 28-20 34z"
           fill="var(--plate-deep)"
         />
-        <path d="M476 300v-38" stroke="var(--plate-ink)" strokeWidth="2.6" strokeLinecap="round" />
+        <path
+          d="M476 300v-38"
+          stroke="var(--plate-ink)"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
 
         {/* Small sapling, breaks the symmetry */}
         <path
@@ -225,8 +348,17 @@ export default function AcademyPlate({ className = "" }: { className?: string })
       />
 
       {/* ---------------- Birds: three curved strokes ---------------- */}
-      <g stroke="var(--plate-paper)" fill="none" opacity="0.5" strokeLinecap="round" strokeWidth="1.1">
-        <path d="M148 106c4-5 8-5 11 0M159 106c4-5 8-5 11 0" className="bird-drift" />
+      <g
+        stroke="var(--plate-paper)"
+        fill="none"
+        opacity="0.5"
+        strokeLinecap="round"
+        strokeWidth="1.1"
+      >
+        <path
+          d="M148 106c4-5 8-5 11 0M159 106c4-5 8-5 11 0"
+          className="bird-drift"
+        />
         <path
           d="M186 88c3-4 6-4 8 0M194 88c3-4 6-4 8 0"
           opacity="0.7"
@@ -236,7 +368,13 @@ export default function AcademyPlate({ className = "" }: { className?: string })
       </g>
 
       {/* Plate grain over everything */}
-      <rect width="520" height="380" filter="url(#plate-grain)" opacity="0.5" pointerEvents="none" />
+      <rect
+        width="520"
+        height="380"
+        filter="url(#plate-grain)"
+        opacity="0.5"
+        pointerEvents="none"
+      />
     </svg>
   );
 }

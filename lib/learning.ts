@@ -30,7 +30,10 @@ export async function getLearningState(userId: string) {
       include: {
         course: {
           include: {
-            lessons: { orderBy: { order: "asc" }, select: { id: true, title: true, order: true } },
+            lessons: {
+              orderBy: { order: "asc" },
+              select: { id: true, title: true, order: true },
+            },
           },
         },
       },
@@ -82,7 +85,8 @@ export async function getLearningState(userId: string) {
 
   const streak = computeStreak(progress.map((p) => p.completedAt));
   const studiedToday = progress.some(
-    (p) => startOfDay(p.completedAt).getTime() === startOfDay(new Date()).getTime(),
+    (p) =>
+      startOfDay(p.completedAt).getTime() === startOfDay(new Date()).getTime(),
   );
 
   return {
@@ -97,11 +101,19 @@ export async function getLearningState(userId: string) {
       lessonsDone,
       lessonsLeft: totalLessons - lessonsDone,
       completedCourses,
-      percent: totalLessons > 0 ? Math.round((lessonsDone / totalLessons) * 100) : 0,
+      percent:
+        totalLessons > 0 ? Math.round((lessonsDone / totalLessons) * 100) : 0,
     },
     streak,
     studiedToday,
-    reminders: buildReminders({ courses, upNext, streak, studiedToday, notStarted, certificates }),
+    reminders: buildReminders({
+      courses,
+      upNext,
+      streak,
+      studiedToday,
+      notStarted,
+      certificates,
+    }),
   };
 }
 
@@ -112,7 +124,9 @@ export async function getLearningState(userId: string) {
 function computeStreak(dates: Date[]) {
   if (dates.length === 0) return 0;
 
-  const days = [...new Set(dates.map((d) => startOfDay(d).getTime()))].sort((a, b) => b - a);
+  const days = [...new Set(dates.map((d) => startOfDay(d).getTime()))].sort(
+    (a, b) => b - a,
+  );
   const today = startOfDay(new Date()).getTime();
 
   if (days[0] !== today && days[0] !== today - DAY_MS) return 0;
@@ -134,7 +148,11 @@ function buildReminders({
   certificates,
 }: {
   courses: { title: string; remaining: number; complete: boolean }[];
-  upNext: { id: string; title: string; nextLesson: { title: string } | null } | null;
+  upNext: {
+    id: string;
+    title: string;
+    nextLesson: { title: string } | null;
+  } | null;
   streak: number;
   studiedToday: boolean;
   notStarted: { id: string; title: string }[];
@@ -183,7 +201,9 @@ function buildReminders({
     });
   }
 
-  const nearlyDone = courses.find((c) => !c.complete && c.remaining > 0 && c.remaining <= 2);
+  const nearlyDone = courses.find(
+    (c) => !c.complete && c.remaining > 0 && c.remaining <= 2,
+  );
   if (nearlyDone) {
     out.push({
       id: "nearly",
@@ -200,7 +220,10 @@ function buildReminders({
       id: "untouched",
       tone: "nudge",
       title: `${notStarted.length} course${notStarted.length === 1 ? "" : "s"} not yet opened`,
-      body: notStarted.map((c) => c.title).slice(0, 2).join(", "),
+      body: notStarted
+        .map((c) => c.title)
+        .slice(0, 2)
+        .join(", "),
       href: `/learn/${notStarted[0].id}`,
       cta: "Begin",
     });

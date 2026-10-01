@@ -8,7 +8,10 @@ import Icon from "@/components/Icon";
 type Action =
   | { action: "suspend" | "activate" | "promote" | "demote" }
   | { action: "grant" | "revokeAccess"; courseId: string }
-  | { action: "revokeCertificate" | "restoreCertificate"; certificateId: string };
+  | {
+      action: "revokeCertificate" | "restoreCertificate";
+      certificateId: string;
+    };
 
 type UserControlsProps = {
   userId: string;
@@ -17,7 +20,12 @@ type UserControlsProps = {
   role: string;
   grantableCourses: { id: string; title: string }[];
   enrollments: { courseId: string; title: string }[];
-  certificates: { id: string; code: string; courseTitle: string; revoked: boolean }[];
+  certificates: {
+    id: string;
+    code: string;
+    courseTitle: string;
+    revoked: boolean;
+  }[];
 };
 
 export default function UserControls({
@@ -56,7 +64,9 @@ export default function UserControls({
 
   async function remove() {
     if (
-      !confirm("Delete this user permanently? Their progress and certificates go too.")
+      !confirm(
+        "Delete this user permanently? Their progress and certificates go too.",
+      )
     ) {
       return;
     }
@@ -150,7 +160,9 @@ export default function UserControls({
               ))}
             </select>
             <button
-              onClick={() => grantId && run({ action: "grant", courseId: grantId })}
+              onClick={() =>
+                grantId && run({ action: "grant", courseId: grantId })
+              }
               disabled={busy || !grantId}
               className="btn btn-primary press disabled:opacity-40"
             >
@@ -161,7 +173,9 @@ export default function UserControls({
         )}
 
         {enrollments.length === 0 ? (
-          <p className="text-sm text-[var(--text-muted)]">No courses granted.</p>
+          <p className="text-sm text-[var(--text-muted)]">
+            No courses granted.
+          </p>
         ) : (
           <ul className="space-y-2">
             {enrollments.map((e) => (
@@ -171,7 +185,9 @@ export default function UserControls({
               >
                 <span className="flex-1 text-sm font-medium">{e.title}</span>
                 <button
-                  onClick={() => run({ action: "revokeAccess", courseId: e.courseId })}
+                  onClick={() =>
+                    run({ action: "revokeAccess", courseId: e.courseId })
+                  }
                   disabled={busy}
                   className="focus-ring rounded-full px-3 py-1.5 text-sm font-semibold text-red-500 transition hover:bg-red-500/10 disabled:opacity-40"
                 >
@@ -196,7 +212,9 @@ export default function UserControls({
                 className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--border)] px-4 py-2.5"
               >
                 <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-medium">{c.courseTitle}</span>
+                  <span className="block text-sm font-medium">
+                    {c.courseTitle}
+                  </span>
                   <Link
                     href={`/verify/${c.code}`}
                     className="font-mono text-xs text-[var(--brand)] hover:underline"
@@ -214,7 +232,9 @@ export default function UserControls({
                 <button
                   onClick={() =>
                     run({
-                      action: c.revoked ? "restoreCertificate" : "revokeCertificate",
+                      action: c.revoked
+                        ? "restoreCertificate"
+                        : "revokeCertificate",
                       certificateId: c.id,
                     })
                   }

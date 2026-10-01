@@ -80,7 +80,9 @@ export default function LiveUsers({
           </span>
           Online now
         </h3>
-        <span className="font-serif text-2xl font-bold text-[var(--gold)]">{count}</span>
+        <span className="font-serif text-2xl font-bold text-[var(--gold)]">
+          {count}
+        </span>
       </div>
 
       {stale && (
@@ -103,7 +105,9 @@ export default function LiveUsers({
               >
                 <span
                   className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-xs font-bold text-white ${
-                    u.role === "ADMIN" ? "bg-[var(--academy-plum)]" : "bg-[var(--academy-purple)]"
+                    u.role === "ADMIN"
+                      ? "bg-[var(--academy-plum)]"
+                      : "bg-[var(--academy-purple)]"
                   }`}
                 >
                   {u.name.charAt(0).toUpperCase()}

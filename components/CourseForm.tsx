@@ -20,7 +20,9 @@ export default function CourseForm({ course }: { course?: Course }) {
   const router = useRouter();
   const [title, setTitle] = useState(course?.title ?? "");
   const [description, setDescription] = useState(course?.description ?? "");
-  const [price, setPrice] = useState(course ? (course.price / 100).toFixed(2) : "49.00");
+  const [price, setPrice] = useState(
+    course ? (course.price / 100).toFixed(2) : "49.00",
+  );
   const [category, setCategory] = useState(course?.category ?? "Development");
   const [thumbnailUrl, setThumbnailUrl] = useState(course?.thumbnailUrl ?? "");
   const [gifUrl, setGifUrl] = useState(course?.gifUrl ?? "");
@@ -50,7 +52,7 @@ export default function CourseForm({ course }: { course?: Course }) {
         method: course ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-      }
+      },
     );
 
     const data = await res.json().catch(() => ({}));
@@ -115,7 +117,9 @@ export default function CourseForm({ course }: { course?: Course }) {
                 }`}
                 style={
                   active
-                    ? { backgroundImage: `linear-gradient(135deg, ${t.from}, ${t.to})` }
+                    ? {
+                        backgroundImage: `linear-gradient(135deg, ${t.from}, ${t.to})`,
+                      }
                     : undefined
                 }
               >
@@ -145,7 +149,10 @@ export default function CourseForm({ course }: { course?: Course }) {
         </div>
         <div>
           <label htmlFor="thumb" className="label">
-            Thumbnail URL <span className="font-normal text-[var(--text-faint)]">(optional)</span>
+            Thumbnail URL{" "}
+            <span className="font-normal text-[var(--text-faint)]">
+              (optional)
+            </span>
           </label>
           <input
             id="thumb"
@@ -161,7 +168,9 @@ export default function CourseForm({ course }: { course?: Course }) {
       <div className="flex items-center gap-3 rounded-2xl border border-dashed border-[var(--border-strong)] p-4">
         <span
           className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-white shadow-md"
-          style={{ backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+          }}
         >
           <Icon name={theme.icon} className="h-5 w-5" />
         </span>

@@ -26,8 +26,10 @@ export default async function CoursePage({
   const enrolled = session?.user
     ? Boolean(
         await prisma.enrollment.findUnique({
-          where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
-        })
+          where: {
+            userId_courseId: { userId: session.user.id, courseId: course.id },
+          },
+        }),
       )
     : false;
 
@@ -46,7 +48,9 @@ export default async function CoursePage({
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 opacity-60 blur-3xl"
-        style={{ background: `linear-gradient(120deg, ${theme.from}33, ${theme.to}22)` }}
+        style={{
+          background: `linear-gradient(120deg, ${theme.from}33, ${theme.to}22)`,
+        }}
       />
 
       <div className="mx-auto max-w-5xl px-6 py-10">
@@ -103,20 +107,23 @@ export default async function CoursePage({
               {course.title}
             </h1>
             <div className="mt-4 flex items-center gap-2 text-[var(--text-faint)]">
-              <Icon name="user" className="h-4 w-4" /> Instructor: Master Scholar
+              <Icon name="user" className="h-4 w-4" /> Instructor: Master
+              Scholar
               <span className="mx-2">•</span>
               <Icon name="star" className="h-4 w-4 text-[var(--gold)]" /> 4.9/5
             </div>
-            
+
             <div className="mt-4 h-[1px] w-full bg-gradient-to-r from-[var(--gold)] via-[var(--gold-dim)] to-transparent opacity-60"></div>
-            
+
             <p className="mt-6 max-w-2xl text-[16px] leading-relaxed text-[var(--text-muted)]">
               {course.description}
             </p>
 
             <div className="mt-12">
               <h2 className="mb-6 flex items-center gap-3 text-[22px] font-bold font-serif text-[var(--brand)]">
-                <span className="text-[var(--gold)]"><Icon name="book" className="h-6 w-6" /></span>
+                <span className="text-[var(--gold)]">
+                  <Icon name="book" className="h-6 w-6" />
+                </span>
                 Curriculum
                 <span className="text-sm font-normal text-[var(--text-faint)] ml-2 border border-[var(--border)] rounded-full px-3 py-0.5 bg-[var(--surface-2)]">
                   {course.lessons.length} manuscripts
@@ -125,7 +132,10 @@ export default async function CoursePage({
 
               <ol className="card divide-y divide-[var(--border)] overflow-hidden border-[var(--border)] shadow-[var(--shadow-card)]">
                 {course.lessons.map((lesson, i) => (
-                  <li key={lesson.id} className="group relative flex items-center gap-4 px-6 py-5 hover:bg-[var(--surface-2)] transition-colors duration-300">
+                  <li
+                    key={lesson.id}
+                    className="group relative flex items-center gap-4 px-6 py-5 hover:bg-[var(--surface-2)] transition-colors duration-300"
+                  >
                     <span
                       aria-hidden="true"
                       className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -136,8 +146,13 @@ export default async function CoursePage({
                     <span className="flex-1 text-[15px] font-medium text-[var(--text)] group-hover:text-[var(--brand)] transition-colors">
                       {lesson.title}
                     </span>
-                    <span className={`transition-all duration-300 ${enrolled ? "text-[var(--gold)]" : "text-[var(--text-faint)] group-hover:text-[var(--text-muted)]"}`}>
-                      <Icon name={enrolled ? "play" : "lock"} className="h-[18px] w-[18px]" />
+                    <span
+                      className={`transition-all duration-300 ${enrolled ? "text-[var(--gold)]" : "text-[var(--text-faint)] group-hover:text-[var(--text-muted)]"}`}
+                    >
+                      <Icon
+                        name={enrolled ? "play" : "lock"}
+                        className="h-[18px] w-[18px]"
+                      />
                     </span>
                   </li>
                 ))}

@@ -21,10 +21,15 @@ export default function SettingsForm({
 
   const [visibility, setVisibility] = useState(isPublic);
   const [offers, setOffers] = useState(marketingOptIn);
-  const [prefState, setPrefState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [prefState, setPrefState] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
   const [prefError, setPrefError] = useState("");
 
-  async function savePrefs(next: { isPublic?: boolean; marketingOptIn?: boolean }) {
+  async function savePrefs(next: {
+    isPublic?: boolean;
+    marketingOptIn?: boolean;
+  }) {
     setPrefState("saving");
     setPrefError("");
 
@@ -104,8 +109,8 @@ export default function SettingsForm({
           </p>
           <p className="mt-1 text-[var(--text)]">{email}</p>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Contact the academy if you need this changed — it is the address your
-            credentials are tied to.
+            Contact the academy if you need this changed — it is the address
+            your credentials are tied to.
           </p>
         </div>
 
@@ -185,7 +190,10 @@ function PasswordChange() {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-4 rounded-sm border border-[var(--border)] bg-[var(--surface-2)] p-4">
+    <form
+      onSubmit={submit}
+      className="space-y-4 rounded-sm border border-[var(--border)] bg-[var(--surface-2)] p-4"
+    >
       <Field label="Current password">
         <input
           type="password"
@@ -255,7 +263,9 @@ function Panel({
   return (
     <section className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-card)]">
       <div className="mb-4">
-        <h2 className="font-serif text-xl font-bold text-[var(--brand)]">{title}</h2>
+        <h2 className="font-serif text-xl font-bold text-[var(--brand)]">
+          {title}
+        </h2>
         {note && <p className="text-xs text-[var(--text-faint)]">{note}</p>}
       </div>
       {children}
@@ -295,7 +305,9 @@ function Toggle({
         />
       </button>
       <span className="min-w-0">
-        <span className="block text-sm font-semibold text-[var(--text)]">{label}</span>
+        <span className="block text-sm font-semibold text-[var(--text)]">
+          {label}
+        </span>
         <span className="mt-0.5 block text-xs leading-relaxed text-[var(--text-muted)]">
           {hint}
         </span>
@@ -317,7 +329,11 @@ function Field({
     <label className="block">
       <span className="mb-1.5 block text-sm font-semibold text-[var(--text)]">
         {label}
-        {hint && <span className="ml-2 text-xs font-normal text-[var(--text-faint)]">{hint}</span>}
+        {hint && (
+          <span className="ml-2 text-xs font-normal text-[var(--text-faint)]">
+            {hint}
+          </span>
+        )}
       </span>
       {children}
     </label>

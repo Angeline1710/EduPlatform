@@ -20,7 +20,9 @@ function greeting(d: Date) {
   return "Good evening";
 }
 
-export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
+export default async function DashboardPage({
+  searchParams,
+}: PageProps<"/dashboard">) {
   const session = await auth();
   if (!session?.user) redirect("/login");
 
@@ -56,9 +58,22 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
           {/* Standing */}
           <div className="stagger mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Stat icon="book" label="Courses" value={s.totals.courses} />
-            <Stat icon="check" label="Lessons done" value={s.totals.lessonsDone} />
-            <Stat icon="clock" label="Lessons left" value={s.totals.lessonsLeft} />
-            <Stat icon="award" label="Credentials" value={s.certificates.length} highlight />
+            <Stat
+              icon="check"
+              label="Lessons done"
+              value={s.totals.lessonsDone}
+            />
+            <Stat
+              icon="clock"
+              label="Lessons left"
+              value={s.totals.lessonsLeft}
+            />
+            <Stat
+              icon="award"
+              label="Credentials"
+              value={s.certificates.length}
+              highlight
+            />
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
@@ -83,7 +98,8 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--text-faint)]">
-                        {s.upNext.done === 0 ? "Begin" : "Resume"} · {s.upNext.category}
+                        {s.upNext.done === 0 ? "Begin" : "Resume"} ·{" "}
+                        {s.upNext.category}
                       </p>
                       <p className="mt-1 truncate font-serif text-2xl font-bold text-[var(--text)]">
                         {s.upNext.title}
@@ -141,7 +157,10 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                                   } as React.CSSProperties
                                 }
                               >
-                                <DepartmentCrest name={c.category} className="h-11 w-11" />
+                                <DepartmentCrest
+                                  name={c.category}
+                                  className="h-11 w-11"
+                                />
                               </span>
                             )}
 
@@ -151,7 +170,9 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                               </p>
                               <p className="text-xs text-[var(--text-faint)]">
                                 {c.done} of {c.total} lessons
-                                {c.complete ? " · complete" : ` · ${c.remaining} left`}
+                                {c.complete
+                                  ? " · complete"
+                                  : ` · ${c.remaining} left`}
                               </p>
                             </div>
 
@@ -173,7 +194,8 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                           <p className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-[var(--brand)]">
                             {c.complete ? (
                               <>
-                                <Icon name="check" className="h-4 w-4" /> Completed
+                                <Icon name="check" className="h-4 w-4" />{" "}
+                                Completed
                               </>
                             ) : (
                               <>
@@ -214,7 +236,9 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                           <p className="font-serif font-bold text-[var(--text)]">
                             {cert.course.title}
                           </p>
-                          <p className="mt-1 font-mono text-xs text-[var(--brand)]">{cert.code}</p>
+                          <p className="mt-1 font-mono text-xs text-[var(--brand)]">
+                            {cert.code}
+                          </p>
                           <p className="mt-auto pt-3 text-xs text-[var(--text-faint)]">
                             Issued {formatIssueDate(cert.issuedAt)}
                           </p>
@@ -237,7 +261,9 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                 </h3>
 
                 {s.reminders.length === 0 ? (
-                  <p className="text-sm text-[var(--text-muted)]">Nothing needs your attention.</p>
+                  <p className="text-sm text-[var(--text-muted)]">
+                    Nothing needs your attention.
+                  </p>
                 ) : (
                   <ul className="space-y-3">
                     {s.reminders.map((r) => (
@@ -253,7 +279,9 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                                 : "var(--border-strong)",
                         }}
                       >
-                        <p className="text-sm font-semibold text-[var(--text)]">{r.title}</p>
+                        <p className="text-sm font-semibold text-[var(--text)]">
+                          {r.title}
+                        </p>
                         <p className="mt-0.5 text-xs leading-relaxed text-[var(--text-muted)]">
                           {r.body}
                         </p>
@@ -288,7 +316,8 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
                   />
                 </div>
                 <p className="mt-4 text-sm text-[var(--text-muted)]">
-                  {s.totals.completedCourses} of {s.totals.courses} courses complete
+                  {s.totals.completedCourses} of {s.totals.courses} courses
+                  complete
                 </p>
               </div>
             </aside>
@@ -331,15 +360,25 @@ function Stat({
   );
 }
 
-function StreakCard({ streak, studiedToday }: { streak: number; studiedToday: boolean }) {
+function StreakCard({
+  streak,
+  studiedToday,
+}: {
+  streak: number;
+  studiedToday: boolean;
+}) {
   // Seven candles; the lit ones show this week's consecutive days.
   const lit = Math.min(streak, 7);
 
   return (
     <div className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)]">
       <div className="flex items-baseline justify-between">
-        <h3 className="font-serif text-lg font-bold text-[var(--text)]">Study streak</h3>
-        <span className="font-serif text-2xl font-bold text-[var(--gold)]">{streak}</span>
+        <h3 className="font-serif text-lg font-bold text-[var(--text)]">
+          Study streak
+        </h3>
+        <span className="font-serif text-2xl font-bold text-[var(--gold)]">
+          {streak}
+        </span>
       </div>
 
       <div className="mt-4 flex items-end justify-between gap-1.5">
@@ -350,9 +389,15 @@ function StreakCard({ streak, studiedToday }: { streak: number; studiedToday: bo
               {/* Flame */}
               <span
                 className={`h-2.5 w-2.5 rounded-full transition-all ${
-                  isLit ? "animate-flicker bg-[var(--gold-bright)]" : "bg-[var(--surface-2)]"
+                  isLit
+                    ? "animate-flicker bg-[var(--gold-bright)]"
+                    : "bg-[var(--surface-2)]"
                 }`}
-                style={isLit ? { boxShadow: "0 0 8px var(--academy-glow)" } : undefined}
+                style={
+                  isLit
+                    ? { boxShadow: "0 0 8px var(--academy-glow)" }
+                    : undefined
+                }
               />
               {/* Candle */}
               <span
@@ -385,7 +430,9 @@ function EmptyRecord() {
       <p className="font-serif text-2xl font-bold text-[var(--brand)]">
         Your academy journey begins here.
       </p>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">Choose your first course.</p>
+      <p className="mt-2 text-sm text-[var(--text-muted)]">
+        Choose your first course.
+      </p>
       <Link
         href="/courses"
         className="rune-edge mt-6 inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] px-6 py-3 font-semibold text-[var(--on-gold)] transition hover:brightness-110"

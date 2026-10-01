@@ -31,51 +31,51 @@
   --academy-radius-lg: 8px;
 
   /* Shell — follows the theme */
-  --shell: #F3E4E6;
-  --shell-2: #EAD6DA;
+  --shell: #f3e4e6;
+  --shell-2: #ead6da;
   --shell-line: rgb(122 39 64 / 0.22);
   --shell-line-soft: rgb(122 39 64 / 0.1);
-  --shell-text: #35141F;
-  --shell-text-muted: #6E4B56;
+  --shell-text: #35141f;
+  --shell-text-muted: #6e4b56;
 
   /* Hero wash */
-  --hero-from: #F7EDEF;
-  --hero-via: #EFDDE1;
-  --hero-to: #F9F3F4;
+  --hero-from: #f7edef;
+  --hero-via: #efdde1;
+  --hero-to: #f9f3f4;
 
   /* Metals */
-  --gold: #A8803C;
-  --gold-bright: #C9A25A;
-  --gold-dim: #7E5D25;
+  --gold: #a8803c;
+  --gold-bright: #c9a25a;
+  --gold-dim: #7e5d25;
   --gold-soft: rgb(168 128 60 / 0.12);
-  --copper: #A05A34;
-  --silver: #9AA2AA;
-  --silver-bright: #C4CBD2;
+  --copper: #a05a34;
+  --silver: #9aa2aa;
+  --silver-bright: #c4cbd2;
 
   /* Surfaces */
-  --bg: #FBF5F6;
-  --bg-subtle: #F3E7E9;
-  --surface: #FFFFFF;
-  --surface-2: #F7EEF0;
-  --border: #C9D0D7;
-  --border-strong: #A6AEB7;
+  --bg: #fbf5f6;
+  --bg-subtle: #f3e7e9;
+  --surface: #ffffff;
+  --surface-2: #f7eef0;
+  --border: #c9d0d7;
+  --border-strong: #a6aeb7;
 
   /* Ink */
-  --text: #2E101B;
-  --text-muted: #64444F;
-  --text-faint: #8E7982;
+  --text: #2e101b;
+  --text-muted: #64444f;
+  --text-faint: #8e7982;
 
-  --academy-purple: #5A3570;
-  --academy-plum: #7A2740;
-  --academy-emerald: #2F6B52;
+  --academy-purple: #5a3570;
+  --academy-plum: #7a2740;
+  --academy-emerald: #2f6b52;
 
-  --brand: #7A2740;
-  --brand-hover: #5C1A2E;
+  --brand: #7a2740;
+  --brand-hover: #5c1a2e;
   --brand-soft: rgb(122 39 64 / 0.09);
-  --brand-contrast: #FFFFFF;
+  --brand-contrast: #ffffff;
 
-  --glow: #A8803C;
-  --ring: #7A2740;
+  --glow: #a8803c;
+  --ring: #7a2740;
 
   --academy-shadow: rgb(46 16 27 / 0.1);
   --academy-glow: rgb(168 128 60 / 0.3);
@@ -84,79 +84,82 @@
   --blob-b: radial-gradient(circle, rgb(168 128 60 / 0.16), transparent 70%);
   --blob-c: radial-gradient(circle, rgb(154 162 170 / 0.2), transparent 70%);
 
-  --shadow-card: 0 1px 2px rgb(46 16 27 / 0.05), 0 10px 28px rgb(46 16 27 / 0.07);
-  --shadow-lift: 0 2px 6px rgb(46 16 27 / 0.09), 0 22px 48px rgb(46 16 27 / 0.14);
-  --shadow-panel: 0 6px 18px rgb(46 16 27 / 0.07), 0 40px 80px rgb(46 16 27 / 0.12);
+  --shadow-card:
+    0 1px 2px rgb(46 16 27 / 0.05), 0 10px 28px rgb(46 16 27 / 0.07);
+  --shadow-lift:
+    0 2px 6px rgb(46 16 27 / 0.09), 0 22px 48px rgb(46 16 27 / 0.14);
+  --shadow-panel:
+    0 6px 18px rgb(46 16 27 / 0.07), 0 40px 80px rgb(46 16 27 / 0.12);
 
   --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 
   /* Engraved plate, inked for this theme so the illustration is never a
      dark drawing stranded on a light page. */
-  --plate-sky-top: #DCC9CE;
-  --plate-sky-bottom: #F6EDEF;
-  --plate-stone: #B9BFC6;
-  --plate-roof: #8A5468;
-  --plate-deep: #6E4553;
-  --plate-ink: #4A2A36;
-  --plate-paper: #FBF5F6;
-  --plate-lit: #C9A25A;
+  --plate-sky-top: #dcc9ce;
+  --plate-sky-bottom: #f6edef;
+  --plate-stone: #b9bfc6;
+  --plate-roof: #8a5468;
+  --plate-deep: #6e4553;
+  --plate-ink: #4a2a36;
+  --plate-paper: #fbf5f6;
+  --plate-lit: #c9a25a;
 
   /* Hero film: the text sits on video in both themes, so its ink and the
      scrims that keep it legible are fixed rather than theme-flipped. */
-  --hero-ink: #FAF6F2;
-  --hero-ink-muted: #DCD2D6;
+  --hero-ink: #faf6f2;
+  --hero-ink-muted: #dcd2d6;
   --hero-scrim-strong: rgb(20 12 24 / 0.82);
   --hero-scrim-soft: rgb(20 12 24 / 0.42);
 
   /* Ink for text sitting ON a gold button. Light-mode gold is dark, so it
      takes white; dark-mode gold is bright, so it takes near-black. */
-  --on-gold: #FFFFFF;
+  --on-gold: #ffffff;
 }
 
 /* ---------------- DARK: Midnight Conservatory ---------------- */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --shell: #150E20;
-    --shell-2: #1E1430;
+    --shell: #150e20;
+    --shell-2: #1e1430;
     --shell-line: rgb(217 164 65 / 0.26);
     --shell-line-soft: rgb(217 164 65 / 0.12);
-    --shell-text: #F0E9F7;
-    --shell-text-muted: #B7A6CA;
+    --shell-text: #f0e9f7;
+    --shell-text-muted: #b7a6ca;
 
-    --hero-from: #1E1430;
-    --hero-via: #2A1A3E;
-    --hero-to: #14101E;
+    --hero-from: #1e1430;
+    --hero-via: #2a1a3e;
+    --hero-to: #14101e;
 
-    --gold: #D9A441;
-    --gold-bright: #F2C86E;
-    --gold-dim: #9C7326;
+    --gold: #d9a441;
+    --gold-bright: #f2c86e;
+    --gold-dim: #9c7326;
     --gold-soft: rgb(217 164 65 / 0.14);
-    --copper: #B87333;
-    --silver: #9AA2AA;
-    --silver-bright: #C4CBD2;
+    --copper: #b87333;
+    --silver: #9aa2aa;
+    --silver-bright: #c4cbd2;
 
-    --bg: #150E20;
-    --bg-subtle: #0F0917;
+    --bg: #150e20;
+    --bg-subtle: #0f0917;
     --surface: #241634;
-    --surface-2: #2E1D42;
-    --border: #46305F;
-    --border-strong: #5E4079;
+    --surface-2: #2e1d42;
+    --border: #46305f;
+    --border-strong: #5e4079;
 
-    --text: #F0E9F7;
-    --text-muted: #BFAFD0;
-    --text-faint: #8E7FA0;
+    --text: #f0e9f7;
+    --text-muted: #bfafd0;
+    --text-faint: #8e7fa0;
 
-    --academy-purple: #9A6FBF;
-    --academy-plum: #3A1F4E;
-    --academy-emerald: #4FA982;
+    --academy-purple: #9a6fbf;
+    --academy-plum: #3a1f4e;
+    --academy-emerald: #4fa982;
 
-    --brand: #D9A441;
-    --brand-hover: #F2C86E;
+    --brand: #d9a441;
+    --brand-hover: #f2c86e;
     --brand-soft: rgb(217 164 65 / 0.14);
-    --brand-contrast: #150E20;
+    --brand-contrast: #150e20;
 
-    --glow: #F2C86E;
-    --ring: #D9A441;
+    --glow: #f2c86e;
+    --ring: #d9a441;
 
     --academy-shadow: rgb(0 0 0 / 0.5);
     --academy-glow: rgb(242 200 110 / 0.3);
@@ -171,66 +174,66 @@
 
     --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 
-  /* Engraved plate, inked for this theme so the illustration is never a
+    /* Engraved plate, inked for this theme so the illustration is never a
      dark drawing stranded on a light page. */
-  --plate-sky-top: #100A18;
-  --plate-sky-bottom: #3A1F4E;
-  --plate-stone: #2E1D42;
-  --plate-roof: #46305F;
-  --plate-deep: #1B1228;
-  --plate-ink: #0D0814;
-  --plate-paper: #F0E9F7;
-  --plate-lit: #F2C86E;
-  --hero-ink: #FAF6F2;
-  --hero-ink-muted: #DCD2D6;
-  --hero-scrim-strong: rgb(12 7 16 / 0.8);
-  --hero-scrim-soft: rgb(12 7 16 / 0.4);
-  --on-gold: #150E20;
+    --plate-sky-top: #100a18;
+    --plate-sky-bottom: #3a1f4e;
+    --plate-stone: #2e1d42;
+    --plate-roof: #46305f;
+    --plate-deep: #1b1228;
+    --plate-ink: #0d0814;
+    --plate-paper: #f0e9f7;
+    --plate-lit: #f2c86e;
+    --hero-ink: #faf6f2;
+    --hero-ink-muted: #dcd2d6;
+    --hero-scrim-strong: rgb(12 7 16 / 0.8);
+    --hero-scrim-soft: rgb(12 7 16 / 0.4);
+    --on-gold: #150e20;
   }
 }
 
 :root[data-theme="dark"] {
-  --shell: #150E20;
-  --shell-2: #1E1430;
+  --shell: #150e20;
+  --shell-2: #1e1430;
   --shell-line: rgb(217 164 65 / 0.26);
   --shell-line-soft: rgb(217 164 65 / 0.12);
-  --shell-text: #F0E9F7;
-  --shell-text-muted: #B7A6CA;
+  --shell-text: #f0e9f7;
+  --shell-text-muted: #b7a6ca;
 
-  --hero-from: #1E1430;
-  --hero-via: #2A1A3E;
-  --hero-to: #14101E;
+  --hero-from: #1e1430;
+  --hero-via: #2a1a3e;
+  --hero-to: #14101e;
 
-  --gold: #D9A441;
-  --gold-bright: #F2C86E;
-  --gold-dim: #9C7326;
+  --gold: #d9a441;
+  --gold-bright: #f2c86e;
+  --gold-dim: #9c7326;
   --gold-soft: rgb(217 164 65 / 0.14);
-  --copper: #B87333;
-  --silver: #9AA2AA;
-  --silver-bright: #C4CBD2;
+  --copper: #b87333;
+  --silver: #9aa2aa;
+  --silver-bright: #c4cbd2;
 
-  --bg: #150E20;
-  --bg-subtle: #0F0917;
+  --bg: #150e20;
+  --bg-subtle: #0f0917;
   --surface: #241634;
-  --surface-2: #2E1D42;
-  --border: #46305F;
-  --border-strong: #5E4079;
+  --surface-2: #2e1d42;
+  --border: #46305f;
+  --border-strong: #5e4079;
 
-  --text: #F0E9F7;
-  --text-muted: #BFAFD0;
-  --text-faint: #8E7FA0;
+  --text: #f0e9f7;
+  --text-muted: #bfafd0;
+  --text-faint: #8e7fa0;
 
-  --academy-purple: #9A6FBF;
-  --academy-plum: #3A1F4E;
-  --academy-emerald: #4FA982;
+  --academy-purple: #9a6fbf;
+  --academy-plum: #3a1f4e;
+  --academy-emerald: #4fa982;
 
-  --brand: #D9A441;
-  --brand-hover: #F2C86E;
+  --brand: #d9a441;
+  --brand-hover: #f2c86e;
   --brand-soft: rgb(217 164 65 / 0.14);
-  --brand-contrast: #150E20;
+  --brand-contrast: #150e20;
 
-  --glow: #F2C86E;
-  --ring: #D9A441;
+  --glow: #f2c86e;
+  --ring: #d9a441;
 
   --academy-shadow: rgb(0 0 0 / 0.5);
   --academy-glow: rgb(242 200 110 / 0.3);
@@ -247,19 +250,19 @@
 
   /* Engraved plate, inked for this theme so the illustration is never a
      dark drawing stranded on a light page. */
-  --plate-sky-top: #100A18;
-  --plate-sky-bottom: #3A1F4E;
-  --plate-stone: #2E1D42;
-  --plate-roof: #46305F;
-  --plate-deep: #1B1228;
-  --plate-ink: #0D0814;
-  --plate-paper: #F0E9F7;
-  --plate-lit: #F2C86E;
-  --hero-ink: #FAF6F2;
-  --hero-ink-muted: #DCD2D6;
+  --plate-sky-top: #100a18;
+  --plate-sky-bottom: #3a1f4e;
+  --plate-stone: #2e1d42;
+  --plate-roof: #46305f;
+  --plate-deep: #1b1228;
+  --plate-ink: #0d0814;
+  --plate-paper: #f0e9f7;
+  --plate-lit: #f2c86e;
+  --hero-ink: #faf6f2;
+  --hero-ink-muted: #dcd2d6;
   --hero-scrim-strong: rgb(12 7 16 / 0.8);
   --hero-scrim-soft: rgb(12 7 16 / 0.4);
-  --on-gold: #150E20;
+  --on-gold: #150e20;
 }
 
 /* Parchment grain applied to content bands */
@@ -284,8 +287,10 @@
 }
 
 /* On the plum shell the content ring disappears; gold reads on both. */
-.shell-panel :where(a, button, input, select, textarea, [tabindex]):focus-visible,
-.hero-panel :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+.shell-panel
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible,
+.hero-panel
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline-color: var(--gold-bright);
 }
 
@@ -322,10 +327,11 @@
    visibly easing over while the wave crosses the page, not landing before
    it arrives or snapping after it has gone. */
 .theme-ready * {
-  transition: background-color 620ms var(--ease-academy),
-              border-color 620ms var(--ease-academy),
-              color 620ms var(--ease-academy),
-              fill 620ms var(--ease-academy);
+  transition:
+    background-color 620ms var(--ease-academy),
+    border-color 620ms var(--ease-academy),
+    color 620ms var(--ease-academy),
+    fill 620ms var(--ease-academy);
 }
 
 /* ---------------------------------------------------------------
@@ -427,30 +433,65 @@
 
 /* A slow breath, so the bird reads as alive without demanding attention. */
 @keyframes owl-breathe {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-3px) rotate(-1.5deg); }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-1.5deg);
+  }
 }
 
 @keyframes owl-blink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95%           { transform: scaleY(0.08); }
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.08);
+  }
 }
 
 /* The speech card unfolds from the owl's shoulder. */
 @keyframes owl-speak {
-  from { opacity: 0; transform: translateY(8px) scale(0.94); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes owl-pip {
-  0%, 100% { opacity: 0.35; transform: scale(0.8); }
-  50%      { opacity: 1; transform: scale(1.15); }
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
 }
 
-.owl-roost svg { animation: owl-breathe 5.5s ease-in-out infinite; }
-.owl-eyes { animation: owl-blink 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-.owl-speak { animation: owl-speak var(--t-emphasis) var(--ease-academy) both; transform-origin: bottom left; }
-.owl-pip { animation: owl-pip 2.2s ease-in-out infinite; }
+.owl-roost svg {
+  animation: owl-breathe 5.5s ease-in-out infinite;
+}
+.owl-eyes {
+  animation: owl-blink 5s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.owl-speak {
+  animation: owl-speak var(--t-emphasis) var(--ease-academy) both;
+  transform-origin: bottom left;
+}
+.owl-pip {
+  animation: owl-pip 2.2s ease-in-out infinite;
+}
 
 @keyframes spark-fly {
   from {
@@ -469,32 +510,42 @@
   }
 }
 
-
 /* Gold rim riding the leading edge of the wipe */
 .sweep-rim {
   position: fixed;
   border-radius: 9999px;
   border: 2px solid var(--gold-bright);
-  box-shadow: 0 0 30px 10px var(--academy-glow), inset 0 0 24px var(--academy-glow);
+  box-shadow:
+    0 0 30px 10px var(--academy-glow),
+    inset 0 0 24px var(--academy-glow);
   pointer-events: none;
   z-index: 2147483647;
   animation: sweep-rim var(--t-major) var(--ease-academy) forwards;
 }
-
 
 /* ---------------------------------------------------------------
    Ornamental language: gold leaf, hexagons, engraved frames.
    --------------------------------------------------------------- */
 
 .text-gradient {
-  background: linear-gradient(100deg, var(--gold) 0%, var(--gold-bright) 45%, var(--gold) 100%);
+  background: linear-gradient(
+    100deg,
+    var(--gold) 0%,
+    var(--gold-bright) 45%,
+    var(--gold) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .brand-gradient {
-  background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold) 50%, var(--gold-bright) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--gold-dim) 0%,
+    var(--gold) 50%,
+    var(--gold-bright) 100%
+  );
 }
 
 /* Gold leaf text with a slow shimmer sweeping across it */
@@ -529,8 +580,9 @@
 /* Hexagonal icon tile — the mockup's signature card element */
 .hex {
   clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              filter 0.4s ease;
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.4s ease;
 }
 
 .group:hover .hex {
@@ -582,8 +634,12 @@
   );
 }
 
-.animate-ink-reveal { animation: ink-reveal var(--t-magical) var(--ease-ink) both; }
-.animate-seal-press { animation: seal-press var(--t-magical) var(--ease-academy) both; }
+.animate-ink-reveal {
+  animation: ink-reveal var(--t-magical) var(--ease-ink) both;
+}
+.animate-seal-press {
+  animation: seal-press var(--t-magical) var(--ease-academy) both;
+}
 
 /**
  * Cartouche: the arched, double-ruled frame the reference uses for
@@ -593,11 +649,20 @@
 .cartouche {
   position: relative;
   clip-path: polygon(
-    50% 0%, 88% 6%, 100% 18%, 100% 82%, 88% 94%,
-    50% 100%, 12% 94%, 0% 82%, 0% 18%, 12% 6%
+    50% 0%,
+    88% 6%,
+    100% 18%,
+    100% 82%,
+    88% 94%,
+    50% 100%,
+    12% 94%,
+    0% 82%,
+    0% 18%,
+    12% 6%
   );
-  transition: transform var(--t-normal) var(--ease-academy),
-              filter var(--t-normal) var(--ease-academy);
+  transition:
+    transform var(--t-normal) var(--ease-academy),
+    filter var(--t-normal) var(--ease-academy);
 }
 
 .cartouche-rule {
@@ -606,14 +671,24 @@
   border: 1px solid var(--gold);
   opacity: 0.45;
   clip-path: polygon(
-    50% 0%, 88% 6%, 100% 18%, 100% 82%, 88% 94%,
-    50% 100%, 12% 94%, 0% 82%, 0% 18%, 12% 6%
+    50% 0%,
+    88% 6%,
+    100% 18%,
+    100% 82%,
+    88% 94%,
+    50% 100%,
+    12% 94%,
+    0% 82%,
+    0% 18%,
+    12% 6%
   );
   pointer-events: none;
   transition: opacity var(--t-normal) var(--ease-academy);
 }
 
-.group:hover .cartouche-rule { opacity: 0.9; }
+.group:hover .cartouche-rule {
+  opacity: 0.9;
+}
 
 /* Shell surfaces — brand furniture, identical in both themes */
 .shell-panel {
@@ -624,7 +699,12 @@
 .hero-panel {
   background:
     radial-gradient(ellipse at 70% 40%, rgb(120 70 140 / 0.4), transparent 60%),
-    linear-gradient(135deg, var(--hero-from) 0%, var(--hero-via) 55%, var(--hero-to) 100%);
+    linear-gradient(
+      135deg,
+      var(--hero-from) 0%,
+      var(--hero-via) 55%,
+      var(--hero-to) 100%
+    );
 }
 
 /* Shared form + button primitives, so pages don't repeat long class lists */
@@ -667,7 +747,9 @@
   padding: 0.625rem 1.25rem;
   font-weight: 600;
   font-size: 0.9375rem;
-  transition: opacity 0.15s ease, background-color 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .btn:focus-visible {
@@ -676,16 +758,25 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--brand) 0%, var(--glow) 50%, var(--brand) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--brand) 0%,
+    var(--glow) 50%,
+    var(--brand) 100%
+  );
   color: #fff;
-  box-shadow: 0 4px 14px var(--glow, rgb(212 165 116 / 0.3)), 0 0 8px var(--glow, rgb(212 165 116 / 0.2));
+  box-shadow:
+    0 4px 14px var(--glow, rgb(212 165 116 / 0.3)),
+    0 0 8px var(--glow, rgb(212 165 116 / 0.2));
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 
 .btn-primary:hover:not(:disabled) {
   opacity: 0.95;
-  box-shadow: 0 6px 20px var(--glow, rgb(212 165 116 / 0.4)), 0 0 12px var(--glow, rgb(212 165 116 / 0.3));
+  box-shadow:
+    0 6px 20px var(--glow, rgb(212 165 116 / 0.4)),
+    0 0 12px var(--glow, rgb(212 165 116 / 0.3));
   transform: translateY(-2px);
 }
 
@@ -707,12 +798,16 @@
   border-radius: 1.5rem;
   border: 1px solid var(--border);
   background: var(--surface);
-  box-shadow: var(--shadow-card), 0 0 8px var(--glow, rgba(212, 165, 116, 0.05));
+  box-shadow:
+    var(--shadow-card),
+    0 0 8px var(--glow, rgba(212, 165, 116, 0.05));
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lift), 0 0 12px var(--glow, rgba(212, 165, 116, 0.1));
+  box-shadow:
+    var(--shadow-lift),
+    0 0 12px var(--glow, rgba(212, 165, 116, 0.1));
   border-color: var(--glow, var(--border));
 }
 
@@ -748,172 +843,354 @@
    --------------------------------------------------------------- */
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes pop-in {
-  0%   { opacity: 0; transform: scale(0.92); }
-  60%  { opacity: 1; transform: scale(1.02); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(24px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes float-y {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes shimmer {
-  from { background-position: -200% 0; }
-  to   { background-position: 200% 0; }
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes ring-fill {
-  from { stroke-dashoffset: var(--ring-circumference); }
-  to   { stroke-dashoffset: var(--ring-offset); }
+  from {
+    stroke-dashoffset: var(--ring-circumference);
+  }
+  to {
+    stroke-dashoffset: var(--ring-offset);
+  }
 }
 
 @keyframes confetti-fall {
-  0%   { opacity: 1; transform: translateY(-10px) rotate(0deg); }
-  100% { opacity: 0; transform: translateY(180px) rotate(540deg); }
+  0% {
+    opacity: 1;
+    transform: translateY(-10px) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(180px) rotate(540deg);
+  }
 }
 
 @keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 var(--glow, rgb(212 165 116 / 0.45)); }
-  70%  { box-shadow: 0 0 0 14px var(--glow, rgb(212 165 116 / 0)); }
-  100% { box-shadow: 0 0 0 0 var(--glow, rgb(212 165 116 / 0)); }
+  0% {
+    box-shadow: 0 0 0 0 var(--glow, rgb(212 165 116 / 0.45));
+  }
+  70% {
+    box-shadow: 0 0 0 14px var(--glow, rgb(212 165 116 / 0));
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--glow, rgb(212 165 116 / 0));
+  }
 }
 
 @keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
-  50%      { opacity: 0.9; transform: scale(1) rotate(180deg); }
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1) rotate(180deg);
+  }
 }
 
 /* Gold sweeping across leafed text */
 @keyframes gold-sweep {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* The aura behind headings, breathing slowly */
 @keyframes aura-breathe {
-  0%, 100% {
-    text-shadow: 0 0 14px rgb(212 162 76 / 0.3), 0 0 34px rgb(212 162 76 / 0.14);
+  0%,
+  100% {
+    text-shadow:
+      0 0 14px rgb(212 162 76 / 0.3),
+      0 0 34px rgb(212 162 76 / 0.14);
   }
   50% {
-    text-shadow: 0 0 20px rgb(240 208 137 / 0.5), 0 0 48px rgb(240 208 137 / 0.24);
+    text-shadow:
+      0 0 20px rgb(240 208 137 / 0.5),
+      0 0 48px rgb(240 208 137 / 0.24);
   }
 }
 
 /* Embers drifting upward through the hero */
 @keyframes ember-rise {
-  0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0.6); }
-  12%  { opacity: 0.8; }
-  80%  { opacity: 0.5; }
-  100% { opacity: 0; transform: translateY(-140px) translateX(18px) scale(1.1); }
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scale(0.6);
+  }
+  12% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-140px) translateX(18px) scale(1.1);
+  }
 }
 
 /* Candlelight in the castle windows */
 @keyframes window-flicker {
-  0%, 100% { opacity: 0.85; }
-  35%      { opacity: 0.55; }
-  60%      { opacity: 1; }
-  78%      { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  35% {
+    opacity: 0.55;
+  }
+  60% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 0.7;
+  }
 }
 
 @keyframes magical-shimmer {
-  0%   { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 @keyframes float-gentle {
-  0%, 100% { transform: translateY(0px); }
-  50%      { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 /* Slow rotation for the sidebar mandala */
 @keyframes slow-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* A rune-light sliding along a border */
 @keyframes rune-trace {
-  0%   { transform: translateX(-100%); opacity: 0; }
-  35%  { opacity: 1; }
-  100% { transform: translateX(400%); opacity: 0; }
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(400%);
+    opacity: 0;
+  }
 }
 
 /* A single mote crossing a heading — the living-ink effect */
 @keyframes mote-drift {
-  0%   { transform: translateX(0) translateY(0); opacity: 0; }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { transform: translateX(var(--mote-distance, 100%)) translateY(-6px); opacity: 0; }
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(var(--mote-distance, 100%)) translateY(-6px);
+    opacity: 0;
+  }
 }
 
 /* Ink settling into the page, for headings on first view */
 @keyframes ink-reveal {
-  from { opacity: 0; filter: blur(6px); transform: translateY(8px); }
-  to   { opacity: 1; filter: blur(0); transform: none; }
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
 }
 
 /* A seal pressing down into parchment */
 @keyframes seal-press {
-  0%   { opacity: 0; transform: scale(1.6) rotate(-12deg); }
-  55%  { opacity: 1; transform: scale(0.94) rotate(2deg); }
-  75%  { transform: scale(1.03) rotate(-1deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  0% {
+    opacity: 0;
+    transform: scale(1.6) rotate(-12deg);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(0.94) rotate(2deg);
+  }
+  75% {
+    transform: scale(1.03) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 /* Gold ring expanding out from a completed action */
 @keyframes seal-ring {
-  0%   { opacity: 0.85; transform: scale(0.6); }
-  100% { opacity: 0; transform: scale(1.9); }
+  0% {
+    opacity: 0.85;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
 }
 
 /* ---- The owl alighting on a nav row ---- */
 
 /* Swoops down from upper-right, overshoots, then settles. */
 @keyframes owl-arrive {
-  0%   { opacity: 0; transform: translate(18px, -26px) rotate(14deg) scale(0.7); }
-  55%  { opacity: 1; transform: translate(0, 3px) rotate(-4deg) scale(1.06); }
-  75%  { transform: translate(0, -1px) rotate(2deg) scale(0.99); }
-  100% { opacity: 1; transform: none; }
+  0% {
+    opacity: 0;
+    transform: translate(18px, -26px) rotate(14deg) scale(0.7);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(0, 3px) rotate(-4deg) scale(1.06);
+  }
+  75% {
+    transform: translate(0, -1px) rotate(2deg) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Wings settle a beat after landing. */
 @keyframes owl-settle {
-  0%, 45% { transform: scaleY(1.12) translateY(-1px); }
-  70%     { transform: scaleY(0.96); }
-  100%    { transform: none; }
+  0%,
+  45% {
+    transform: scaleY(1.12) translateY(-1px);
+  }
+  70% {
+    transform: scaleY(0.96);
+  }
+  100% {
+    transform: none;
+  }
 }
 
 @keyframes owl-blink {
-  0%, 88%, 100% { transform: scaleY(1); }
-  93%           { transform: scaleY(0.1); }
+  0%,
+  88%,
+  100% {
+    transform: scaleY(1);
+  }
+  93% {
+    transform: scaleY(0.1);
+  }
 }
 
 /* Motes scattered by the landing. */
 @keyframes owl-dust {
-  0%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
-  25%  { opacity: 1; }
-  100% { opacity: 0; transform: translate(var(--dx, -14px), var(--dy, 10px)) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, -14px), var(--dy, 10px)) scale(1);
+  }
 }
 
-.owl-arrive { animation: owl-arrive 0.42s var(--ease-academy) both; }
-.owl-perch .owl-wing { animation: owl-settle 0.7s var(--ease-academy) both; transform-origin: center top; }
-.owl-perch .owl-eye { animation: owl-blink 3.2s ease-in-out infinite; transform-origin: center; }
+.owl-arrive {
+  animation: owl-arrive 0.42s var(--ease-academy) both;
+}
+.owl-perch .owl-wing {
+  animation: owl-settle 0.7s var(--ease-academy) both;
+  transform-origin: center top;
+}
+.owl-perch .owl-eye {
+  animation: owl-blink 3.2s ease-in-out infinite;
+  transform-origin: center;
+}
 
 .owl-dust {
   position: absolute;
@@ -927,83 +1204,178 @@
   animation: owl-dust 0.6s ease-out both;
 }
 
-.owl-dust:nth-of-type(2) { --dx: 12px; --dy: 12px; }
-.owl-dust:nth-of-type(3) { --dx: -4px; --dy: 16px; }
+.owl-dust:nth-of-type(2) {
+  --dx: 12px;
+  --dy: 12px;
+}
+.owl-dust:nth-of-type(3) {
+  --dx: -4px;
+  --dy: 16px;
+}
 
 /* ---- Theme transition: the academy's hour changing ---- */
 
 @keyframes hour-sweep {
-  0%   { opacity: 0; }
-  25%  { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes orb-travel {
-  0%   { transform: translate(-14vw, 24vh) scale(0.7); opacity: 0; }
-  30%  { opacity: 1; }
-  100% { transform: translate(84vw, -22vh) scale(1.15); opacity: 0; }
+  0% {
+    transform: translate(-14vw, 24vh) scale(0.7);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(84vw, -22vh) scale(1.15);
+    opacity: 0;
+  }
 }
 
 @keyframes star-bloom {
-  0%   { opacity: 0; transform: scale(0.2); }
-  45%  { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.8); }
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
 }
 
 /* ---- Engraved plate: the illustration breathing ---- */
 
 /* Mist rolls very slowly, so the scene is never quite still. */
 @keyframes mist-roll {
-  0%, 100% { transform: translateX(0) scaleY(1); opacity: 0.85; }
-  50%      { transform: translateX(-14px) scaleY(1.08); opacity: 1; }
+  0%,
+  100% {
+    transform: translateX(0) scaleY(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(-14px) scaleY(1.08);
+    opacity: 1;
+  }
 }
 
 /* Birds cross the plate on a long loop. */
 @keyframes bird-drift {
-  0%   { transform: translate(0, 0); opacity: 0; }
-  10%  { opacity: 0.55; }
-  85%  { opacity: 0.4; }
-  100% { transform: translate(150px, -34px); opacity: 0; }
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.55;
+  }
+  85% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(150px, -34px);
+    opacity: 0;
+  }
 }
 
-.plate-mist { animation: mist-roll 14s ease-in-out infinite; transform-origin: bottom; }
-.bird-drift { animation: bird-drift 26s linear infinite; }
+.plate-mist {
+  animation: mist-roll 14s ease-in-out infinite;
+  transform-origin: bottom;
+}
+.bird-drift {
+  animation: bird-drift 26s linear infinite;
+}
 
 /* ---- Ambient layer that persists across the whole site ---- */
 
 /* Ink blooming outward, as though dropped on wet paper. */
 @keyframes ink-bloom {
-  0%   { transform: scale(0.6); opacity: 0; }
-  30%  { opacity: 0.5; }
-  100% { transform: scale(1.5); opacity: 0; }
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }
 
 /* Constellation lines drawing themselves in. */
 @keyframes constellation-draw {
-  0%   { stroke-dashoffset: 260; opacity: 0; }
-  20%  { opacity: 0.5; }
-  70%  { opacity: 0.45; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
+  0% {
+    stroke-dashoffset: 260;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.45;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
 }
 
-.ambient-bloom { animation: ink-bloom 18s ease-out infinite; }
+.ambient-bloom {
+  animation: ink-bloom 18s ease-out infinite;
+}
 .ambient-line {
   stroke-dasharray: 260;
   animation: constellation-draw 22s ease-in-out infinite;
 }
 
-.animate-fade-up { animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.animate-fade-in { animation: fade-in 0.5s ease both; }
-.animate-pop-in  { animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.animate-slide-in-right { animation: slide-in-right 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.animate-float { animation: float-y 6s ease-in-out infinite; }
-.animate-float-gentle { animation: float-gentle 4s ease-in-out infinite; }
-.animate-pulse-ring { animation: pulse-ring 2s ease-out infinite; }
-.animate-sparkle { animation: sparkle 3.5s ease-in-out infinite; }
-.animate-magical-shimmer { animation: magical-shimmer 8s linear infinite; }
-.animate-ember { animation: ember-rise 7s ease-out infinite; }
-.animate-flicker { animation: window-flicker 4s ease-in-out infinite; }
-.animate-slow-spin { animation: slow-spin 90s linear infinite; }
+.animate-fade-up {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-fade-in {
+  animation: fade-in 0.5s ease both;
+}
+.animate-pop-in {
+  animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+.animate-float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+.animate-pulse-ring {
+  animation: pulse-ring 2s ease-out infinite;
+}
+.animate-sparkle {
+  animation: sparkle 3.5s ease-in-out infinite;
+}
+.animate-magical-shimmer {
+  animation: magical-shimmer 8s linear infinite;
+}
+.animate-ember {
+  animation: ember-rise 7s ease-out infinite;
+}
+.animate-flicker {
+  animation: window-flicker 4s ease-in-out infinite;
+}
+.animate-slow-spin {
+  animation: slow-spin 90s linear infinite;
+}
 
 /* Gold light that traces a button's edge on hover */
 .rune-edge {
@@ -1031,24 +1403,47 @@
 }
 
 /* Stagger helper: children animate in sequence. */
-.stagger > * { animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.stagger > *:nth-child(1) { animation-delay: 0.04s; }
-.stagger > *:nth-child(2) { animation-delay: 0.08s; }
-.stagger > *:nth-child(3) { animation-delay: 0.12s; }
-.stagger > *:nth-child(4) { animation-delay: 0.16s; }
-.stagger > *:nth-child(5) { animation-delay: 0.20s; }
-.stagger > *:nth-child(6) { animation-delay: 0.24s; }
-.stagger > *:nth-child(7) { animation-delay: 0.28s; }
-.stagger > *:nth-child(8) { animation-delay: 0.32s; }
-.stagger > *:nth-child(9) { animation-delay: 0.36s; }
-.stagger > *:nth-child(n + 10) { animation-delay: 0.4s; }
+.stagger > * {
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.stagger > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.stagger > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.stagger > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.stagger > *:nth-child(4) {
+  animation-delay: 0.16s;
+}
+.stagger > *:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.stagger > *:nth-child(6) {
+  animation-delay: 0.24s;
+}
+.stagger > *:nth-child(7) {
+  animation-delay: 0.28s;
+}
+.stagger > *:nth-child(8) {
+  animation-delay: 0.32s;
+}
+.stagger > *:nth-child(9) {
+  animation-delay: 0.36s;
+}
+.stagger > *:nth-child(n + 10) {
+  animation-delay: 0.4s;
+}
 
 /* Scroll reveal: JS flips data-revealed once the element enters view. */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .reveal[data-revealed="true"] {
@@ -1063,9 +1458,10 @@
 }
 
 .lift {
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              filter 0.3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.3s ease;
   position: relative;
 }
 

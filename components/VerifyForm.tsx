@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Icon from "@/components/Icon";
 
-export default function VerifyForm({ initialCode = "" }: { initialCode?: string }) {
+export default function VerifyForm({
+  initialCode = "",
+}: {
+  initialCode?: string;
+}) {
   const router = useRouter();
   const [code, setCode] = useState(initialCode);
 

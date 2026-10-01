@@ -33,7 +33,10 @@ export async function hasCompletedCourse(userId: string, courseId: string) {
  * already hold one. Safe to call repeatedly — returns the existing credential
  * rather than minting a duplicate.
  */
-export async function issueCertificateIfEarned(userId: string, courseId: string) {
+export async function issueCertificateIfEarned(
+  userId: string,
+  courseId: string,
+) {
   const existing = await prisma.certificate.findUnique({
     where: { userId_courseId: { userId, courseId } },
   });

@@ -59,10 +59,14 @@ export default function DepartmentFilter({
             >
               <div
                 className={`cartouche flex flex-col items-center gap-2 px-3 py-5 transition-all group-hover:-translate-y-1 ${
-                  isActive ? "shadow-[var(--shadow-lift)]" : "shadow-[var(--shadow-card)]"
+                  isActive
+                    ? "shadow-[var(--shadow-lift)]"
+                    : "shadow-[var(--shadow-card)]"
                 }`}
                 style={{
-                  background: isActive ? "var(--academy-plum)" : "var(--surface)",
+                  background: isActive
+                    ? "var(--academy-plum)"
+                    : "var(--surface)",
                   border: `1px solid ${isActive ? "var(--gold)" : "var(--border)"}`,
                 }}
               >

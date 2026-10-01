@@ -9,7 +9,10 @@ const schema = z.object({ courseId: z.string().min(1) });
 export async function POST(req: Request) {
   const session = await auth();
   if (!session?.user) {
-    return NextResponse.json({ error: "You must be signed in to purchase." }, { status: 401 });
+    return NextResponse.json(
+      { error: "You must be signed in to purchase." },
+      { status: 401 },
+    );
   }
 
   const parsed = schema.safeParse(await req.json());
@@ -29,16 +32,23 @@ export async function POST(req: Request) {
     );
   }
 
-  const course = await prisma.course.findUnique({ where: { id: parsed.data.courseId } });
+  const course = await prisma.course.findUnique({
+    where: { id: parsed.data.courseId },
+  });
   if (!course || !course.published) {
     return NextResponse.json({ error: "Course not found." }, { status: 404 });
   }
 
   const existing = await prisma.enrollment.findUnique({
-    where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
+    where: {
+      userId_courseId: { userId: session.user.id, courseId: course.id },
+    },
   });
   if (existing) {
-    return NextResponse.json({ error: "You already own this course." }, { status: 409 });
+    return NextResponse.json(
+      { error: "You already own this course." },
+      { status: 409 },
+    );
   }
 
   // Free courses have nothing to charge, so there is no payment provider to
@@ -92,8 +102,10 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("Stripe checkout failed:", err);
     return NextResponse.json(
-      { error: "Payment provider unavailable. Check your Stripe keys in .env." },
-      { status: 502 }
+      {
+        error: "Payment provider unavailable. Check your Stripe keys in .env.",
+      },
+      { status: 502 },
     );
   }
 

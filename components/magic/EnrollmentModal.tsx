@@ -24,10 +24,10 @@ export default function EnrollmentModal({
   const handleEnroll = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
-    
+
     setError("");
     setStep("confirming");
-    
+
     try {
       await onConfirm(name, email);
       setStep("success");
@@ -42,7 +42,7 @@ export default function EnrollmentModal({
       <div className="paper relative w-full max-w-lg overflow-hidden rounded-md border border-[var(--border)] shadow-[var(--shadow-panel)]">
         {/* Parchment border ornaments */}
         <div className="pointer-events-none absolute inset-2 border border-[var(--gold)] opacity-30" />
-        
+
         <div className="relative p-8">
           <button
             onClick={onClose}
@@ -52,9 +52,14 @@ export default function EnrollmentModal({
           </button>
 
           <div className="mb-8 text-center">
-            <h2 className="font-serif text-[28px] font-bold text-[var(--brand)]">Academy Admission</h2>
+            <h2 className="font-serif text-[28px] font-bold text-[var(--brand)]">
+              Academy Admission
+            </h2>
             <p className="mt-2 text-[var(--text-muted)] text-sm">
-              Your place in <span className="font-semibold text-[var(--text)]">{courseTitle}</span>
+              Your place in{" "}
+              <span className="font-semibold text-[var(--text)]">
+                {courseTitle}
+              </span>
             </p>
           </div>
 
@@ -90,7 +95,9 @@ export default function EnrollmentModal({
               )}
 
               <div className="pt-4 flex items-center justify-between border-t border-[var(--border)]">
-                <span className="font-serif text-[22px] font-bold text-[var(--brand)]">{price}</span>
+                <span className="font-serif text-[22px] font-bold text-[var(--brand)]">
+                  {price}
+                </span>
                 <MagicButton type="submit">Submit Record</MagicButton>
               </div>
             </form>
@@ -98,9 +105,14 @@ export default function EnrollmentModal({
 
           {step === "confirming" && (
             <div className="flex flex-col items-center justify-center py-10 space-y-6 animate-fade-in">
-              <p className="font-serif text-lg italic text-[var(--text-muted)]">Writing to the archives...</p>
+              <p className="font-serif text-lg italic text-[var(--text-muted)]">
+                Writing to the archives...
+              </p>
               <div className="h-8">
-                <QuillAnimation text={name || "Student"} className="font-serif text-2xl font-bold text-[var(--brand)]" />
+                <QuillAnimation
+                  text={name || "Student"}
+                  className="font-serif text-2xl font-bold text-[var(--brand)]"
+                />
               </div>
             </div>
           )}
@@ -109,7 +121,9 @@ export default function EnrollmentModal({
             <div className="flex flex-col items-center justify-center py-6 space-y-6 text-center animate-fade-in">
               <AcademySeal size={80} />
               <div>
-                <h3 className="font-serif text-[24px] font-bold text-[var(--brand)]">ENROLLMENT CONFIRMED</h3>
+                <h3 className="font-serif text-[24px] font-bold text-[var(--brand)]">
+                  ENROLLMENT CONFIRMED
+                </h3>
                 <p className="mt-2 text-[var(--text-muted)]">
                   Welcome, {name}. <br /> Your place has been recorded.
                 </p>

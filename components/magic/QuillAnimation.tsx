@@ -16,10 +16,13 @@ export default function QuillAnimation({
 
   useEffect(() => {
     if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayedText((prev) => prev + text[currentIndex]);
-        setCurrentIndex((prev) => prev + 1);
-      }, 50 + Math.random() * 50); // randomized typing speed
+      const timer = setTimeout(
+        () => {
+          setDisplayedText((prev) => prev + text[currentIndex]);
+          setCurrentIndex((prev) => prev + 1);
+        },
+        50 + Math.random() * 50,
+      ); // randomized typing speed
       return () => clearTimeout(timer);
     } else {
       if (onComplete) onComplete();

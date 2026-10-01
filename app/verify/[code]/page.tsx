@@ -6,7 +6,9 @@ import Certificate from "@/components/Certificate";
 import VerifyForm from "@/components/VerifyForm";
 import Icon from "@/components/Icon";
 
-export default async function VerifyResultPage({ params }: PageProps<"/verify/[code]">) {
+export default async function VerifyResultPage({
+  params,
+}: PageProps<"/verify/[code]">) {
   const { code } = await params;
   const normalized = decodeURIComponent(code).trim().toUpperCase();
 
@@ -15,7 +17,11 @@ export default async function VerifyResultPage({ params }: PageProps<"/verify/[c
     include: {
       user: { select: { name: true } },
       course: {
-        select: { title: true, category: true, _count: { select: { lessons: true } } },
+        select: {
+          title: true,
+          category: true,
+          _count: { select: { lessons: true } },
+        },
       },
     },
   });

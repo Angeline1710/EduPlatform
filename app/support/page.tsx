@@ -76,13 +76,17 @@ export default function SupportPage() {
             <Reveal key={c.title} delay={i * 0.06}>
               <a
                 href={c.href}
-                {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {...(c.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
                 className="group flex h-full flex-col rounded-sm border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold)]"
               >
                 <span className="mb-4 inline-grid h-12 w-12 place-items-center rounded-sm border border-[var(--gold)] text-[var(--gold)] transition-all duration-300 group-hover:bg-[var(--gold-soft)]">
                   <Icon name={c.icon} className="h-6 w-6" />
                 </span>
-                <h2 className="font-serif text-xl font-bold text-[var(--text)]">{c.title}</h2>
+                <h2 className="font-serif text-xl font-bold text-[var(--text)]">
+                  {c.title}
+                </h2>
                 <p className="mt-1.5 flex-1 text-sm leading-relaxed text-[var(--text-muted)]">
                   {c.body}
                 </p>

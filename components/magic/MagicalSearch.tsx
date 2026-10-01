@@ -4,7 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../Icon";
 
-export default function MagicalSearch({ initialQuery = "" }: { initialQuery?: string }) {
+export default function MagicalSearch({
+  initialQuery = "",
+}: {
+  initialQuery?: string;
+}) {
   const [query, setQuery] = useState(initialQuery);
   const [isFocused, setIsFocused] = useState(false);
   const [status, setStatus] = useState<"idle" | "searching">("idle");
@@ -19,7 +23,7 @@ export default function MagicalSearch({ initialQuery = "" }: { initialQuery?: st
     e.preventDefault();
     if (!query.trim()) return;
     setStatus("searching");
-    
+
     // Simulate magical quill writing/ink traveling before redirecting
     setTimeout(() => {
       setStatus("idle");
@@ -38,7 +42,9 @@ export default function MagicalSearch({ initialQuery = "" }: { initialQuery?: st
       <Icon
         name="search"
         className={`h-4 w-4 shrink-0 transition-colors ${
-          isFocused ? "text-[var(--gold-bright)]" : "text-[var(--shell-text-muted)]"
+          isFocused
+            ? "text-[var(--gold-bright)]"
+            : "text-[var(--shell-text-muted)]"
         }`}
       />
 

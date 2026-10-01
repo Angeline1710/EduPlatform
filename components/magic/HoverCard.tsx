@@ -9,7 +9,11 @@ type HoverCardProps = {
   style?: React.CSSProperties;
 };
 
-export default function HoverCard({ children, className = "", style }: HoverCardProps) {
+export default function HoverCard({
+  children,
+  className = "",
+  style,
+}: HoverCardProps) {
   return (
     <motion.div
       whileHover={{

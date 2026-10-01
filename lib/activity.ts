@@ -16,32 +16,44 @@ export type ActivityEvent = {
  * completion, credential or accolade, read back and merged. That means the
  * timeline can never drift out of step with the rest of the platform.
  */
-export async function getActivity(userId: string, limit = 40): Promise<ActivityEvent[]> {
-  const [user, enrollments, progress, certificates, profile] = await Promise.all([
-    prisma.user.findUnique({ where: { id: userId }, select: { createdAt: true } }),
-    prisma.enrollment.findMany({
-      where: { userId },
-      include: { course: { select: { id: true, title: true, category: true } } },
-    }),
-    prisma.lessonProgress.findMany({
-      where: { userId },
-      orderBy: { completedAt: "desc" },
-      take: limit,
-      include: {
-        lesson: {
-          select: { title: true, course: { select: { id: true, title: true } } },
+export async function getActivity(
+  userId: string,
+  limit = 40,
+): Promise<ActivityEvent[]> {
+  const [user, enrollments, progress, certificates, profile] =
+    await Promise.all([
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { createdAt: true },
+      }),
+      prisma.enrollment.findMany({
+        where: { userId },
+        include: {
+          course: { select: { id: true, title: true, category: true } },
         },
-      },
-    }),
-    prisma.certificate.findMany({
-      where: { userId, revokedAt: null },
-      include: { course: { select: { title: true } } },
-    }),
-    prisma.profile.findUnique({
-      where: { userId },
-      include: { accolades: true },
-    }),
-  ]);
+      }),
+      prisma.lessonProgress.findMany({
+        where: { userId },
+        orderBy: { completedAt: "desc" },
+        take: limit,
+        include: {
+          lesson: {
+            select: {
+              title: true,
+              course: { select: { id: true, title: true } },
+            },
+          },
+        },
+      }),
+      prisma.certificate.findMany({
+        where: { userId, revokedAt: null },
+        include: { course: { select: { title: true } } },
+      }),
+      prisma.profile.findUnique({
+        where: { userId },
+        include: { accolades: true },
+      }),
+    ]);
 
   const events: ActivityEvent[] = [];
 

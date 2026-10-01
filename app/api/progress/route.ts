@@ -36,7 +36,10 @@ export async function POST(req: Request) {
     where: { userId_courseId: { userId, courseId: lesson.courseId } },
   });
   if (!enrollment) {
-    return NextResponse.json({ error: "You do not own this course." }, { status: 403 });
+    return NextResponse.json(
+      { error: "You do not own this course." },
+      { status: 403 },
+    );
   }
 
   if (completed) {

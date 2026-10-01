@@ -38,7 +38,10 @@ export function HexTile({
         }}
       />
       {/* Glyph scales with the tile so one component covers every use */}
-      <span className="relative text-white drop-shadow" style={{ width: size * 0.42, height: size * 0.42 }}>
+      <span
+        className="relative text-white drop-shadow"
+        style={{ width: size * 0.42, height: size * 0.42 }}
+      >
         <Icon name={icon} className="h-full w-full" />
       </span>
     </span>
@@ -70,7 +73,10 @@ export function DiamondHeading({
 
 function Rule() {
   return (
-    <span className="hidden flex-1 items-center gap-2 sm:flex" aria-hidden="true">
+    <span
+      className="hidden flex-1 items-center gap-2 sm:flex"
+      aria-hidden="true"
+    >
       <span className="rule-fade flex-1" />
       <Diamond />
       <span className="rule-fade w-8" />
@@ -170,7 +176,10 @@ export function Embers({ count = 14 }: { count?: number }) {
   }));
 
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
       {motes.map((m, i) => (
         <span
           key={i}

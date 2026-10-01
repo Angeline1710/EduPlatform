@@ -33,28 +33,43 @@ Start the dev server:
 npm run dev
 ```
 
+## Containerized setup
+
+This project is ready to run via Docker with persistent storage for both dependencies and the SQLite database.
+
+```bash
+docker compose up --build
+```
+
+The compose file uses named volumes for:
+
+- `node_modules` to keep package installs out of the host filesystem
+- `prisma_data` to persist SQLite data at `./prisma/dev.db`
+
+The app will be available at `http://localhost:3000`.
+
 ## Seeded accounts
 
-| Role    | Email               | Password     |
-| ------- | ------------------- | ------------ |
-| Admin   | admin@edu.local     | admin123     |
-| Student | student@edu.local   | student123   |
+| Role    | Email             | Password   |
+| ------- | ----------------- | ---------- |
+| Admin   | admin@edu.local   | admin123   |
+| Student | student@edu.local | student123 |
 
 Change these before deploying anywhere public.
 
 ## Routes
 
-| Path                        | Who         | Purpose                                  |
-| --------------------------- | ----------- | ---------------------------------------- |
-| `/`                         | Public      | Course catalog                           |
-| `/courses/[id]`             | Public      | Course detail + buy button               |
-| `/login`, `/register`       | Public      | Student auth                             |
-| `/admin/login`              | Public      | Admin auth                               |
-| `/admin`                    | Admin       | Dashboard: courses, enrollments, revenue |
-| `/admin/courses/new`        | Admin       | Create a course                          |
-| `/admin/courses/[id]/edit`  | Admin       | Edit course + manage lessons             |
-| `/dashboard`                | Student     | Purchased courses                        |
-| `/learn/[courseId]`         | Enrolled    | Lesson viewer                            |
+| Path                       | Who      | Purpose                                  |
+| -------------------------- | -------- | ---------------------------------------- |
+| `/`                        | Public   | Course catalog                           |
+| `/courses/[id]`            | Public   | Course detail + buy button               |
+| `/login`, `/register`      | Public   | Student auth                             |
+| `/admin/login`             | Public   | Admin auth                               |
+| `/admin`                   | Admin    | Dashboard: courses, enrollments, revenue |
+| `/admin/courses/new`       | Admin    | Create a course                          |
+| `/admin/courses/[id]/edit` | Admin    | Edit course + manage lessons             |
+| `/dashboard`               | Student  | Purchased courses                        |
+| `/learn/[courseId]`        | Enrolled | Lesson viewer                            |
 
 Route protection lives in [middleware.ts](middleware.ts); API routes independently re-check the session, so the admin endpoints are not protected by middleware alone.
 

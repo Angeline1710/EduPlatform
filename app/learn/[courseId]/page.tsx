@@ -6,7 +6,9 @@ import LessonViewer from "@/components/LessonViewer";
 import Icon from "@/components/Icon";
 import { categoryTheme } from "@/lib/categories";
 
-export default async function LearnPage({ params }: PageProps<"/learn/[courseId]">) {
+export default async function LearnPage({
+  params,
+}: PageProps<"/learn/[courseId]">) {
   const { courseId } = await params;
   const session = await auth();
   if (!session?.user) redirect("/login");
@@ -39,8 +41,12 @@ export default async function LearnPage({ params }: PageProps<"/learn/[courseId]
         <span className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-[var(--brand-soft)] text-[var(--brand)]">
           <Icon name="lock" className="h-6 w-6" />
         </span>
-        <h1 className="text-2xl font-bold tracking-tight">You do not own this course</h1>
-        <p className="mt-2 text-[var(--text-muted)]">Purchase it to unlock all lessons.</p>
+        <h1 className="text-2xl font-bold tracking-tight">
+          You do not own this course
+        </h1>
+        <p className="mt-2 text-[var(--text-muted)]">
+          Purchase it to unlock all lessons.
+        </p>
         <Link href={`/courses/${course.id}`} className="btn btn-primary mt-7">
           View course
           <Icon name="arrowRight" className="h-4 w-4" />
@@ -66,7 +72,9 @@ export default async function LearnPage({ params }: PageProps<"/learn/[courseId]
       <div className="mb-8 flex items-center gap-4">
         <span
           className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white shadow-lg"
-          style={{ backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+          }}
         >
           <Icon name={theme.icon} className="h-6 w-6" />
         </span>
@@ -74,7 +82,9 @@ export default async function LearnPage({ params }: PageProps<"/learn/[courseId]
           <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
             {course.category}
           </p>
-          <h1 className="text-3xl font-extrabold tracking-tight">{course.title}</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">
+            {course.title}
+          </h1>
         </div>
 
         {isAdmin && !enrollment && (
@@ -88,7 +98,9 @@ export default async function LearnPage({ params }: PageProps<"/learn/[courseId]
         lessons={course.lessons}
         completedIds={progress.map((p) => p.lessonId)}
         canTrackProgress={Boolean(enrollment)}
-        existingCertificateCode={certificate && !certificate.revokedAt ? certificate.code : null}
+        existingCertificateCode={
+          certificate && !certificate.revokedAt ? certificate.code : null
+        }
       />
     </div>
   );

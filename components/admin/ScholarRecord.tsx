@@ -53,8 +53,13 @@ export default async function ScholarRecord({ userId }: { userId: string }) {
               : "bg-[var(--surface-2)] text-[var(--text-muted)]"
           }`}
         >
-          <Icon name={profile?.marketingOptIn ? "check" : "lock"} className="h-3.5 w-3.5" />
-          {profile?.marketingOptIn ? "Consented to offers" : "No marketing consent"}
+          <Icon
+            name={profile?.marketingOptIn ? "check" : "lock"}
+            className="h-3.5 w-3.5"
+          />
+          {profile?.marketingOptIn
+            ? "Consented to offers"
+            : "No marketing consent"}
         </span>
       </div>
 
@@ -74,17 +79,29 @@ export default async function ScholarRecord({ userId }: { userId: string }) {
               <Row label="Age" value={age !== null ? `${age}` : null} />
               <Row
                 label="Location"
-                value={[profile?.city, profile?.country].filter(Boolean).join(", ") || null}
+                value={
+                  [profile?.city, profile?.country]
+                    .filter(Boolean)
+                    .join(", ") || null
+                }
               />
               <Row label="Phone" value={profile?.phone} />
-              <Row label="Education" value={educationLabel(profile?.educationLevel)} />
+              <Row
+                label="Education"
+                value={educationLabel(profile?.educationLevel)}
+              />
               <Row label="Field" value={profile?.fieldOfStudy} />
               <Row label="Institution" value={profile?.institution} />
               <Row label="Occupation" value={profile?.occupation} />
-              <Row label="Experience" value={experienceLabel(profile?.experienceLevel)} />
+              <Row
+                label="Experience"
+                value={experienceLabel(profile?.experienceLevel)}
+              />
               <Row
                 label="Hours/week"
-                value={profile?.weeklyHours ? String(profile.weeklyHours) : null}
+                value={
+                  profile?.weeklyHours ? String(profile.weeklyHours) : null
+                }
               />
             </dl>
 
@@ -157,8 +174,13 @@ export default async function ScholarRecord({ userId }: { userId: string }) {
 
                 {interest.recommendations.length > 0 && (
                   <p className="mt-2 text-sm text-[var(--text-muted)]">
-                    <span className="text-[var(--text-faint)]">Would likely buy:</span>{" "}
-                    {interest.recommendations.slice(0, 2).map((r) => r.title).join(", ")}
+                    <span className="text-[var(--text-faint)]">
+                      Would likely buy:
+                    </span>{" "}
+                    {interest.recommendations
+                      .slice(0, 2)
+                      .map((r) => r.title)
+                      .join(", ")}
                   </p>
                 )}
               </>
@@ -172,7 +194,9 @@ export default async function ScholarRecord({ userId }: { userId: string }) {
                 <ul className="space-y-1.5">
                   {profile.accolades.map((a) => (
                     <li key={a.id} className="text-sm">
-                      <span className="font-medium text-[var(--text)]">{a.title}</span>
+                      <span className="font-medium text-[var(--text)]">
+                        {a.title}
+                      </span>
                       <span className="text-xs text-[var(--text-faint)]">
                         {" "}
                         · {accoladeLabel(a.kind)}
@@ -194,7 +218,9 @@ function Row({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null;
   return (
     <div className="flex gap-3">
-      <dt className="w-24 shrink-0 text-xs text-[var(--text-faint)]">{label}</dt>
+      <dt className="w-24 shrink-0 text-xs text-[var(--text-faint)]">
+        {label}
+      </dt>
       <dd className="text-[var(--text)]">{value}</dd>
     </div>
   );

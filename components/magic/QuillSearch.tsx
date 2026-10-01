@@ -196,14 +196,29 @@ export default function QuillSearch({
 /** Small feathered quill, nib pointing down-left at the caret. */
 function QuillNib() {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M17 1c-4 1.4-8.2 4.6-10.4 8.2L4.8 12l2.6-1c3.6-1.4 7.2-4.6 8.4-8L17 1z"
         fill="currentColor"
         opacity="0.9"
       />
-      <path d="M5 11.6L1.6 16.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M13.6 3.6c-2.4 1.6-4.6 3.8-6 6" stroke="var(--gold-dim)" strokeWidth="0.7" />
+      <path
+        d="M5 11.6L1.6 16.4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M13.6 3.6c-2.4 1.6-4.6 3.8-6 6"
+        stroke="var(--gold-dim)"
+        strokeWidth="0.7"
+      />
     </svg>
   );
 }

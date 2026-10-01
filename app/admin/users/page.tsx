@@ -4,7 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
 import Icon from "@/components/Icon";
 
-export default async function AdminUsersPage({ searchParams }: PageProps<"/admin/users">) {
+export default async function AdminUsersPage({
+  searchParams,
+}: PageProps<"/admin/users">) {
   const admin = await requireAdmin();
   if (!admin) redirect("/admin/login");
 
@@ -24,7 +26,8 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
   const filtered = needle
     ? users.filter(
         (u) =>
-          u.name.toLowerCase().includes(needle) || u.email.toLowerCase().includes(needle),
+          u.name.toLowerCase().includes(needle) ||
+          u.email.toLowerCase().includes(needle),
       )
     : users;
 
@@ -53,7 +56,10 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
         </p>
       </div>
 
-      <form className="mb-6 animate-fade-up" style={{ animationDelay: "0.06s" }}>
+      <form
+        className="mb-6 animate-fade-up"
+        style={{ animationDelay: "0.06s" }}
+      >
         <label className="relative block max-w-sm">
           <span className="sr-only">Search users</span>
           <Icon
@@ -69,7 +75,10 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
         </label>
       </form>
 
-      <div className="card animate-fade-up overflow-hidden" style={{ animationDelay: "0.12s" }}>
+      <div
+        className="card animate-fade-up overflow-hidden"
+        style={{ animationDelay: "0.12s" }}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-[var(--border)] bg-[var(--surface-2)]">
@@ -85,19 +94,30 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
             <tbody className="divide-y divide-[var(--border)]">
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-5 py-12 text-center text-[var(--text-muted)]">
+                  <td
+                    colSpan={6}
+                    className="px-5 py-12 text-center text-[var(--text-muted)]"
+                  >
                     No users match “{query}”.
                   </td>
                 </tr>
               )}
 
               {filtered.map((user) => (
-                <tr key={user.id} className="transition hover:bg-[var(--surface-2)]">
+                <tr
+                  key={user.id}
+                  className="transition hover:bg-[var(--surface-2)]"
+                >
                   <td className="px-5 py-4">
-                    <Link href={`/admin/users/${user.id}`} className="flex items-center gap-3">
+                    <Link
+                      href={`/admin/users/${user.id}`}
+                      className="flex items-center gap-3"
+                    >
                       <span
                         className={`grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-bold text-white shadow-sm ${
-                          user.role === "ADMIN" ? "bg-slate-700" : "brand-gradient"
+                          user.role === "ADMIN"
+                            ? "bg-slate-700"
+                            : "brand-gradient"
                         }`}
                       >
                         {user.name.charAt(0).toUpperCase()}
@@ -131,7 +151,9 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
                     >
                       <span
                         className={`h-1.5 w-1.5 rounded-full ${
-                          user.status === "ACTIVE" ? "bg-emerald-500" : "bg-red-500"
+                          user.status === "ACTIVE"
+                            ? "bg-emerald-500"
+                            : "bg-red-500"
                         }`}
                       />
                       {user.status}

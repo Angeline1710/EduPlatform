@@ -36,7 +36,8 @@ export async function POST(req: Request) {
     where: { id: session.user.id },
     select: { passwordHash: true },
   });
-  if (!user) return NextResponse.json({ error: "Account not found." }, { status: 404 });
+  if (!user)
+    return NextResponse.json({ error: "Account not found." }, { status: 404 });
 
   const valid = await bcrypt.compare(currentPassword, user.passwordHash);
   if (!valid) {

@@ -24,10 +24,14 @@ export default function LessonViewer({
 }: LessonViewerProps) {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [completed, setCompleted] = useState<Set<string>>(new Set(completedIds));
+  const [completed, setCompleted] = useState<Set<string>>(
+    new Set(completedIds),
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [certCode, setCertCode] = useState<string | null>(existingCertificateCode);
+  const [certCode, setCertCode] = useState<string | null>(
+    existingCertificateCode,
+  );
   const [justEarned, setJustEarned] = useState(false);
 
   const active = lessons[activeIndex];
@@ -36,7 +40,9 @@ export default function LessonViewer({
     return (
       <div className="card px-6 py-16 text-center">
         <p className="font-semibold">This course has no lessons yet.</p>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">Check back soon.</p>
+        <p className="mt-1 text-sm text-[var(--text-muted)]">
+          Check back soon.
+        </p>
       </div>
     );
   }
@@ -82,7 +88,10 @@ export default function LessonViewer({
 
     // Advance to the next unfinished lesson for a smoother run-through.
     if (next && activeIndex < lessons.length - 1) {
-      setTimeout(() => setActiveIndex((i) => Math.min(lessons.length - 1, i + 1)), 350);
+      setTimeout(
+        () => setActiveIndex((i) => Math.min(lessons.length - 1, i + 1)),
+        350,
+      );
     }
   }
 
@@ -140,9 +149,15 @@ export default function LessonViewer({
                           : "border-[var(--border)] bg-transparent text-[var(--text-faint)] group-hover:border-[var(--text-muted)] group-hover:text-[var(--text)]"
                     }`}
                   >
-                    {isComplete ? <Icon name="check" className="h-3 w-3" /> : i + 1}
+                    {isComplete ? (
+                      <Icon name="check" className="h-3 w-3" />
+                    ) : (
+                      i + 1
+                    )}
                   </span>
-                  <span className="flex-1 line-clamp-2 leading-tight">{lesson.title}</span>
+                  <span className="flex-1 line-clamp-2 leading-tight">
+                    {lesson.title}
+                  </span>
                 </button>
               </li>
             );
@@ -150,7 +165,10 @@ export default function LessonViewer({
         </ol>
       </aside>
 
-      <section className="card animate-fade-up p-8 relative min-h-[600px] border border-[var(--border)] shadow-[var(--shadow-card)]" style={{ animationDelay: "0.08s" }}>
+      <section
+        className="card animate-fade-up p-8 relative min-h-[600px] border border-[var(--border)] shadow-[var(--shadow-card)]"
+        style={{ animationDelay: "0.08s" }}
+      >
         {/* Parchment background for content */}
         <div className="absolute inset-0 bg-[var(--surface)] opacity-90 rounded-2xl pointer-events-none" />
 
@@ -166,11 +184,18 @@ export default function LessonViewer({
               </span>
               <div className="min-w-0 flex-1">
                 <p className="font-serif text-lg font-bold text-[var(--gold)]">
-                  {justEarned ? "Mastery Achieved — Credential Issued!" : "Credential Earned"}
+                  {justEarned
+                    ? "Mastery Achieved — Credential Issued!"
+                    : "Credential Earned"}
                 </p>
-                <p className="font-mono text-sm text-[var(--text-muted)] tracking-widest">{certCode}</p>
+                <p className="font-mono text-sm text-[var(--text-muted)] tracking-widest">
+                  {certCode}
+                </p>
               </div>
-              <Link href={`/certificates/${certCode}`} className="rune-edge press inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:brightness-110">
+              <Link
+                href={`/certificates/${certCode}`}
+                className="rune-edge press inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:brightness-110"
+              >
                 View Credential
                 <Icon name="arrowRight" className="h-4 w-4" />
               </Link>
@@ -181,7 +206,9 @@ export default function LessonViewer({
             <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[var(--gold)]">
               Manuscript {activeIndex + 1} of {lessons.length}
             </p>
-            <h2 className="font-serif text-3xl font-bold tracking-tight text-[var(--brand)]">{active.title}</h2>
+            <h2 className="font-serif text-3xl font-bold tracking-tight text-[var(--brand)]">
+              {active.title}
+            </h2>
           </header>
 
           <div
@@ -208,10 +235,16 @@ export default function LessonViewer({
                     : "border-[var(--gold-bright)] bg-gradient-to-b from-[var(--gold)] to-[var(--gold-dim)] text-[var(--on-gold)] hover:brightness-110 shadow-[0_0_18px_rgb(212_162_76/0.35)]"
                 }`}
               >
-                <span className={`grid h-5 w-5 place-items-center rounded-full transition-colors ${isDone ? "bg-[var(--gold)] text-[var(--on-gold)]" : "bg-black/20 text-[var(--on-gold)]"}`}>
+                <span
+                  className={`grid h-5 w-5 place-items-center rounded-full transition-colors ${isDone ? "bg-[var(--gold)] text-[var(--on-gold)]" : "bg-black/20 text-[var(--on-gold)]"}`}
+                >
                   <Icon name="check" className="h-3 w-3" />
                 </span>
-                {saving ? "Inscribing..." : isDone ? "Mastery Recorded" : "Mark as Mastered"}
+                {saving
+                  ? "Inscribing..."
+                  : isDone
+                    ? "Mastery Recorded"
+                    : "Mark as Mastered"}
               </button>
             </div>
           )}
@@ -228,7 +261,9 @@ export default function LessonViewer({
               Previous
             </button>
             <button
-              onClick={() => setActiveIndex((i) => Math.min(lessons.length - 1, i + 1))}
+              onClick={() =>
+                setActiveIndex((i) => Math.min(lessons.length - 1, i + 1))
+              }
               disabled={activeIndex === lessons.length - 1}
               className="rune-edge inline-flex items-center gap-2 rounded-md border border-[var(--gold)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:bg-[var(--gold)] hover:text-[var(--on-gold)] disabled:opacity-40 disabled:pointer-events-none"
             >
@@ -240,20 +275,24 @@ export default function LessonViewer({
       </section>
 
       {/* Study Notes Sidebar */}
-      <aside className="card animate-fade-up sticky top-24 h-[calc(100vh-8rem)] flex flex-col overflow-hidden border border-[var(--border)] bg-[var(--surface-2)] shadow-[var(--shadow-panel)]" style={{ animationDelay: "0.15s" }}>
+      <aside
+        className="card animate-fade-up sticky top-24 h-[calc(100vh-8rem)] flex flex-col overflow-hidden border border-[var(--border)] bg-[var(--surface-2)] shadow-[var(--shadow-panel)]"
+        style={{ animationDelay: "0.15s" }}
+      >
         <div className="border-b border-[var(--border)] bg-[var(--surface)] px-4 py-3 flex items-center gap-2">
           <Icon name="code" className="h-4 w-4 text-[var(--gold)]" />
-          <h3 className="font-serif font-bold text-[var(--brand)]">Study Notes</h3>
+          <h3 className="font-serif font-bold text-[var(--brand)]">
+            Study Notes
+          </h3>
         </div>
         <textarea
           className="flex-1 w-full resize-none bg-transparent p-4 text-[15px] text-[var(--text-muted)] placeholder:text-[var(--text-faint)] focus:outline-none"
           placeholder="Jot down your insights here... (Autosaved locally)"
           defaultValue=""
-          onChange={(e) => {
-            // Mock autosave
+          onChange={() => {
             clearTimeout((window as any)._notesTimer);
             (window as any)._notesTimer = setTimeout(() => {
-              console.log("Notes autosaved");
+              // Autosave is handled locally; no noisy console output.
             }, 1000);
           }}
         />

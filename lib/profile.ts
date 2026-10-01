@@ -15,11 +15,19 @@ export async function getProfile(userId: string) {
   const [user, profile] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, name: true, email: true, role: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
     }),
     prisma.profile.findUnique({
       where: { userId },
-      include: { accolades: { orderBy: [{ year: "desc" }, { createdAt: "desc" }] } },
+      include: {
+        accolades: { orderBy: [{ year: "desc" }, { createdAt: "desc" }] },
+      },
     }),
   ]);
 

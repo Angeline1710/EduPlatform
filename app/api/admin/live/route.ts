@@ -5,7 +5,8 @@ import { getLiveUsers, PRESENCE_WINDOW_MS } from "@/lib/analytics";
 /** Polled by the admin dashboard for the "online now" panel. */
 export async function GET() {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  if (!admin)
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
 
   const users = await getLiveUsers();
 

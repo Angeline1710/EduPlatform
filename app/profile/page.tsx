@@ -62,37 +62,71 @@ export default async function ProfilePage() {
                 )}
               </h2>
               {profile?.headline && (
-                <p className="mt-0.5 text-[var(--text-muted)]">{profile.headline}</p>
+                <p className="mt-0.5 text-[var(--text-muted)]">
+                  {profile.headline}
+                </p>
               )}
 
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-[var(--text-muted)]">
                 <span className="inline-flex items-center gap-1.5">
-                  <Icon name="chat" className="h-3.5 w-3.5 text-[var(--gold)]" />
+                  <Icon
+                    name="chat"
+                    className="h-3.5 w-3.5 text-[var(--gold)]"
+                  />
                   {user.email}
                 </span>
                 {age !== null && (
                   <span className="inline-flex items-center gap-1.5">
-                    <Icon name="user" className="h-3.5 w-3.5 text-[var(--gold)]" />
+                    <Icon
+                      name="user"
+                      className="h-3.5 w-3.5 text-[var(--gold)]"
+                    />
                     {age} years old
                   </span>
                 )}
                 {(profile?.city || profile?.country) && (
                   <span className="inline-flex items-center gap-1.5">
-                    <Icon name="home" className="h-3.5 w-3.5 text-[var(--gold)]" />
+                    <Icon
+                      name="home"
+                      className="h-3.5 w-3.5 text-[var(--gold)]"
+                    />
                     {[profile.city, profile.country].filter(Boolean).join(", ")}
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1.5">
-                  <Icon name="clock" className="h-3.5 w-3.5 text-[var(--gold)]" />
+                  <Icon
+                    name="clock"
+                    className="h-3.5 w-3.5 text-[var(--gold)]"
+                  />
                   Joined {formatIssueDate(user.createdAt)}
                 </span>
               </div>
 
-              {(profile?.linkedinUrl || profile?.githubUrl || profile?.websiteUrl) && (
+              {(profile?.linkedinUrl ||
+                profile?.githubUrl ||
+                profile?.websiteUrl) && (
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {profile.linkedinUrl && <LinkChip href={profile.linkedinUrl} label="LinkedIn" icon="linkedin" />}
-                  {profile.githubUrl && <LinkChip href={profile.githubUrl} label="GitHub" icon="code" />}
-                  {profile.websiteUrl && <LinkChip href={profile.websiteUrl} label="Website" icon="grid" />}
+                  {profile.linkedinUrl && (
+                    <LinkChip
+                      href={profile.linkedinUrl}
+                      label="LinkedIn"
+                      icon="linkedin"
+                    />
+                  )}
+                  {profile.githubUrl && (
+                    <LinkChip
+                      href={profile.githubUrl}
+                      label="GitHub"
+                      icon="code"
+                    />
+                  )}
+                  {profile.websiteUrl && (
+                    <LinkChip
+                      href={profile.websiteUrl}
+                      label="Website"
+                      icon="grid"
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -139,8 +173,12 @@ export default async function ProfilePage() {
                     <li key={m.key} className="flex items-start gap-2 text-sm">
                       <span className="mt-1 h-1.5 w-1.5 shrink-0 rotate-45 bg-[var(--gold)]" />
                       <span>
-                        <span className="font-semibold text-[var(--text)]">{m.label}</span>
-                        <span className="block text-xs text-[var(--text-muted)]">{m.helps}</span>
+                        <span className="font-semibold text-[var(--text)]">
+                          {m.label}
+                        </span>
+                        <span className="block text-xs text-[var(--text-muted)]">
+                          {m.helps}
+                        </span>
                       </span>
                     </li>
                   ))}
@@ -153,32 +191,51 @@ export default async function ProfilePage() {
           <div className="stagger mb-6 grid gap-4 sm:grid-cols-3">
             <Stat label="Courses" value={enrollments} icon="book" />
             <Stat label="Lessons mastered" value={lessonsDone} icon="check" />
-            <Stat label="Credentials" value={certificates} icon="award" highlight />
+            <Stat
+              label="Credentials"
+              value={certificates}
+              icon="award"
+              highlight
+            />
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Education */}
             <Card title="Education & work">
-              {!profile?.educationLevel && !profile?.fieldOfStudy && !profile?.occupation ? (
+              {!profile?.educationLevel &&
+              !profile?.fieldOfStudy &&
+              !profile?.occupation ? (
                 <Blank>Nothing recorded yet.</Blank>
               ) : (
                 <dl className="space-y-3">
-                  <Row label="Level" value={educationLabel(profile?.educationLevel)} />
+                  <Row
+                    label="Level"
+                    value={educationLabel(profile?.educationLevel)}
+                  />
                   <Row label="Field of study" value={profile?.fieldOfStudy} />
                   <Row label="Institution" value={profile?.institution} />
                   <Row
                     label="Graduated"
-                    value={profile?.graduationYear ? String(profile.graduationYear) : null}
+                    value={
+                      profile?.graduationYear
+                        ? String(profile.graduationYear)
+                        : null
+                    }
                   />
                   <Row label="Occupation" value={profile?.occupation} />
-                  <Row label="Experience" value={experienceLabel(profile?.experienceLevel)} />
+                  <Row
+                    label="Experience"
+                    value={experienceLabel(profile?.experienceLevel)}
+                  />
                 </dl>
               )}
             </Card>
 
             {/* Learning intent */}
             <Card title="What you want to learn">
-              {interests.length === 0 && !profile?.goals && !profile?.weeklyHours ? (
+              {interests.length === 0 &&
+              !profile?.goals &&
+              !profile?.weeklyHours ? (
                 <Blank>Tell us and the owl will aim better.</Blank>
               ) : (
                 <>
@@ -285,9 +342,10 @@ export default async function ProfilePage() {
               How your record is used
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
-              What you record here shapes the courses the owl suggests and helps the academy
-              decide what to teach next. Every field is optional. Offers by email are sent
-              only if you have turned them on — currently{" "}
+              What you record here shapes the courses the owl suggests and helps
+              the academy decide what to teach next. Every field is optional.
+              Offers by email are sent only if you have turned them on —
+              currently{" "}
               <span className="font-semibold text-[var(--text)]">
                 {profile?.marketingOptIn ? "on" : "off"}
               </span>
@@ -300,10 +358,18 @@ export default async function ProfilePage() {
   );
 }
 
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
+function Card({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-sm border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)]">
-      <h3 className="mb-4 font-serif text-lg font-bold text-[var(--brand)]">{title}</h3>
+      <h3 className="mb-4 font-serif text-lg font-bold text-[var(--brand)]">
+        {title}
+      </h3>
       {children}
     </div>
   );
@@ -347,7 +413,9 @@ function Stat({
       >
         <Icon name={icon} className="h-5 w-5" />
       </span>
-      <p className="font-serif text-3xl font-bold text-[var(--text)]">{value}</p>
+      <p className="font-serif text-3xl font-bold text-[var(--text)]">
+        {value}
+      </p>
       <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text-faint)]">
         {label}
       </p>
@@ -355,7 +423,15 @@ function Stat({
   );
 }
 
-function LinkChip({ href, label, icon }: { href: string; label: string; icon: string }) {
+function LinkChip({
+  href,
+  label,
+  icon,
+}: {
+  href: string;
+  label: string;
+  icon: string;
+}) {
   return (
     <a
       href={href}
