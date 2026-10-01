@@ -11,6 +11,8 @@ export const metadata = {
   description: "How learning works here, and what you take away from it.",
 };
 
+export const dynamic = "force-dynamic";
+
 const PILLARS = [
   {
     icon: "crown",

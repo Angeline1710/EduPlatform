@@ -12,6 +12,8 @@ export const metadata = {
   description: "The academy's departments and what each one teaches.",
 };
 
+export const dynamic = "force-dynamic";
+
 /** Written by hand rather than derived — each department needs a voice. */
 const BLURB: Record<string, string> = {
   Development:

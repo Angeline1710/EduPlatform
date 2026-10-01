@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 // Role: "ADMIN" | "STUDENT" (SQLite has no native enum support in Prisma)

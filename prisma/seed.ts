@@ -1,10 +1,10 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient({
-  adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL! }),
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }),
 });
 
 const COURSES = [
@@ -179,37 +179,45 @@ const COURSES = [
 ];
 
 async function main() {
-  const adminPassword = await bcrypt.hash("admin123", 10);
-  const studentPassword = await bcrypt.hash("student123", 10);
+  const isProduction = process.env.NODE_ENV === "production";
+  const ownerEmail = process.env.ADMIN_EMAIL;
+  const ownerPassword = process.env.ADMIN_PASSWORD;
+
+  if (isProduction && (!ownerEmail || !ownerPassword)) {
+    throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD must be set when seeding production.");
+  }
+
+  const adminEmail = isProduction ? ownerEmail! : "admin@edu.local";
+  const adminPassword = isProduction ? ownerPassword! : "admin123";
+  const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
 
   const admin = await prisma.user.upsert({
-    where: { email: "admin@edu.local" },
-    update: {},
+    where: { email: adminEmail },
+    update: isProduction
+      ? { passwordHash: adminPasswordHash, role: "ADMIN", status: "ACTIVE" }
+      : {},
     create: {
-      name: "Platform Admin",
-      email: "admin@edu.local",
-      passwordHash: adminPassword,
+      name: process.env.ADMIN_NAME ?? "Platform Admin",
+      email: adminEmail,
+      passwordHash: adminPasswordHash,
       role: "ADMIN",
     },
   });
 
-  await prisma.user.upsert({
-    where: { email: "student@edu.local" },
-    update: {},
-    create: {
-      name: "Sample Student",
-      email: "student@edu.local",
-      passwordHash: studentPassword,
-      role: "STUDENT",
-    },
-  });
+  if (!isProduction) {
+    await prisma.user.upsert({
+      where: { email: "student@edu.local" },
+      update: {},
+      create: {
+        name: "Sample Student",
+        email: "student@edu.local",
+        passwordHash: await bcrypt.hash("student123", 10),
+        role: "STUDENT",
+      },
+    });
+  }
 
-  // Owner account. The password is read from the environment so it never
-  // lands in version control — set ADMIN_PASSWORD in .env (gitignored).
-  const ownerEmail = process.env.ADMIN_EMAIL;
-  const ownerPassword = process.env.ADMIN_PASSWORD;
-
-  if (ownerEmail && ownerPassword) {
+  if (!isProduction && ownerEmail && ownerPassword && ownerEmail !== adminEmail) {
     await prisma.user.upsert({
       where: { email: ownerEmail },
       // Re-hash on every seed so rotating ADMIN_PASSWORD in .env takes effect.

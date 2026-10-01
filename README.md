@@ -5,7 +5,7 @@ An online course platform with two separate logins (admin and student), course p
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind CSS
-- Prisma ORM with SQLite (swap the datasource to PostgreSQL for production)
+- Prisma ORM with PostgreSQL
 - NextAuth (credentials provider, JWT sessions) with `ADMIN` / `STUDENT` roles
 - Stripe Checkout + webhooks
 
@@ -21,10 +21,12 @@ Copy the environment template and fill in your values:
 cp .env.example .env
 ```
 
-Set up the database and seed sample data:
+Start the local PostgreSQL container and seed sample data:
 
 ```bash
-npx prisma migrate dev && npx prisma db seed
+docker compose up -d db
+npx prisma migrate dev
+npx prisma db seed
 ```
 
 Start the dev server:
@@ -35,7 +37,7 @@ npm run dev
 
 ## Containerized setup
 
-This project is ready to run via Docker with persistent storage for both dependencies and the SQLite database.
+This project is ready to run via Docker with persistent storage for dependencies and PostgreSQL data.
 
 ```bash
 docker compose up --build
@@ -44,7 +46,7 @@ docker compose up --build
 The compose file uses named volumes for:
 
 - `node_modules` to keep package installs out of the host filesystem
-- `prisma_data` to persist SQLite data at `./prisma/dev.db`
+- `postgres_data` to persist the PostgreSQL database
 
 The app will be available at `http://localhost:3000`.
 
@@ -55,7 +57,7 @@ The app will be available at `http://localhost:3000`.
 | Admin   | admin@edu.local   | admin123   |
 | Student | student@edu.local | student123 |
 
-Change these before deploying anywhere public.
+These accounts are created only in development. Production seeding requires `ADMIN_EMAIL` and `ADMIN_PASSWORD` and never creates these demo accounts.
 
 ## Routes
 
@@ -86,6 +88,17 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 Enrollment is created by the webhook on `checkout.session.completed`, not on the success redirect — so a user closing the tab mid-redirect still gets access.
 
-## Switching to PostgreSQL
+## Vercel deployment
 
-In `prisma/schema.prisma`, change the datasource provider to `postgresql`, swap the adapter in [lib/prisma.ts](lib/prisma.ts) for `@prisma/adapter-pg`, point `DATABASE_URL` at your database, and re-run `npx prisma migrate dev`.
+1. Provision a managed PostgreSQL database and import this repository into Vercel.
+2. Add these environment variables in Vercel for Production:
+	- `DATABASE_URL`: the managed PostgreSQL connection string
+	- `NEXTAUTH_SECRET`: a unique random secret
+	- `NEXTAUTH_URL`: the deployed HTTPS URL
+	- `STRIPE_SECRET_KEY` and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: production Stripe keys
+	- `STRIPE_WEBHOOK_SECRET`: the signing secret for the webhook endpoint
+3. Set Vercel's Build Command to `npx prisma migrate deploy && npm run build`.
+4. Register `https://<your-domain>/api/webhooks/stripe` in Stripe and subscribe to `checkout.session.completed`.
+5. Seed the production database once from a trusted terminal with `NODE_ENV=production`, `DATABASE_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, and a strong `ADMIN_PASSWORD` set. Run `npx prisma db seed`; do not use the development demo credentials in production.
+
+The build generates Prisma Client automatically. The initial PostgreSQL migration is in `prisma/migrations-postgresql`; the older SQLite migration history is retained separately and is not used by the current Prisma config. Existing local SQLite data is not copied to the production database.
