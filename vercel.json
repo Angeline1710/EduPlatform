@@ -4,14 +4,6 @@
   "installCommand": "npm install",
   "outputDirectory": ".next",
   "regions": ["sin1"],
-  "env": {
-    "NEXTAUTH_URL": "@nextauth_url",
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "DATABASE_URL": "@database_url",
-    "ADMIN_EMAIL": "@admin_email",
-    "ADMIN_PASSWORD": "@admin_password",
-    "ADMIN_NAME": "@admin_name"
-  },
   "headers": [
     {
       "source": "/(.*)",
