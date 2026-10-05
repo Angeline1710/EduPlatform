@@ -10,8 +10,7 @@ import { AcademyCrest } from "@/components/Crests";
 import MagicalSearch from "@/components/magic/MagicalSearch";
 
 const LINKS = [
-  { href: "/", label: "Courses" },
-  { href: "/#categories", label: "Categories" },
+  { href: "/courses", label: "Courses" },
   { href: "/#why", label: "Why Us" },
   { href: "/verify", label: "Verify" },
 ];

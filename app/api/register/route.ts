@@ -1,43 +1,43 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-
-const schema = z.object({
-  name: z.string().min(1).max(100),
-  email: z.string().email(),
-  password: z.string().min(8).max(200),
-});
+import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const parsed = schema.safeParse(body);
+  try {
+    const { name, email, password } = await req.json();
 
-  if (!parsed.success) {
+    if (!name || !email || !password) {
+      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    }
+
+    if (password.length < 8) {
+      return NextResponse.json({ error: "Password must be at least 8 characters long." }, { status: 400 });
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      return NextResponse.json({ error: "A user with this email already exists." }, { status: 400 });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        passwordHash,
+      },
+    });
+
     return NextResponse.json(
-      { error: "Invalid name, email, or password (min 8 chars)." },
-      { status: 400 },
+      { message: "User registered successfully", user: { id: user.id, email: user.email, name: user.name } },
+      { status: 201 }
     );
+  } catch (error: any) {
+    console.error("Registration error:", error);
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
-
-  const { name, email, password } = parsed.data;
-
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    return NextResponse.json(
-      { error: "An account with that email already exists." },
-      { status: 409 },
-    );
-  }
-
-  await prisma.user.create({
-    data: {
-      name,
-      email,
-      passwordHash: await bcrypt.hash(password, 10),
-      role: "STUDENT",
-    },
-  });
-
-  return NextResponse.json({ ok: true }, { status: 201 });
 }

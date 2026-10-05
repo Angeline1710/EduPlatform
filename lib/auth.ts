@@ -23,8 +23,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
 
-        // A suspended account keeps its data but cannot start a session.
-        if (user.status === "SUSPENDED") return null;
+        // The status field was removed from User schema
+        // so we don't need to check it.
 
         return {
           id: user.id,

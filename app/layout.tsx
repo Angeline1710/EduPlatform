@@ -7,7 +7,7 @@ import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import Heartbeat from "@/components/Heartbeat";
 import AmbientCanvas from "@/components/art/AmbientCanvas";
-import OwlCompanion from "@/components/owl/OwlCompanion";
+
 import PageTransition from "@/components/magic/PageTransition";
 
 const geistSans = Geist({
@@ -46,17 +46,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${displaySerif.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
       <body className="bg-[var(--shell)] text-[var(--text)]">
         <Providers>
           {/* Reports presence so the admin's live count is real */}
           <Heartbeat />
           {/* Living backdrop, so the artwork continues past the hero */}
           <AmbientCanvas />
-          {/* The messenger owl, present on every page */}
-          <OwlCompanion />
           {/* Rail + column. The rail is its own scroll context so the main
               column scrolls independently, as in the reference layout. */}
           {/* First stop for a keyboard visitor, past the rail and the bar. */}

@@ -3,74 +3,60 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
-
-// Role: "ADMIN" | "STUDENT" (SQLite has no native enum support in Prisma)
-// PaymentStatus: "PENDING" | "PAID" | "FAILED"
-// User.status: "ACTIVE" | "SUSPENDED"
 
 model User {
-  id           String       @id @default(cuid())
-  name         String
-  email        String       @unique
-  passwordHash String
-  role         String       @default("STUDENT")
-  status       String       @default("ACTIVE")
-  createdAt    DateTime     @default(now())
-
-  coursesCreated Course[]         @relation("CourseCreatedBy")
-  enrollments    Enrollment[]
-  payments       Payment[]
-  progress       LessonProgress[]
-  certificates   Certificate[]
-  bookmarks      Bookmark[]
-  notes          Note[]
-  achievements   Achievement[]
-  signals        Signal[]
-  profile        Profile?
-
-  currentStreak  Int       @default(0)
-  lastStudyDate  DateTime?
-  /// Touched by a client heartbeat while a session is open. Anyone seen
-  /// inside the presence window counts as online; this is the only source
-  /// for the live count, so it is never estimated.
-  lastSeenAt     DateTime?
-}
-
-model Course {
   id           String   @id @default(cuid())
-  title        String
-  description  String
-  price        Int      // stored in cents
-  category     String   @default("General")
-  thumbnailUrl String?
-  /// Small looping GIF shown above the course title. Optional; courses
-  /// without one simply render the crest as before.
-  gifUrl       String?
-  published    Boolean  @default(false)
-  createdBy    User     @relation("CourseCreatedBy", fields: [createdById], references: [id])
-  createdById  String
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("STUDENT") // STUDENT, ADMIN
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  courseEnrollments     CourseEnrollment[]
+  internshipEnrollments InternshipEnrollment[]
+  certificates          Certificate[]
+  desiredCourses        DesiredCourse[]
+  lessonProgress        LessonProgress[]
+}
+
+model DesiredCourse {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic     String   // The topic or course name the user is interested in
+  createdAt DateTime @default(now())
+
+  @@unique([userId, topic])
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  topics      String   // Tags used to match with User.DesiredCourse (comma separated)
+  internRole  String   @default("Software Development") // e.g. "Frontend Development", "Data Science"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
   lessons      Lesson[]
-  enrollments  Enrollment[]
-  payments     Payment[]
+  enrollments  CourseEnrollment[]
   certificates Certificate[]
-  bookmarks    Bookmark[]
 }
 
 model Lesson {
-  id       String @id @default(cuid())
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  title    String
-  content  String // video URL or text/markdown content
-  order    Int
+  id          String   @id @default(cuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String
+  description String   // Summary / what you will learn
+  content     String   // Full lesson body
+  order       Int      // Display order within the course
+  createdAt   DateTime @default(now())
 
   progress LessonProgress[]
-  notes    Note[]
 }
 
 model LessonProgress {
@@ -84,182 +70,57 @@ model LessonProgress {
   @@unique([userId, lessonId])
 }
 
-/// A credential issued when a student completes every lesson in a course.
-/// `code` is the human-readable value printed on the certificate and encoded
-/// in its QR; it is what the public /verify page looks up.
-model Certificate {
-  id        String    @id @default(cuid())
-  code      String    @unique
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId  String
-  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  issuedAt  DateTime  @default(now())
-  revokedAt DateTime?
-
-  @@unique([userId, courseId])
-}
-
-model Enrollment {
-  id           String   @id @default(cuid())
-  userId       String
-  user         User     @relation(fields: [userId], references: [id])
-  courseId     String
-  course       Course   @relation(fields: [courseId], references: [id])
-  purchasedAt  DateTime @default(now())
-
-  @@unique([userId, courseId])
-}
-
-model Payment {
-  id              String        @id @default(cuid())
-  userId          String
-  user            User          @relation(fields: [userId], references: [id])
-  courseId        String
-  course          Course        @relation(fields: [courseId], references: [id])
-  stripeSessionId String        @unique
-  amount          Int
-  status          String        @default("PENDING")
-  createdAt       DateTime      @default(now())
-}
-
-model Bookmark {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-
-  @@unique([userId, courseId])
-}
-
-model Note {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lessonId  String
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-/// The scholar's record.
-///
-/// Every field is optional on purpose: a student can use the platform fully
-/// without disclosing anything, and each thing they do share earns its place
-/// by improving what the owl can suggest. Age is never stored — only the date
-/// of birth, so the figure can never go stale.
-model Profile {
-  id     String @id @default(cuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Identity
-  headline    String?
-  bio         String?
-  avatarUrl   String?
-  dateOfBirth DateTime?
-
-  // Contact and place
-  phone    String?
-  country  String?
-  city     String?
-  timezone String?
-  pronouns String?
-  /// Comma-separated; free text rather than a fixed list, since a fixed one
-  /// would inevitably exclude someone.
-  languages String?
-
-  /// Whether the scholar's page is visible to anyone with the link. Off by
-  /// default — a record is private until its owner decides otherwise.
-  isPublic Boolean @default(false)
-
-  // Education
-  /// "SECONDARY" | "DIPLOMA" | "BACHELORS" | "MASTERS" | "DOCTORATE" | "SELF_TAUGHT" | "OTHER"
-  educationLevel String?
-  fieldOfStudy   String?
-  institution    String?
-  graduationYear Int?
-  occupation     String?
-  /// "BEGINNER" | "INTERMEDIATE" | "ADVANCED"
-  experienceLevel String?
-
-  /// Departments the scholar says they care about, stored as a JSON array of
-  /// category names. Read alongside behaviour, so a stated preference counts
-  /// even before they have browsed anything.
-  interests   String?
-  goals       String?
-  weeklyHours Int?
-
-  // Links
-  linkedinUrl String?
-  githubUrl   String?
-  websiteUrl  String?
-
-  /// Explicit consent for offers and course suggestions by email. Defaults to
-  /// off; nothing promotional should be sent without it being deliberately on.
-  marketingOptIn Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  accolades Accolade[]
-}
-
-/// Something the scholar earned elsewhere — a competition placing, an outside
-/// certification, an award. Distinct from Certificate, which is issued by this
-/// academy and is verifiable; these are self-declared.
-model Accolade {
-  id        String  @id @default(cuid())
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  /// "COMPETITION" | "CERTIFICATION" | "AWARD" | "PUBLICATION" | "PROJECT"
-  kind        String
+model Internship {
+  id          String   @id @default(cuid())
   title       String
-  issuer      String?
-  year        Int?
-  url         String?
-  description String?
+  description String
+  topics      String   // Tags to match with User.DesiredCourse (comma separated)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-
-  @@index([profileId])
+  enrollments  InternshipEnrollment[]
+  certificates Certificate[]
 }
 
-/// One recorded act of interest.
-///
-/// Signals are what the owl reasons over, and what the admin brief
-/// aggregates. Anonymous visitors are grouped by `anonId` (a value the
-/// client keeps locally) so a browsing session still forms a profile before
-/// anyone signs in; once they do, `userId` carries it.
-model Signal {
-  id        String   @id @default(cuid())
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  /// Set only when there is no signed-in user.
-  anonId    String?
-  /// "search" | "course_view" | "category_view" | "enroll_intent" | "enrolled"
-  kind      String
-  /// The search term, or the course title — whatever was actually acted on.
-  value     String
-  courseId  String?
-  category  String?
-  createdAt DateTime @default(now())
+model CourseEnrollment {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrolledAt  DateTime @default(now())
+  completedAt DateTime?
 
-  @@index([userId, createdAt])
-  @@index([anonId, createdAt])
-  @@index([kind, createdAt])
+  @@unique([userId, courseId])
 }
 
-model Achievement {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type       String   // e.g. "FIRST_DISCOVERY", "THE_SCHOLAR"
-  unlockedAt DateTime @default(now())
+model InternshipEnrollment {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  internshipId String
+  internship   Internship @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+  enrolledAt   DateTime   @default(now())
+  completedAt  DateTime?
 
-  @@unique([userId, type])
+  @@unique([userId, internshipId])
+}
+
+model Certificate {
+  id           String      @id @default(cuid())
+  credentialId String      @unique // Custom credential ID e.g. EDU-XXXX-XXXX
+  type         String      // "COURSE" | "INTERNSHIP"
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  courseId     String?
+  course       Course?     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  internshipId String?
+  internship   Internship? @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+
+  issuedAt     DateTime    @default(now())
+
+  @@unique([userId, courseId, type])
+  @@unique([userId, internshipId, type])
 }

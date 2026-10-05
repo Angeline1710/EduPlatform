@@ -1,35 +1,31 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { qrSvg, verificationUrl } from "@/lib/qr";
-import { formatIssueDate } from "@/lib/certificates";
 import Certificate from "@/components/Certificate";
+import DownloadCertificate from "@/components/DownloadCertificate";
 import VerifyForm from "@/components/VerifyForm";
 import Icon from "@/components/Icon";
 
 export default async function VerifyResultPage({
   params,
-}: PageProps<"/verify/[code]">) {
+}: {
+  params: Promise<{ code: string }>;
+}) {
   const { code } = await params;
   const normalized = decodeURIComponent(code).trim().toUpperCase();
 
   const certificate = await prisma.certificate.findUnique({
-    where: { code: normalized },
+    where: { credentialId: normalized },
     include: {
       user: { select: { name: true } },
-      course: {
-        select: {
-          title: true,
-          category: true,
-          _count: { select: { lessons: true } },
-        },
-      },
+      course: { select: { title: true, internRole: true } },
+      internship: { select: { title: true } },
     },
   });
 
-  const valid = Boolean(certificate && !certificate.revokedAt);
+  const valid = Boolean(certificate);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <Link
         href="/verify"
         className="focus-ring mb-8 inline-flex items-center gap-2 rounded-full text-sm font-medium text-[var(--text-muted)] transition hover:text-[var(--text)]"
@@ -40,7 +36,6 @@ export default async function VerifyResultPage({
         Verify another
       </Link>
 
-      {/* Verdict banner */}
       <div
         className={`animate-pop-in mb-8 flex items-center gap-4 rounded-2xl border px-6 py-5 ${
           valid
@@ -61,18 +56,12 @@ export default async function VerifyResultPage({
               valid ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"
             }`}
           >
-            {valid
-              ? "Valid credential"
-              : certificate
-                ? "Credential revoked"
-                : "Credential not found"}
+            {valid ? "Valid credential" : "Credential not found"}
           </p>
           <p className="text-sm text-[var(--text-muted)]">
             {valid
-              ? `Issued by EduPlatform on ${formatIssueDate(certificate!.issuedAt)}.`
-              : certificate
-                ? "This certificate was issued but has since been revoked."
-                : `No certificate matches ${normalized}.`}
+              ? `Issued by EduPlatform on ${new Date(certificate!.issuedAt).toLocaleDateString()}.`
+              : `No certificate matches ${normalized}.`}
           </p>
         </div>
       </div>
@@ -80,8 +69,8 @@ export default async function VerifyResultPage({
       {certificate ? (
         <CertificateView code={normalized} certificate={certificate} />
       ) : (
-        <div className="card p-8">
-          <p className="mb-4 font-semibold">Check the ID and try again</p>
+        <div className="card p-8 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
+          <p className="mb-4 font-semibold text-white">Check the ID and try again</p>
           <VerifyForm initialCode={normalized} />
         </div>
       )}
@@ -89,32 +78,27 @@ export default async function VerifyResultPage({
   );
 }
 
-async function CertificateView({
+function CertificateView({
   code,
   certificate,
 }: {
   code: string;
-  certificate: {
-    issuedAt: Date;
-    revokedAt: Date | null;
-    user: { name: string };
-    course: { title: string; category: string; _count: { lessons: number } };
-  };
+  certificate: any;
 }) {
-  const verifyUrl = verificationUrl(code);
-  const qrMarkup = await qrSvg(verifyUrl);
+  const type = certificate.type === 'COURSE' ? 'Course' : 'Internship';
+  const title = certificate.course?.title || certificate.internship?.title || 'Unknown Program';
+  const internRole = certificate.course?.internRole || 'Software Development';
 
   return (
-    <Certificate
-      holderName={certificate.user.name}
-      courseTitle={certificate.course.title}
-      category={certificate.course.category}
-      code={code}
-      issuedAt={certificate.issuedAt}
-      lessonCount={certificate.course._count.lessons}
-      qrMarkup={qrMarkup}
-      verifyUrl={verifyUrl}
-      revoked={Boolean(certificate.revokedAt)}
-    />
+    <DownloadCertificate filename={`${code}-${type}`}>
+      <Certificate
+        holderName={certificate.user.name}
+        title={title}
+        type={type as "Course" | "Internship"}
+        internRole={internRole}
+        credentialId={code}
+        issuedAt={certificate.issuedAt}
+      />
+    </DownloadCertificate>
   );
 }
