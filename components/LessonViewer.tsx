@@ -8,6 +8,7 @@ import Icon from "@/components/Icon";
 type Lesson = { id: string; title: string; content: string; order: number };
 
 type LessonViewerProps = {
+  courseId: string;
   lessons: Lesson[];
   /** Lesson ids the student has already completed. */
   completedIds: string[];
@@ -17,6 +18,7 @@ type LessonViewerProps = {
 };
 
 export default function LessonViewer({
+  courseId,
   lessons,
   completedIds,
   canTrackProgress,
@@ -173,6 +175,31 @@ export default function LessonViewer({
         <div className="absolute inset-0 bg-[var(--surface)] opacity-90 rounded-2xl pointer-events-none" />
 
         <div className="relative z-10">
+          {percent >= 85 && (
+            <div className="mb-8 pt-4 pb-6 border-b border-[var(--border)]">
+              <h3 className="text-xl font-bold mb-4 text-[var(--gold)] flex items-center gap-2">
+                <Icon name="award" className="h-5 w-5" />
+                Mastery Achieved! Claim Your Certificates
+              </h3>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <a
+                  href={`/api/certificates/generate?courseId=${courseId}&type=COURSE`}
+                  className="flex items-center gap-2 bg-[var(--gold)] hover:bg-[var(--gold-bright)] text-black font-semibold py-2 px-5 rounded-md transition-colors"
+                >
+                  <Icon name="medal" className="h-4 w-4" />
+                  Claim Course Certificate
+                </a>
+                <a
+                  href={`/api/certificates/generate?courseId=${courseId}&type=INTERNSHIP`}
+                  className="flex items-center gap-2 border border-[var(--gold)] hover:bg-[var(--gold)] hover:text-black text-[var(--gold)] font-semibold py-2 px-5 rounded-md transition-colors"
+                >
+                  <Icon name="briefcase" className="h-4 w-4" />
+                  Claim Internship Certificate
+                </a>
+              </div>
+            </div>
+          )}
+
           {certCode && (
             <div
               className={`mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-[var(--gold)] bg-[var(--surface-2)] px-6 py-5 shadow-[0_0_12px_var(--academy-glow)] ${

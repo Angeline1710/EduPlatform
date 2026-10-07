@@ -59,7 +59,14 @@ export default async function CourseDetailPage({
         eyebrow="Course Overview"
         title={course.title}
         lead={course.description}
-      />
+      >
+        {isEnrolled && (
+          <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-1.5 rounded-full text-sm font-semibold">
+            <Icon name="check" className="w-4 h-4" />
+            Enrolled
+          </div>
+        )}
+      </PageHeader>
 
       <section className="px-6 py-12 xl:px-10 text-white">
         <div className="mx-auto max-w-[1000px]">
@@ -81,38 +88,50 @@ export default async function CourseDetailPage({
                   No lessons available yet.
                 </div>
               ) : (
-                <div className="space-y-4 mb-10">
-                  {course.lessons.map((lesson, i) => (
-                    <Reveal key={lesson.id} delay={i * 0.05}>
-                      <div className="bg-gray-800 border border-gray-700 rounded-lg p-5">
-                        <div className="flex items-start gap-4">
-                          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold">
-                            {lesson.order}
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-bold text-white">{lesson.title}</h3>
-                            <p className="mt-1 text-gray-400">{lesson.description}</p>
+                <div className="flex flex-col md:flex-row gap-8">
+                  <div className="flex-1 space-y-4 mb-10">
+                    {course.lessons.slice(0, 6).map((lesson, i) => (
+                      <Reveal key={lesson.id} delay={i * 0.05}>
+                        <div className="bg-gray-800 border border-gray-700 rounded-lg p-5">
+                          <div className="flex items-start gap-4">
+                            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold">
+                              {lesson.order}
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold text-white">{lesson.title}</h3>
+                              <p className="mt-1 text-gray-400">{lesson.description}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Reveal>
-                  ))}
+                      </Reveal>
+                    ))}
+                    {course.lessons.length > 6 && (
+                      <Reveal delay={0.3}>
+                        <div className="bg-gray-800/50 border border-dashed border-gray-700 rounded-lg p-4 text-center">
+                          <p className="text-gray-400 font-medium">
+                            ... and {course.lessons.length - 6} more lessons
+                          </p>
+                        </div>
+                      </Reveal>
+                    )}
+                  </div>
+                  
+                  <div className="w-full md:w-64 shrink-0 flex flex-col items-center md:items-end justify-start pt-4">
+                    {session ? (
+                      <EnrollButton courseId={course.id} />
+                    ) : (
+                      <Link href="/login" className="flex items-center gap-2 bg-[var(--gold)] hover:bg-[var(--gold-bright)] text-black font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(201,162,39,0.3)]">
+                        Sign in to Enroll
+                      </Link>
+                    )}
+                  </div>
                 </div>
               )}
-              
-              <div className="flex justify-center mt-8">
-                {session ? (
-                  <EnrollButton courseId={course.id} />
-                ) : (
-                  <Link href="/login" className="flex items-center gap-2 bg-[var(--gold)] hover:bg-[var(--gold-bright)] text-black font-bold py-3 px-8 rounded-full transition-all duration-300">
-                    Sign in to Enroll
-                  </Link>
-                )}
-              </div>
             </>
           ) : (
             <div className="mt-8">
               <LessonViewer
+                courseId={course.id}
                 lessons={course.lessons}
                 completedIds={completedIds}
                 canTrackProgress={true}
