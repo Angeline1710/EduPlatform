@@ -102,9 +102,45 @@ export default async function HomePage() {
 
       <section
         id="why"
-        className="shell-panel border-t border-[var(--shell-line)]"
+        className="shell-panel border-t border-[var(--shell-line)] text-white"
       >
-        <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-9 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 xl:px-10">
+        <div className="mx-auto max-w-[1400px] px-6 pt-16 pb-8 xl:px-10">
+          <h2 className="text-center font-serif text-[32px] font-bold text-[var(--gold)] mb-12">
+            How Learning Works
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full border border-[var(--gold)] flex items-center justify-center text-[var(--gold)] mb-4 shadow-[0_0_15px_rgba(201,162,39,0.3)]">
+                <Icon name="search" className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-sm tracking-widest uppercase mb-2">Discover</h3>
+              <p className="text-xs text-gray-400">Find your path in the archives</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full border border-[var(--gold)] flex items-center justify-center text-[var(--gold)] mb-4 shadow-[0_0_15px_rgba(201,162,39,0.3)]">
+                <Icon name="book" className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-sm tracking-widest uppercase mb-2">Learn</h3>
+              <p className="text-xs text-gray-400">Study expert manuscripts</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full border border-[var(--gold)] flex items-center justify-center text-[var(--gold)] mb-4 shadow-[0_0_15px_rgba(201,162,39,0.3)]">
+                <Icon name="code" className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-sm tracking-widest uppercase mb-2">Practice</h3>
+              <p className="text-xs text-gray-400">Apply knowledge directly</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full border border-[var(--gold)] flex items-center justify-center text-[var(--gold)] mb-4 shadow-[0_0_15px_rgba(201,162,39,0.3)]">
+                <Icon name="award" className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-sm tracking-widest uppercase mb-2">Master</h3>
+              <p className="text-xs text-gray-400">Earn your credentials</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-9 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 xl:px-10 border-t border-[var(--shell-line-soft)] mt-8">
           {FEATURES.map((f, i) => (
             <div
               key={f.title}

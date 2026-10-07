@@ -244,7 +244,7 @@ export default function Certificate({
 
           {/* Holder name */}
           <div style={{ marginTop:"10px", fontSize:"44px", fontWeight:700, color:"#1a1a1a", letterSpacing:"0.01em" }}>
-            Mr/Mrs/Ms. {holderName}
+            {holderName}
           </div>
 
           {/* Gold divider with diamond */}

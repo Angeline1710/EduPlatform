@@ -23,6 +23,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
 
+        await prisma.loginLog.create({
+          data: {
+            userId: user.id,
+          },
+        });
+
         // The status field was removed from User schema
         // so we don't need to check it.
 

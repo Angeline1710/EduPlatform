@@ -16,7 +16,7 @@ export default async function VerifyResultPage({
   const certificate = await prisma.certificate.findUnique({
     where: { credentialId: normalized },
     include: {
-      user: { select: { name: true } },
+      user: { select: { name: true, title: true } },
       course: { select: { title: true, internRole: true } },
       internship: { select: { title: true } },
     },
@@ -92,7 +92,7 @@ function CertificateView({
   return (
     <DownloadCertificate filename={`${code}-${type}`}>
       <Certificate
-        holderName={certificate.user.name}
+        holderName={`${certificate.user.title} ${certificate.user.name}`}
         title={title}
         type={type as "Course" | "Internship"}
         internRole={internRole}

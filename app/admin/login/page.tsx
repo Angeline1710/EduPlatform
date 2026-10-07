@@ -6,10 +6,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthShell from "@/components/AuthShell";
 
-export default function RegisterPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
-  const [title, setTitle] = useState("Mr.");
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,72 +18,38 @@ export default function RegisterPage() {
     setError("");
     setLoading(true);
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, name, email, password }),
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
     });
+    setLoading(false);
 
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      setError(data.error ?? "Registration failed.");
-      setLoading(false);
+    if (res?.error) {
+      setError("Invalid email or password.");
       return;
     }
-
-    await signIn("credentials", { email, password, redirect: false });
-    setLoading(false);
-    router.push("/dashboard");
+    router.push("/admin");
     router.refresh();
   }
 
   return (
     <AuthShell
-      title="Create your account"
-      subtitle="Start learning in a couple of clicks."
+      title="Admin Portal"
+      subtitle="Sign in to manage the platform."
       footer={
         <p>
-          Already have an account?{" "}
+          Not an admin?{" "}
           <Link
             href="/login"
             className="font-semibold text-[var(--brand)] hover:underline"
           >
-            Sign in
+            Student login
           </Link>
         </p>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex gap-4">
-          <div className="w-1/3">
-            <label htmlFor="title" className="label">
-              Title
-            </label>
-            <select
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="input bg-transparent"
-            >
-              <option value="Mr.">Mr.</option>
-              <option value="Mrs.">Mrs.</option>
-              <option value="Ms.">Ms.</option>
-            </select>
-          </div>
-          <div className="w-2/3">
-            <label htmlFor="name" className="label">
-              Name
-            </label>
-            <input
-              id="name"
-              required
-              autoComplete="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="input"
-            />
-          </div>
-        </div>
         <div>
           <label htmlFor="email" className="label">
             Email
@@ -108,15 +72,11 @@ export default function RegisterPage() {
             id="password"
             type="password"
             required
-            minLength={8}
-            autoComplete="new-password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="input"
           />
-          <p className="mt-1.5 text-xs text-[var(--text-faint)]">
-            At least 8 characters.
-          </p>
         </div>
 
         {error && (
@@ -130,7 +90,7 @@ export default function RegisterPage() {
           disabled={loading}
           className="btn btn-primary w-full"
         >
-          {loading ? "Creating account..." : "Create account"}
+          {loading ? "Signing in..." : "Sign in to Admin"}
         </button>
       </form>
     </AuthShell>

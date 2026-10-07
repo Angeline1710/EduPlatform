@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id           String   @id @default(cuid())
+  title        String   @default("Mr.")
   name         String
   email        String   @unique
   passwordHash String
@@ -21,6 +22,16 @@ model User {
   certificates          Certificate[]
   desiredCourses        DesiredCourse[]
   lessonProgress        LessonProgress[]
+  loginLogs             LoginLog[]
+}
+
+model LoginLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  loginAt   DateTime @default(now())
+  ipAddress String?
+  userAgent String?
 }
 
 model DesiredCourse {
