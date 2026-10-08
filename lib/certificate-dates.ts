@@ -38,7 +38,7 @@ export function parseOneMonthPeriod(startValue: string, endValue: string): {
   const startDate = parseDateOnly(startValue);
   const endDate = parseDateOnly(endValue);
   if (endValue !== addOneCalendarMonth(startValue)) {
-    throw new Error("The course completion period must be exactly one calendar month.");
+    throw new Error("The completion period must be exactly one calendar month.");
   }
 
   return { startDate, endDate };

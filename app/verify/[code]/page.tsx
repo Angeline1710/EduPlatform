@@ -1,18 +1,13 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
 import Certificate from "@/components/Certificate";
 import DownloadCertificate from "@/components/DownloadCertificate";
 import VerifyForm from "@/components/VerifyForm";
 import Icon from "@/components/Icon";
-import type { Prisma } from "@prisma/client";
-
-type CertificateWithDetails = Prisma.CertificateGetPayload<{
-  include: {
-    user: { select: { name: true; title: true } };
-    course: { select: { title: true; internRole: true } };
-    internship: { select: { title: true } };
-  };
-}>;
+import {
+  findCredential,
+  hasConsistentCredentialRelations,
+  normalizeCredentialId,
+} from "@/lib/credentials";
 
 export default async function VerifyResultPage({
   params,
@@ -20,18 +15,11 @@ export default async function VerifyResultPage({
   params: Promise<{ code: string }>;
 }) {
   const { code } = await params;
-  const normalized = decodeURIComponent(code).trim().toUpperCase();
-
-  const certificate = await prisma.certificate.findUnique({
-    where: { credentialId: normalized },
-    include: {
-      user: { select: { name: true, title: true } },
-      course: { select: { title: true, internRole: true } },
-      internship: { select: { title: true } },
-    },
-  });
-
-  const valid = Boolean(certificate);
+  const normalized = normalizeCredentialId(code);
+  const record = normalized ? await findCredential(normalized) : null;
+  const valid = Boolean(record && hasConsistentCredentialRelations(record));
+  const certificate = valid ? record : null;
+  const foundButInconsistent = Boolean(record && !valid);
 
   return (
     <div className="mx-auto max-w-[1200px] px-6 py-12">
@@ -65,22 +53,76 @@ export default async function VerifyResultPage({
               valid ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"
             }`}
           >
-            {valid ? "Valid credential" : "Credential not found"}
+            {valid
+              ? "Valid credential"
+              : foundButInconsistent
+                ? "Credential record is inconsistent"
+                : "Credential not found"}
           </p>
           <p className="text-sm text-[var(--text-muted)]">
             {valid
               ? `Issued by EduPlatform on ${new Date(certificate!.issuedAt).toLocaleDateString()}.`
-              : `No certificate matches ${normalized}.`}
+              : foundButInconsistent
+                ? "This credential record does not match a valid program type. Contact EduPlatform support."
+                : `No certificate matches ${normalized ?? code.trim().toUpperCase()}.`}
           </p>
         </div>
       </div>
 
-      {certificate ? (
-        <CertificateView code={normalized} certificate={certificate} />
+      {certificate && normalized ? (
+        <div className="space-y-6">
+          <section
+            aria-label="Verified credential details"
+            className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
+                Recipient
+              </p>
+              <p className="mt-1 font-semibold text-[var(--text)]">
+                {certificate.user.title} {certificate.user.name}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
+                {certificate.type === "COURSE" ? "Course" : "Internship"}
+              </p>
+              <p className="mt-1 font-semibold text-[var(--text)]">
+                {certificate.course?.title ?? certificate.internship!.title}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
+                Credential ID
+              </p>
+              <p className="mt-1 break-all font-mono text-sm font-semibold text-[var(--text)]">
+                {certificate.credentialId}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
+                Issued on
+              </p>
+              <p className="mt-1 font-semibold text-[var(--text)]">
+                {new Intl.DateTimeFormat("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  timeZone: "UTC",
+                }).format(certificate.issuedAt)}
+              </p>
+            </div>
+          </section>
+          <CertificateView code={normalized} certificate={certificate} />
+        </div>
       ) : (
         <div className="card p-8 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
-          <p className="mb-4 font-semibold text-white">Check the ID and try again</p>
-          <VerifyForm initialCode={normalized} />
+          <p className="mb-4 font-semibold text-white">
+            {foundButInconsistent
+              ? "This credential cannot be verified."
+              : "Check the ID and try again"}
+          </p>
+          <VerifyForm initialCode={normalized ?? code.trim()} />
         </div>
       )}
     </div>
@@ -92,11 +134,10 @@ function CertificateView({
   certificate,
 }: {
   code: string;
-  certificate: CertificateWithDetails;
+  certificate: NonNullable<Awaited<ReturnType<typeof findCredential>>>;
 }) {
-  const type = certificate.type === 'COURSE' ? 'Course' : 'Internship';
-  const title = certificate.course?.title || certificate.internship?.title || 'Unknown Program';
-  const internRole = certificate.course?.internRole || 'Software Development';
+  const type = certificate.type === "COURSE" ? "Course" : "Internship";
+  const title = certificate.course?.title ?? certificate.internship!.title;
 
   return (
     <DownloadCertificate filename={`${code}-${type}`}>
@@ -104,7 +145,6 @@ function CertificateView({
         holderName={`${certificate.user.title} ${certificate.user.name}`}
         title={title}
         type={type as "Course" | "Internship"}
-        internRole={internRole}
         credentialId={code}
         issuedAt={certificate.issuedAt}
         periodStartDate={certificate.periodStartDate}

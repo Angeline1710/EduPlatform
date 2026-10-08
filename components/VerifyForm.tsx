@@ -26,7 +26,7 @@ export default function VerifyForm({
         <input
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          placeholder="EDU-XXXX-XXXX-XXXX"
+          placeholder="EDU-XXXXXXXX"
           autoComplete="off"
           spellCheck={false}
           className="input font-mono uppercase tracking-wider"

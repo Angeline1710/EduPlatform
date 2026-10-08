@@ -34,8 +34,7 @@ export default function VerifyLandingPage() {
           className="animate-fade-up mt-4 text-[var(--text-muted)] text-lg"
           style={{ animationDelay: "0.08s" }}
         >
-          Enter the magical seal ID inscribed on the credential, or scan its
-          sigil.
+          Enter the credential ID printed on the certificate.
         </p>
 
         <div
@@ -46,8 +45,9 @@ export default function VerifyLandingPage() {
         </div>
 
         <p className="mt-6 text-xs text-[var(--text-faint)]">
-          Credential IDs look like{" "}
-          <span className="font-mono">EDU-XXXX-XXXX-XXXX</span>
+          Credential IDs start with{" "}
+          <span className="font-mono">EDU-</span> followed by the ID printed on
+          the certificate.
         </p>
       </div>
     </div>

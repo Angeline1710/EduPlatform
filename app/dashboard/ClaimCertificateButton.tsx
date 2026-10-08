@@ -25,47 +25,20 @@ export default function ClaimCertificateButton({
 }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(autoOpen);
-  const [date, setDate] = useState("");
   const [periodStartDate, setPeriodStartDate] = useState("");
   const [periodEndDate, setPeriodEndDate] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const today = new Date();
-  const todayUtc = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
-  const minDate = [
-    todayUtc.getUTCFullYear(),
-    String(todayUtc.getUTCMonth() + 1).padStart(2, "0"),
-    String(todayUtc.getUTCDate()).padStart(2, "0"),
-  ].join("-");
-  const nextMonth = new Date(
-    todayUtc.getUTCFullYear(),
-    todayUtc.getUTCMonth() + 1,
-    Math.min(
-      todayUtc.getUTCDate(),
-      new Date(Date.UTC(todayUtc.getUTCFullYear(), todayUtc.getUTCMonth() + 2, 0)).getUTCDate(),
-    ),
-  );
-  nextMonth.setUTCDate(nextMonth.getUTCDate() - 1);
-  const maxDate = [
-    nextMonth.getUTCFullYear(),
-    String(nextMonth.getUTCMonth() + 1).padStart(2, "0"),
-    String(nextMonth.getUTCDate()).padStart(2, "0"),
-  ].join("-");
   const expectedEndDate = periodStartDate ? addOneCalendarMonth(periodStartDate) : "";
 
   const handleClaim = async () => {
-    if (type === "COURSE") {
-      if (!periodStartDate || !periodEndDate) {
-        setError("Choose both the course start date and completion date.");
-        return;
-      }
-      if (periodEndDate !== expectedEndDate) {
-        setError("The course completion period must be exactly one calendar month.");
-        return;
-      }
-    } else if (!date) {
-      setError("Please select a completion date.");
+    if (!periodStartDate || !periodEndDate) {
+      setError("Choose both the start date and completion date.");
+      return;
+    }
+    if (periodEndDate !== expectedEndDate) {
+      setError("The completion period must be exactly one calendar month.");
       return;
     }
 
@@ -75,9 +48,8 @@ export default function ClaimCertificateButton({
         type,
         courseId,
         internshipId,
-        issuedAt: type === "INTERNSHIP" ? date : undefined,
-        periodStartDate: type === "COURSE" ? periodStartDate : undefined,
-        periodEndDate: type === "COURSE" ? periodEndDate : undefined,
+        periodStartDate,
+        periodEndDate,
       });
       setIsOpen(false);
       onClaimed?.(credentialId);
@@ -110,77 +82,55 @@ export default function ClaimCertificateButton({
             className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-6 shadow-2xl"
           >
             <h3 id="claim-certificate-title" className="mb-2 text-xl font-bold text-white">
-              {type === "COURSE" ? "Choose your course dates" : "Choose your completion date"}
+              Choose your completion dates
             </h3>
             <p className="mb-4 text-sm text-gray-300">
-              {type === "COURSE"
-                ? <>Select the start and completion dates for <strong>{title}</strong>. The period must be exactly one calendar month.</>
-                : <>Select a desired completion date for <strong>{title}</strong>.</>}
+              Select the start and completion dates for <strong>{title}</strong>. The period must be exactly one calendar month.
             </p>
 
-            {type === "COURSE" ? (
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="certificate-period-start" className="mb-2 block text-sm font-medium text-white">
-                    From date
-                  </label>
-                  <input
-                    id="certificate-period-start"
-                    type="date"
-                    required
-                    className="w-full rounded-lg border border-gray-600 bg-gray-900 p-2 text-white"
-                    value={periodStartDate}
-                    onChange={(event) => {
-                      setPeriodStartDate(event.target.value);
-                      setPeriodEndDate("");
-                      setError("");
-                    }}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="certificate-period-end" className="mb-2 block text-sm font-medium text-white">
-                    To date
-                  </label>
-                  <input
-                    id="certificate-period-end"
-                    type="date"
-                    min={expectedEndDate || undefined}
-                    max={expectedEndDate || undefined}
-                    required
-                    disabled={!periodStartDate}
-                    className="w-full rounded-lg border border-gray-600 bg-gray-900 p-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
-                    value={periodEndDate}
-                    onChange={(event) => {
-                      setPeriodEndDate(event.target.value);
-                      setError("");
-                    }}
-                  />
-                  {periodStartDate && (
-                    <p className="mt-1 text-xs text-gray-400">
-                      For a one-month period, choose {expectedEndDate}.
-                    </p>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <>
-                <label htmlFor="certificate-completion-date" className="mb-2 block text-sm font-medium text-white">
-                  Completion date
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="certificate-period-start" className="mb-2 block text-sm font-medium text-white">
+                  From date
                 </label>
                 <input
-                  id="certificate-completion-date"
+                  id="certificate-period-start"
                   type="date"
-                  min={minDate}
-                  max={maxDate}
-                  className="mb-2 w-full rounded-lg border border-gray-600 bg-gray-900 p-2 text-white"
-                  value={date}
+                  required
+                  className="w-full rounded-lg border border-gray-600 bg-gray-900 p-2 text-white"
+                  value={periodStartDate}
                   onChange={(event) => {
-                    setDate(event.target.value);
+                    setPeriodStartDate(event.target.value);
+                    setPeriodEndDate("");
                     setError("");
                   }}
                 />
-              </>
-            )}
+              </div>
+              <div>
+                <label htmlFor="certificate-period-end" className="mb-2 block text-sm font-medium text-white">
+                  To date
+                </label>
+                <input
+                  id="certificate-period-end"
+                  type="date"
+                  min={expectedEndDate || undefined}
+                  max={expectedEndDate || undefined}
+                  required
+                  disabled={!periodStartDate}
+                  className="w-full rounded-lg border border-gray-600 bg-gray-900 p-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  value={periodEndDate}
+                  onChange={(event) => {
+                    setPeriodEndDate(event.target.value);
+                    setError("");
+                  }}
+                />
+                {periodStartDate && (
+                  <p className="mt-1 text-xs text-gray-400">
+                    For a one-month period, choose {expectedEndDate}.
+                  </p>
+                )}
+              </div>
+            </div>
             {error && <p role="alert" className="mb-4 text-xs text-red-400">{error}</p>}
 
             <div className="flex justify-end gap-2 mt-6">

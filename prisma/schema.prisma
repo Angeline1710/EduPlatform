@@ -126,7 +126,7 @@ model InternshipEnrollment {
 
 model Certificate {
   id           String      @id @default(cuid())
-  credentialId String      @unique // Custom credential ID e.g. EDU-XXXX-XXXX
+  credentialId String      @unique // Public verification ID, e.g. EDU-<random hex>
   type         String      // "COURSE" | "INTERNSHIP"
   userId       String
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)

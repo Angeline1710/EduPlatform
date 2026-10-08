@@ -2,7 +2,6 @@ type CertificateProps = {
   holderName: string;
   title: string;
   type: "Course" | "Internship";
-  internRole: string;
   credentialId: string;
   issuedAt: Date;
   periodStartDate?: Date | null;
@@ -92,16 +91,15 @@ export default function Certificate({
   holderName,
   title,
   type,
-  internRole,
   credentialId,
   issuedAt,
   periodStartDate,
   periodEndDate,
 }: CertificateProps) {
   const isInternship = type === "Internship";
-  const endDate = periodEndDate ? new Date(periodEndDate) : new Date(issuedAt);
-  const startDate = periodStartDate ? new Date(periodStartDate) : new Date(endDate);
-  if (!periodStartDate) startDate.setUTCMonth(startDate.getUTCMonth() - 1);
+  const hasCompletionPeriod = Boolean(periodStartDate && periodEndDate);
+  const endDate = periodEndDate ? new Date(periodEndDate) : null;
+  const startDate = periodStartDate ? new Date(periodStartDate) : null;
 
   const gold = "#B89047";
   const labelStyle = {
@@ -207,8 +205,8 @@ export default function Certificate({
           <p style={{ maxWidth: 700, margin: "10px 0 0", color: "#333", fontSize: 19, lineHeight: 1.65 }}>
             {isInternship ? (
               <>
-                has successfully completed their internship as{" "}
-                <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{internRole} Intern</strong>
+                has successfully completed the internship program{" "}
+                <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{title}</strong>
               </>
             ) : (
               <>
@@ -217,9 +215,16 @@ export default function Certificate({
               </>
             )}
             <br />
-            for the duration of <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>1 month</strong>{" "}
-            from <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(startDate)}</strong>{" "}
-            to <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(endDate)}</strong>.
+            {hasCompletionPeriod && startDate && endDate ? (
+              <>
+                for the duration of{" "}
+                <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>1 month</strong>{" "}
+                from <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(startDate)}</strong>{" "}
+                to <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(endDate)}</strong>.
+              </>
+            ) : (
+              <>and demonstrated dedication and commitment to learning.</>
+            )}
           </p>
         </main>
 

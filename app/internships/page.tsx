@@ -53,10 +53,10 @@ export default async function InternshipsPage() {
                       ))}
                     </div>
                     <a
-                      href={`/api/certificates/generate?internshipId=${internship.id}&type=INTERNSHIP`}
+                      href={`mailto:advinnetworks@gmail.com?subject=${encodeURIComponent(`Internship application: ${internship.title}`)}`}
                       className="block w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center font-medium py-2 px-4 rounded transition-colors"
                     >
-                      Apply Now
+                      Apply by Email
                     </a>
                   </div>
                 </Reveal>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
@@ -15,11 +14,11 @@ const FAQS = [
   },
   {
     q: "How do I earn a credential?",
-    a: "Complete every lesson in a course. The credential is issued automatically the moment the last lesson is marked done, and appears on your dashboard.",
+    a: "Complete at least 85% of a course's lessons, then claim your credential from the course or dashboard. You'll choose the one-month completion period before it is issued.",
   },
   {
     q: "Can someone verify my credential?",
-    a: "Yes. Every credential carries an ID like EDU-XXXX-XXXX-XXXX and a QR code. Anyone can check it on the public verification page without needing an account.",
+    a: "Yes. Enter the credential ID printed on the certificate on the public verification page. No account is required.",
   },
   {
     q: "What happens if my payment fails?",
@@ -46,7 +45,7 @@ const CHANNELS = [
   {
     icon: "award",
     title: "Verify a credential",
-    body: "Check any credential's authenticity by ID or QR code.",
+    body: "Check any credential's authenticity using the ID printed on it.",
     action: "Open verification",
     href: "/verify",
   },

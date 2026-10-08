@@ -4,10 +4,6 @@ import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import Icon from "@/components/Icon";
 
-// A4 landscape at 96 DPI = 1123 x 794 px
-const A4_W = 1123;
-const A4_H = 794;
-
 export default function DownloadCertificate({
   children,
   filename,
@@ -27,18 +23,18 @@ export default function DownloadCertificate({
       const certEl =
         certRef.current.querySelector<HTMLElement>("#certificate") ??
         certRef.current;
+      const width = certEl.offsetWidth;
+      const height = certEl.offsetHeight;
 
       const dataUrl = await toPng(certEl, {
         quality: 1,
         pixelRatio: 2,
-        width: A4_W,
-        height: A4_H,
-        canvasWidth: A4_W * 2,
-        canvasHeight: A4_H * 2,
+        width,
+        height,
+        canvasWidth: width * 2,
+        canvasHeight: height * 2,
         backgroundColor: "#F7F1E5",
         style: {
-          width: `${A4_W}px`,
-          height: `${A4_H}px`,
           transform: "scale(1)",
           transformOrigin: "top left",
           overflow: "hidden",
@@ -58,9 +54,9 @@ export default function DownloadCertificate({
 
   return (
     <div className="flex flex-col items-center">
-      {/* Scrollable preview area — the certificate inside is exactly A4 */}
+      {/* Keep the export clone at the rendered certificate dimensions. */}
       <div className="w-full overflow-x-auto pb-6 custom-scrollbar">
-        <div ref={certRef} className="mx-auto" style={{ width: A4_W, minWidth: A4_W }}>
+        <div ref={certRef} className="mx-auto w-fit">
           {children}
         </div>
       </div>
