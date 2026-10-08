@@ -11,6 +11,7 @@ export const metadata = {
 
 export default async function CoursesPage() {
   const allCourses = await prisma.course.findMany({
+    where: { published: true },
     orderBy: { createdAt: "desc" },
   });
 
@@ -50,7 +51,7 @@ export default async function CoursesPage() {
                       <h3 className="text-xl font-bold text-white">{course.title}</h3>
                       <p className="mt-2 text-sm text-gray-400">{course.description}</p>
                       <div className="mt-4 flex gap-2 flex-wrap">
-                        {course.topics.split(',').map(t => (
+                        {course.topics.split(",").filter((topic) => topic.trim()).map(t => (
                            <span key={t.trim()} className="bg-indigo-600 text-xs text-white px-2 py-1 rounded">{t.trim()}</span>
                         ))}
                       </div>

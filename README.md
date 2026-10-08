@@ -67,7 +67,7 @@ These accounts are created only in development. Production seeding requires `ADM
 | `/courses/[id]`            | Public   | Course detail + buy button               |
 | `/login`, `/register`      | Public   | Student auth                             |
 | `/admin/login`             | Public   | Admin auth                               |
-| `/admin`                   | Admin    | Dashboard: courses, enrollments, revenue |
+| `/admin`                   | Admin    | Dashboard: KPIs, user activity, course management |
 | `/admin/courses/new`       | Admin    | Create a course                          |
 | `/admin/courses/[id]/edit` | Admin    | Edit course + manage lessons             |
 | `/dashboard`               | Student  | Purchased courses                        |

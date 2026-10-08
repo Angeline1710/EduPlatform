@@ -53,8 +53,22 @@ export default async function CourseDetailPage({
     }
   }
 
+  if (!course.published && session?.user?.role !== "ADMIN" && !isEnrolled) {
+    notFound();
+  }
+
   return (
     <>
+      {course.gifUrl && (
+        <div className="mx-auto max-w-[1000px] px-6 pt-8 xl:px-10">
+          <div
+            role="img"
+            aria-label={`${course.title} course preview`}
+            className="h-64 w-full rounded-xl border border-white/10 bg-cover bg-center md:h-80"
+            style={{ backgroundImage: `url(${JSON.stringify(course.gifUrl)})` }}
+          />
+        </div>
+      )}
       <PageHeader
         eyebrow="Course Overview"
         title={course.title}
@@ -70,9 +84,11 @@ export default async function CourseDetailPage({
 
       <section className="px-6 py-12 xl:px-10 text-white">
         <div className="mx-auto max-w-[1000px]">
-          
+          <p className="mb-6 inline-flex rounded-full bg-violet-500/15 px-3 py-1 text-sm font-semibold text-violet-200">
+            {course.category}
+          </p>
           <div className="mb-10 flex flex-wrap gap-2">
-            {course.topics.split(",").map((t) => (
+            {course.topics.split(",").filter((topic) => topic.trim()).map((t) => (
               <span key={t.trim()} className="bg-indigo-600 text-sm text-white px-3 py-1 rounded-full">
                 {t.trim()}
               </span>

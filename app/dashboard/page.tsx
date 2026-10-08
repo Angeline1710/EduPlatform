@@ -42,7 +42,7 @@ export default async function DashboardPage() {
   user.desiredCourses.forEach(d => topics.add(d.topic.trim().toLowerCase()));
 
   const allOtherCourses = await prisma.course.findMany({
-    where: { id: { notIn: enrolledCourseIds } }
+    where: { id: { notIn: enrolledCourseIds }, published: true }
   });
 
   const recommendedCourses = allOtherCourses.map(course => {

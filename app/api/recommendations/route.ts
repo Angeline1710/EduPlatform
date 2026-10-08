@@ -25,7 +25,7 @@ export async function GET(req: Request) {
     }
 
     // SQLite stores topics as comma-separated string — filter in JS
-    const allCourses = await prisma.course.findMany();
+    const allCourses = await prisma.course.findMany({ where: { published: true } });
     const allInternships = await prisma.internship.findMany();
 
     const courses = allCourses.filter((c) =>

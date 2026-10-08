@@ -1,28 +1,81 @@
 "use client";
 
 import { useState } from "react";
+import type { Lesson, Prisma } from "@prisma/client";
 import { addCourse, updateCourse, deleteCourse, removeEnrollment, updateLesson } from "./actions";
 import UserDetailsModal from "./UserDetailsModal";
 
-export default function CourseManager({ courses }: { courses: any[] }) {
-  const [editingCourse, setEditingCourse] = useState<any>(null);
-  const [editingLesson, setEditingLesson] = useState<any>(null);
+type CourseWithDetails = Prisma.CourseGetPayload<{
+  include: { lessons: true; enrollments: { include: { user: true } } };
+}>;
+
+type CourseFormData = {
+  title: string;
+  description: string;
+  category: string;
+  price: string;
+  thumbnailUrl: string;
+  gifUrl: string;
+  published: boolean;
+  topics: string;
+  internRole: string;
+};
+
+const COURSE_CATEGORIES = [
+  { name: "Development", icon: "<>" },
+  { name: "Data", icon: "↗" },
+  { name: "Design", icon: "◉" },
+  { name: "Business", icon: "⚑" },
+  { name: "Security", icon: "◇" },
+  { name: "Communication", icon: "▱" },
+  { name: "General", icon: "▣" },
+];
+
+const EMPTY_COURSE_FORM: CourseFormData = {
+  title: "",
+  description: "",
+  category: "Development",
+  price: "0",
+  thumbnailUrl: "",
+  gifUrl: "",
+  published: true,
+  topics: "",
+  internRole: "Software Development",
+};
+
+export default function CourseManager({ courses }: { courses: CourseWithDetails[] }) {
+  const [editingCourse, setEditingCourse] = useState<CourseWithDetails | null>(null);
+  const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState({ title: "", description: "", topics: "", internRole: "Software Development" });
+  const [formData, setFormData] = useState<CourseFormData>(EMPTY_COURSE_FORM);
   const [lessonFormData, setLessonFormData] = useState({ title: "", description: "", content: "" });
+  const [isSavingCourse, setIsSavingCourse] = useState(false);
+  const [courseSaveError, setCourseSaveError] = useState("");
 
   const handleSaveCourse = async () => {
-    if (editingCourse) {
-      await updateCourse(editingCourse.id, formData);
-      // Don't close the panel entirely, just refresh the data in a real app.
-      // We'll close it to go back to grid.
+    setCourseSaveError("");
+    setIsSavingCourse(true);
+    try {
+      const data = {
+        ...formData,
+        price: Number(formData.price),
+        thumbnailUrl: formData.thumbnailUrl.trim() || null,
+        gifUrl: formData.gifUrl.trim() || null,
+      };
+      if (editingCourse) {
+        await updateCourse(editingCourse.id, data);
+      } else {
+        await addCourse(data);
+      }
       setEditingCourse(null);
-    } else {
-      await addCourse(formData);
       setIsAdding(false);
+      setFormData(EMPTY_COURSE_FORM);
+    } catch (error) {
+      setCourseSaveError(error instanceof Error ? error.message : "Unable to save the course.");
+    } finally {
+      setIsSavingCourse(false);
     }
-    setFormData({ title: "", description: "", topics: "", internRole: "Software Development" });
   };
 
   const handleSaveLesson = async () => {
@@ -32,9 +85,20 @@ export default function CourseManager({ courses }: { courses: any[] }) {
     }
   };
 
-  const handleEditCourse = (course: any) => {
+  const handleEditCourse = (course: CourseWithDetails) => {
     setEditingCourse(course);
-    setFormData({ title: course.title, description: course.description, topics: course.topics, internRole: course.internRole });
+    setFormData({
+      title: course.title,
+      description: course.description,
+      category: course.category ?? "Development",
+      price: String(course.price ?? 0),
+      thumbnailUrl: course.thumbnailUrl ?? "",
+      gifUrl: course.gifUrl ?? "",
+      published: course.published ?? true,
+      topics: course.topics,
+      internRole: course.internRole,
+    });
+    setCourseSaveError("");
     setIsAdding(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -42,7 +106,8 @@ export default function CourseManager({ courses }: { courses: any[] }) {
   const handleAddNew = () => {
     setIsAdding(true);
     setEditingCourse(null);
-    setFormData({ title: "", description: "", topics: "", internRole: "Software Development" });
+    setFormData(EMPTY_COURSE_FORM);
+    setCourseSaveError("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -55,26 +120,182 @@ export default function CourseManager({ courses }: { courses: any[] }) {
   // 1. ADD / EDIT PANEL
   if (isAdding || editingCourse) {
     return (
-      <div className="mt-8 bg-gray-800 p-6 rounded-lg mb-8 shadow-xl border border-gray-700 animate-fade-in">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold">{editingCourse ? "Edit Course Panel" : "Add New Course"}</h3>
-          <button onClick={handleBackToGrid} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition">
+      <div className="mt-8 mb-8 rounded-3xl border border-[#523b69] bg-[#241631] p-6 shadow-[0_0_30px_rgba(0,0,0,0.35)] md:p-8">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h3 className="text-2xl font-bold">{editingCourse ? "Edit Course" : "Add New Course"}</h3>
+          <button onClick={handleBackToGrid} className="rounded-lg border border-white/15 px-4 py-2 text-sm text-gray-300 transition hover:border-white/30 hover:text-white">
             &larr; Back to Courses
           </button>
         </div>
 
-        <div className="grid gap-4 mb-6">
-          <input type="text" placeholder="Title" className="bg-gray-900 border border-gray-700 p-3 rounded text-white w-full focus:ring-2 focus:ring-indigo-500 outline-none" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
-          <textarea placeholder="Description" className="bg-gray-900 border border-gray-700 p-3 rounded text-white w-full h-24 focus:ring-2 focus:ring-indigo-500 outline-none" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
-          <input type="text" placeholder="Topics (comma separated)" className="bg-gray-900 border border-gray-700 p-3 rounded text-white w-full focus:ring-2 focus:ring-indigo-500 outline-none" value={formData.topics} onChange={e => setFormData({ ...formData, topics: e.target.value })} />
-          <input type="text" placeholder="Intern Role" className="bg-gray-900 border border-gray-700 p-3 rounded text-white w-full focus:ring-2 focus:ring-indigo-500 outline-none" value={formData.internRole} onChange={e => setFormData({ ...formData, internRole: e.target.value })} />
-        </div>
-        
-        <div className="flex gap-4 border-b border-gray-700 pb-8 mb-8">
-          <button onClick={handleSaveCourse} className="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded font-semibold transition">
-            Save Course
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            void handleSaveCourse();
+          }}
+          className="space-y-6"
+        >
+          <div className="space-y-2">
+            <label htmlFor="course-title" className="block text-sm font-semibold text-gray-200">Title</label>
+            <input
+              id="course-title"
+              type="text"
+              required
+              className="w-full rounded-xl border border-[#49315d] bg-[#301d3d] px-3.5 py-3 text-white outline-none transition focus:border-[#a56bc3] focus:ring-2 focus:ring-[#a56bc3]/30"
+              value={formData.title}
+              onChange={(event) => setFormData({ ...formData, title: event.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="course-description" className="block text-sm font-semibold text-gray-200">Description</label>
+            <textarea
+              id="course-description"
+              required
+              rows={4}
+              className="w-full resize-y rounded-xl border border-[#49315d] bg-[#301d3d] px-3.5 py-3 text-white outline-none transition focus:border-[#a56bc3] focus:ring-2 focus:ring-[#a56bc3]/30"
+              value={formData.description}
+              onChange={(event) => setFormData({ ...formData, description: event.target.value })}
+            />
+          </div>
+
+          <fieldset>
+            <legend className="mb-2 block text-sm font-semibold text-gray-200">Category</legend>
+            <div className="flex flex-wrap gap-2">
+              {COURSE_CATEGORIES.map((category) => {
+                const isSelected = formData.category === category.name;
+                return (
+                  <button
+                    key={category.name}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => setFormData({ ...formData, category: category.name })}
+                    className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold transition ${
+                      isSelected
+                        ? "border-[#8c55a4] bg-[#75428a] text-white shadow-[0_0_18px_rgba(145,80,171,0.25)]"
+                        : "border-[#49315d] bg-transparent text-gray-300 hover:border-[#805994] hover:text-white"
+                    }`}
+                  >
+                    <span aria-hidden="true" className="text-base leading-none">{category.icon}</span>
+                    {category.name}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="space-y-2">
+              <label htmlFor="course-price" className="block text-sm font-semibold text-gray-200">Price (INR)</label>
+              <input
+                id="course-price"
+                type="number"
+                min="0"
+                step="0.01"
+                required
+                className="w-full rounded-xl border border-[#49315d] bg-[#301d3d] px-3.5 py-3 text-white outline-none transition focus:border-[#a56bc3] focus:ring-2 focus:ring-[#a56bc3]/30"
+                value={formData.price}
+                onChange={(event) => setFormData({ ...formData, price: event.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="course-thumbnail" className="block text-sm font-semibold text-gray-200">
+                Thumbnail URL <span className="font-normal text-gray-400">(optional)</span>
+              </label>
+              <input
+                id="course-thumbnail"
+                type="url"
+                placeholder="https://example.com/course.jpg"
+                className="w-full rounded-xl border border-[#49315d] bg-[#301d3d] px-3.5 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-[#a56bc3] focus:ring-2 focus:ring-[#a56bc3]/30"
+                value={formData.thumbnailUrl}
+                onChange={(event) => setFormData({ ...formData, thumbnailUrl: event.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 rounded-2xl border border-dashed border-[#573d70] p-4">
+            {formData.thumbnailUrl ? (
+              <div
+                role="img"
+                aria-label="Course thumbnail preview"
+                className="h-14 w-14 shrink-0 rounded-xl bg-cover bg-center"
+                style={{ backgroundImage: `url("${formData.thumbnailUrl.replaceAll('"', '\\"')}")` }}
+              />
+            ) : (
+              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#9253a7] to-[#542768] text-xl font-bold">
+                {COURSE_CATEGORIES.find((category) => category.name === formData.category)?.icon ?? "<>"}
+              </div>
+            )}
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">{formData.category}</p>
+              <p className="truncate font-bold text-white">{formData.title || "Course title preview"}</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="course-gif" className="block text-sm font-semibold text-gray-200">
+              Course GIF <span className="font-normal text-gray-400">optional — plays above the course title</span>
+            </label>
+            <input
+              id="course-gif"
+              type="url"
+              placeholder="https://example.com/spellbook.gif"
+              className="w-full rounded-xl border border-[#49315d] bg-[#301d3d] px-3.5 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-[#a56bc3] focus:ring-2 focus:ring-[#a56bc3]/30"
+              value={formData.gifUrl}
+              onChange={(event) => setFormData({ ...formData, gifUrl: event.target.value })}
+            />
+          </div>
+
+          <details className="rounded-xl border border-white/10 bg-black/10 p-4">
+            <summary className="cursor-pointer text-sm font-semibold text-gray-200">Course matching settings</summary>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label htmlFor="course-topics" className="block text-sm text-gray-300">Recommendation topics (comma separated)</label>
+                <input
+                  id="course-topics"
+                  type="text"
+                  className="w-full rounded-lg border border-[#49315d] bg-[#301d3d] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                  value={formData.topics}
+                  onChange={(event) => setFormData({ ...formData, topics: event.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="course-intern-role" className="block text-sm text-gray-300">Intern role</label>
+                <input
+                  id="course-intern-role"
+                  type="text"
+                  className="w-full rounded-lg border border-[#49315d] bg-[#301d3d] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                  value={formData.internRole}
+                  onChange={(event) => setFormData({ ...formData, internRole: event.target.value })}
+                />
+              </div>
+            </div>
+          </details>
+
+          <label className="inline-flex cursor-pointer items-center gap-2.5 text-sm font-semibold text-gray-200">
+            <input
+              type="checkbox"
+              checked={formData.published}
+              onChange={(event) => setFormData({ ...formData, published: event.target.checked })}
+              className="h-4 w-4 accent-[#d7a938]"
+            />
+            Published (visible to students)
+          </label>
+
+          {courseSaveError && (
+            <p role="alert" className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+              {courseSaveError}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={isSavingCourse}
+            className="rounded-full bg-gradient-to-r from-[#e4bd58] to-[#f2c55a] px-6 py-3 font-bold text-white shadow-[0_0_18px_rgba(237,190,72,0.35)] transition hover:brightness-110 disabled:cursor-wait disabled:opacity-60"
+          >
+            {isSavingCourse ? "Saving..." : editingCourse ? "Save changes" : "Create course"}
           </button>
-        </div>
+        </form>
 
         {/* LESSON MANAGEMENT (Only if editing an existing course) */}
         {editingCourse && (
@@ -82,7 +303,7 @@ export default function CourseManager({ courses }: { courses: any[] }) {
             <h4 className="text-xl font-bold mb-4 text-indigo-300">Manage Lessons</h4>
             {editingCourse.lessons && editingCourse.lessons.length > 0 ? (
               <div className="space-y-4">
-                {editingCourse.lessons.map((lesson: any) => (
+                {editingCourse.lessons.map((lesson) => (
                   <div key={lesson.id} className="bg-gray-900/50 p-4 rounded border border-gray-800">
                     <div className="flex justify-between items-center">
                       <div>
@@ -135,7 +356,7 @@ export default function CourseManager({ courses }: { courses: any[] }) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800">
-                    {editingCourse.enrollments.map((enrollment: any) => (
+                    {editingCourse.enrollments.map((enrollment) => (
                       <tr key={enrollment.id} className="hover:bg-gray-800/50">
                         <td className="p-3 text-gray-300">
                           <button 
@@ -197,16 +418,27 @@ export default function CourseManager({ courses }: { courses: any[] }) {
         {courses.map(course => (
           <div key={course.id} className="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 flex flex-col h-full transition hover:scale-[1.02] hover:border-gray-500">
             <div className="flex-grow">
+              <div className="mb-3 flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-indigo-900/50 px-2.5 py-1 text-xs text-indigo-200">{course.category}</span>
+                <span className={`rounded-full px-2.5 py-1 text-xs ${course.published ? "bg-green-500/10 text-green-300" : "bg-gray-700 text-gray-300"}`}>
+                  {course.published ? "Published" : "Draft"}
+                </span>
+              </div>
               <h3 className="text-xl font-bold text-white mb-2">{course.title}</h3>
               <p className="text-sm text-gray-400 mb-4 line-clamp-3">{course.description}</p>
-              
-              <div className="flex flex-wrap gap-2 mb-4">
-                {course.topics.split(',').map((t: string) => (
-                   <span key={t.trim()} className="bg-indigo-900/50 text-indigo-300 text-xs px-2 py-1 rounded border border-indigo-700/50">
-                     {t.trim()}
-                   </span>
-                ))}
-              </div>
+              <p className="mb-4 text-sm font-semibold text-yellow-300">
+                {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(course.price)}
+              </p>
+
+              {course.topics && (
+                <div className="mb-4 flex flex-wrap gap-2">
+                  {course.topics.split(",").filter((topic: string) => topic.trim()).map((topic: string) => (
+                    <span key={topic.trim()} className="rounded border border-indigo-700/50 bg-indigo-900/50 px-2 py-1 text-xs text-indigo-300">
+                      {topic.trim()}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="mt-auto border-t border-gray-700 pt-4 flex justify-between items-center">

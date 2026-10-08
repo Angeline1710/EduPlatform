@@ -6,45 +6,13 @@ import CourseManager from "./CourseManager";
 
 export const metadata = { title: "Admin Dashboard · EduPlatform" };
 
-// ─── Category mapping ──────────────────────────────────────────────────────
-const CATEGORY_MAP: Record<string, string> = {
-  "Web Development Fundamentals": "Development",
-  "React from Zero to Hero": "Development",
-  "Mobile App Development with React Native": "Development",
-  "DSA for Beginners": "Development",
-  "DSA for beginners": "Development",
-  "Python for Data Analysis": "Data",
-  "SQL and Database Design": "Data",
-  "Machine Learning Basics": "Data",
-  "UI/UX Design Principles": "Design",
-  "Graphic Design with Figma": "Design",
-  "Digital Marketing Essentials": "Business",
-  "Cybersecurity Awareness": "Security",
-  "Business English Communication": "Communication",
-  "Public Speaking Masterclass": "Communication",
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  Development: "#7c3aed",
-  Data:        "#0e9f6e",
-  Design:      "#e02424",
-  Business:    "#f59e0b",
-  Security:    "#3b82f6",
-  Communication:"#ec4899",
-};
-
-function getCategoryColor(title: string) {
-  const cat = CATEGORY_MAP[title] ?? "Development";
-  return CATEGORY_COLORS[cat] ?? "#7c3aed";
-}
-
 export default async function AdminDashboardPage() {
   const session = await auth();
   if (!session?.user?.email) redirect("/admin/login");
   if (session.user.role !== "ADMIN") redirect("/dashboard");
 
   // ── Data ──────────────────────────────────────────────────────────────────
-  const [users, courses, certCount, progressCount] = await Promise.all([
+  const [users, courses, certCount] = await Promise.all([
     prisma.user.findMany({
       orderBy: { createdAt: "desc" },
       include: {
@@ -58,12 +26,11 @@ export default async function AdminDashboardPage() {
       include: { enrollments: { include: { user: true } }, lessons: true },
     }),
     prisma.certificate.count(),
-    prisma.lessonProgress.count(),
   ]);
 
   const studentCount = users.filter((u) => u.role !== "ADMIN").length;
   const enrollmentCount = courses.reduce((a, c) => a + c.enrollments.length, 0);
-  const publishedCount = courses.length; // all seeded courses are "published"
+  const publishedCount = courses.filter((course) => course.published).length;
 
   const adminUser = users.find((u) => u.email === session.user.email);
   const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000);
@@ -159,79 +126,12 @@ export default async function AdminDashboardPage() {
           )}
         </div>
 
-        {/* ── Course Performance Table ──────────────────────────────────── */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-yellow-400">Course performance</h2>
-            <span className="text-xs text-gray-400">By students</span>
-          </div>
-          <div className="rounded-xl border border-white/10 overflow-hidden" style={{ background: "rgba(255,255,255,0.03)" }}>
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-white/10 text-gray-500 text-xs uppercase tracking-widest">
-                  <th className="px-5 py-3">Course</th>
-                  <th className="px-4 py-3">Lessons</th>
-                  <th className="px-4 py-3">Students</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Manage</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {courses.map((course) => {
-                  const cat = CATEGORY_MAP[course.title] ?? "Development";
-                  const color = getCategoryColor(course.title);
-                  return (
-                    <tr key={course.id} className="hover:bg-white/5 transition group">
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="h-8 w-8 rounded-md shrink-0"
-                            style={{ background: color + "33", border: `1.5px solid ${color}` }}
-                          />
-                          <div>
-                            <p className="font-semibold text-white">{course.title}</p>
-                            <p className="text-xs text-gray-500">{cat}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">{course.lessons.length}</td>
-                      <td className="px-4 py-3 text-gray-300">{course.enrollments.length}</td>
-                      <td className="px-4 py-3">
-                        <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/30">
-                          <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
-                          Published
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <CourseRowActions courseId={course.id} />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
         {/* ── Course Manager (card grid + full edit panel) ─────────────── */}
         <section>
           <h2 className="text-lg font-bold text-yellow-400 mb-4">Manage Courses</h2>
           <CourseManager courses={courses} />
         </section>
       </main>
-    </div>
-  );
-}
-
-function CourseRowActions({ courseId }: { courseId: string }) {
-  return (
-    <div className="flex gap-3 opacity-70 group-hover:opacity-100 transition">
-      <Link
-        href={`/admin/courses/${courseId}/edit`}
-        className="text-yellow-400 hover:text-yellow-300 font-semibold text-xs"
-      >
-        Edit
-      </Link>
     </div>
   );
 }

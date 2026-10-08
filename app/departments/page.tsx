@@ -8,24 +8,6 @@ export const metadata = {
   description: "Browse courses organized by department.",
 };
 
-// ─── Category config ────────────────────────────────────────────────────────
-const CATEGORY_MAP: Record<string, string> = {
-  "Web Development Fundamentals":            "Development",
-  "React from Zero to Hero":                 "Development",
-  "Mobile App Development with React Native":"Development",
-  "DSA for Beginners":                       "Development",
-  "DSA for beginners":                       "Development",
-  "Python for Data Analysis":                "Data",
-  "SQL and Database Design":                 "Data",
-  "Machine Learning Basics":                 "Data",
-  "UI/UX Design Principles":                 "Design",
-  "Graphic Design with Figma":               "Design",
-  "Digital Marketing Essentials":            "Business",
-  "Cybersecurity Awareness":                 "Security",
-  "Business English Communication":          "Communication",
-  "Public Speaking Masterclass":             "Communication",
-};
-
 const CATEGORIES = [
   {
     name: "Development",
@@ -75,15 +57,28 @@ const CATEGORIES = [
     badge: "bg-pink-500/20 text-pink-300",
     dot: "bg-pink-400",
   },
+  {
+    name: "General",
+    emoji: "📚",
+    gradient: "from-purple-600/20 to-violet-600/10",
+    border: "border-purple-500/30",
+    badge: "bg-purple-500/20 text-purple-300",
+    dot: "bg-purple-400",
+  },
 ];
 
 export default async function DepartmentsPage() {
-  const allCourses = await prisma.course.findMany({ orderBy: { createdAt: "asc" } });
+  const allCourses = await prisma.course.findMany({
+    where: { published: true },
+    orderBy: { createdAt: "asc" },
+  });
 
   // Group courses by category
   const grouped: Record<string, typeof allCourses> = {};
   for (const course of allCourses) {
-    const cat = CATEGORY_MAP[course.title] ?? "Development";
+    const cat = CATEGORIES.some((category) => category.name === course.category)
+      ? course.category
+      : "General";
     if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push(course);
   }
@@ -163,7 +158,7 @@ export default async function DepartmentsPage() {
 
                               {/* Topics */}
                               <div className="flex flex-wrap gap-1.5">
-                                {course.topics.split(",").slice(0, 3).map((t) => (
+                                {course.topics.split(",").filter((topic) => topic.trim()).slice(0, 3).map((t) => (
                                   <span
                                     key={t.trim()}
                                     className="text-xs bg-white/10 text-gray-300 px-2 py-0.5 rounded"

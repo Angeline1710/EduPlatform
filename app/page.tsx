@@ -32,6 +32,7 @@ const FEATURES = [
 
 export default async function HomePage() {
   const allCourses = await prisma.course.findMany({
+    where: { published: true },
     orderBy: { createdAt: "desc" },
   });
 
@@ -85,7 +86,7 @@ export default async function HomePage() {
                       <h3 className="text-xl font-bold">{course.title}</h3>
                       <p className="mt-2 text-gray-400">{course.description}</p>
                       <div className="mt-4 flex gap-2 flex-wrap">
-                        {course.topics.split(',').map(t => (
+                        {course.topics.split(",").filter((topic) => topic.trim()).map(t => (
                           <span key={t.trim()} className="bg-indigo-600 text-xs px-2 py-1 rounded">{t.trim()}</span>
                         ))}
                       </div>
