@@ -62,12 +62,15 @@ function revalidateCoursePages() {
 }
 
 export async function addCourse(data: CourseWriteData) {
-  await prisma.course.create({ data: validateCourseData(data) });
+  await prisma.course.create({ data: { ...validateCourseData(data), categoryCustomized: true } });
   revalidateCoursePages();
 }
 
 export async function updateCourse(id: string, data: CourseWriteData) {
-  await prisma.course.update({ where: { id }, data: validateCourseData(data) });
+  await prisma.course.update({
+    where: { id },
+    data: { ...validateCourseData(data), categoryCustomized: true },
+  });
   revalidateCoursePages();
 }
 

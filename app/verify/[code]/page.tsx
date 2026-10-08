@@ -4,6 +4,15 @@ import Certificate from "@/components/Certificate";
 import DownloadCertificate from "@/components/DownloadCertificate";
 import VerifyForm from "@/components/VerifyForm";
 import Icon from "@/components/Icon";
+import type { Prisma } from "@prisma/client";
+
+type CertificateWithDetails = Prisma.CertificateGetPayload<{
+  include: {
+    user: { select: { name: true; title: true } };
+    course: { select: { title: true; internRole: true } };
+    internship: { select: { title: true } };
+  };
+}>;
 
 export default async function VerifyResultPage({
   params,
@@ -83,7 +92,7 @@ function CertificateView({
   certificate,
 }: {
   code: string;
-  certificate: any;
+  certificate: CertificateWithDetails;
 }) {
   const type = certificate.type === 'COURSE' ? 'Course' : 'Internship';
   const title = certificate.course?.title || certificate.internship?.title || 'Unknown Program';
@@ -98,6 +107,8 @@ function CertificateView({
         internRole={internRole}
         credentialId={code}
         issuedAt={certificate.issuedAt}
+        periodStartDate={certificate.periodStartDate}
+        periodEndDate={certificate.periodEndDate}
       />
     </DownloadCertificate>
   );

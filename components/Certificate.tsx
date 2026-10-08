@@ -2,144 +2,92 @@ type CertificateProps = {
   holderName: string;
   title: string;
   type: "Course" | "Internship";
-  internRole: string; // e.g. "Frontend Engineering"
+  internRole: string;
   credentialId: string;
   issuedAt: Date;
-};
+  periodStartDate?: Date | null;
+  periodEndDate?: Date | null;
+}
 
-/** Format: "October 5, 2026" */
-const fmt = (d: Date) =>
-  d.toLocaleDateString("en-US", {
+const fmt = (date: Date) =>
+  new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+    timeZone: "UTC",
+  }).format(date);
 
-// ---------------------------------------------------------------------------
-// Gold wax seal (pure SVG — no framer-motion so html2canvas export is safe)
-// ---------------------------------------------------------------------------
-function WaxSeal() {
+function OfficialStamp() {
   return (
     <svg
-      viewBox="0 0 120 120"
-      width={120}
-      height={120}
+      width="144"
+      height="144"
+      viewBox="0 0 200 200"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
       <defs>
-        <radialGradient id="sealGrad" cx="40%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#e8c96a" />
-          <stop offset="55%" stopColor="#c9a227" />
-          <stop offset="100%" stopColor="#8a6914" />
-        </radialGradient>
+        <path id="certificate-stamp-top" d="M 28,126 A 76,76 0 1,1 172,126" />
+        <path id="certificate-stamp-bottom" d="M 46,126 A 76,76 0 0,0 154,126" />
       </defs>
-      {/* Outer dashed ring */}
-      <circle
-        cx="60" cy="60" r="56"
-        fill="none" stroke="#b8933f" strokeWidth="1.5" strokeDasharray="4 3"
-      />
-      {/* Gold disc */}
-      <circle cx="60" cy="60" r="50" fill="url(#sealGrad)" />
-      {/* Inner ring */}
-      <circle
-        cx="60" cy="60" r="44"
-        fill="none" stroke="#e8c96a" strokeWidth="1" opacity="0.6"
-      />
-      {/* Crown */}
-      <g transform="translate(60,60)" fill="#3d2a00">
-        <rect x="-14" y="8" width="28" height="5" rx="1.5" />
-        <polygon points="-14,8 -14,-10 -6,0 0,-14 6,0 14,-10 14,8" />
-        <circle cx="-14" cy="-10" r="2.5" />
-        <circle cx="0" cy="-14" r="2.5" />
-        <circle cx="14" cy="-10" r="2.5" />
+      <g fill="none" stroke="#1E3A8A" strokeWidth="2.2">
+        <circle cx="100" cy="100" r="92" />
+        <circle cx="100" cy="100" r="61" />
       </g>
-      {/* Text arc top: EDUPLATFORM */}
-      <path id="topArc" d="M 10,60 A 50,50 0 0,1 110,60" fill="none" />
-      <text fontSize="7.5" fontFamily="serif" letterSpacing="3" fill="#3d2a00">
-        <textPath href="#topArc" startOffset="50%" textAnchor="middle">
-          EDUPLATFORM
+      <text fontSize="9.5" fontWeight="700" letterSpacing="1.8" fill="#1E3A8A" fontFamily="Arial, sans-serif">
+        <textPath href="#certificate-stamp-top" startOffset="50%" textAnchor="middle">
+          EDUPLATFORM ACADEMY OF KNOWLEDGE
         </textPath>
       </text>
-      {/* Text arc bottom: ACADEMY OF KNOWLEDGE */}
-      <path id="botArc" d="M 10,60 A 50,50 0 0,0 110,60" fill="none" />
-      <text fontSize="6.5" fontFamily="serif" letterSpacing="2" fill="#3d2a00">
-        <textPath href="#botArc" startOffset="50%" textAnchor="middle">
-          ACADEMY OF KNOWLEDGE
+      <g transform="translate(39,134) scale(0.65)" fill="#1E3A8A">
+        <polygon points="10,1 12.8,7 19.5,7.6 14.4,12 16,18.5 10,15 4,18.5 5.6,12 0.5,7.6 7.2,7" />
+      </g>
+      <text fontSize="10" fontWeight="800" letterSpacing="3.2" fill="#1E3A8A" fontFamily="Arial, sans-serif">
+        <textPath href="#certificate-stamp-bottom" startOffset="50%" textAnchor="middle">
+          CERTIFIED
         </textPath>
       </text>
+      <g transform="translate(148,134) scale(0.65)" fill="#1E3A8A">
+        <polygon points="10,1 12.8,7 19.5,7.6 14.4,12 16,18.5 10,15 4,18.5 5.6,12 0.5,7.6 7.2,7" />
+      </g>
+      <g transform="translate(100,100)" fill="none" stroke="#1E3A8A" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round">
+        <path d="M -22,17 L -25,-2 L -14,5 L 0,-8 L 14,5 L 25,-2 L 22,17 Z" />
+        <line x1="-22" y1="21" x2="22" y2="21" strokeWidth="2.2" />
+      </g>
     </svg>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Leaf watermark (SVG)
-// ---------------------------------------------------------------------------
-function LeafWatermark() {
+function AuthorizedSignature() {
   return (
     <svg
-      viewBox="0 0 120 200"
-      width={160}
-      height={260}
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      style={{ opacity: 0.07 }}
-    >
-      <path d="M60 200 Q58 140 60 60" stroke="#7a6030" strokeWidth="2" fill="none" />
-      <path d="M60 160 Q30 130 40 100 Q70 120 60 160" fill="#5a4a20" />
-      <path d="M60 130 Q90 100 80 70 Q50 90 60 130" fill="#5a4a20" />
-      <path d="M60 100 Q25 70 38 40 Q68 60 60 100" fill="#5a4a20" />
-      <path d="M60 75 Q92 45 82 15 Q52 35 60 75" fill="#5a4a20" />
-    </svg>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Handwritten-style SVG signature
-// ---------------------------------------------------------------------------
-function Signature() {
-  return (
-    <svg
-      viewBox="0 0 140 50"
-      width={140}
-      height={50}
+      viewBox="0 0 240 70"
+      width="208"
+      height="56"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
       <path
-        d="M10 38 C20 10, 35 8, 45 28 C52 42, 58 12, 70 22 C78 30, 85 18, 98 26 C108 32, 115 20, 130 28"
-        stroke="#1a1a1a"
-        strokeWidth="1.8"
+        d="M 30,52 C 34,44 46,18 52,12 C 54,10 56,12 53,20 C 49,32 46,48 48,54 C 50,58 54,55 58,45 C 62,35 66,34 70,42 C 74,48 78,48 82,38 C 86,28 92,34 96,44 C 100,50 108,46 116,42 C 134,34 165,26 210,18"
         fill="none"
+        stroke="#111827"
+        strokeWidth="2.3"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path
-        d="M20 42 C40 40, 60 41, 80 40"
-        stroke="#1a1a1a"
-        strokeWidth="1"
-        fill="none"
-        strokeLinecap="round"
-        opacity="0.5"
-      />
+      <path d="M 50,16 C 52,12 54,11 55,13" fill="none" stroke="#111827" strokeWidth="2.6" strokeLinecap="round" />
     </svg>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Small crown icon for header badge
-// ---------------------------------------------------------------------------
-function CrownIcon() {
+function CrownMark() {
   return (
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-      <path d="M2 19h20v2H2v-2zm2-3l3-8 5 5 5-5 3 8H4z" />
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#F5D77F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" />
     </svg>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Main Certificate
-// ---------------------------------------------------------------------------
 export default function Certificate({
   holderName,
   title,
@@ -147,177 +95,158 @@ export default function Certificate({
   internRole,
   credentialId,
   issuedAt,
+  periodStartDate,
+  periodEndDate,
 }: CertificateProps) {
   const isInternship = type === "Internship";
+  const endDate = periodEndDate ? new Date(periodEndDate) : new Date(issuedAt);
+  const startDate = periodStartDate ? new Date(periodStartDate) : new Date(endDate);
+  if (!periodStartDate) startDate.setUTCMonth(startDate.getUTCMonth() - 1);
 
-  const endDate = new Date(issuedAt);
-  const startDate = new Date(endDate);
-  startDate.setMonth(startDate.getMonth() - 1);
+  const gold = "#B89047";
+  const labelStyle = {
+    display: "block",
+    color: "#A88237",
+    fontFamily: "Arial, sans-serif",
+    fontSize: "9px",
+    fontWeight: 600,
+    letterSpacing: "0.22em",
+    textTransform: "uppercase" as const,
+  };
 
   return (
     <div
       id="certificate"
       style={{
-        width: "1056px",
-        height: "748px",
-        fontFamily: '"Georgia", "Times New Roman", Times, serif',
-        backgroundColor: "#f5f0e8",
+        width: "1050px",
+        height: "742px",
+        boxSizing: "border-box",
         position: "relative",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
-        boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+        background: "radial-gradient(circle at 50% 45%, #FBF9F2 0%, #F5F1E5 70%, #EFE9D7 100%)",
+        color: "#171717",
+        fontFamily: '"Georgia", "Times New Roman", serif',
+        boxShadow: "0 20px 60px rgba(0,0,0,0.24)",
       }}
     >
-
-
-      {/* ── Double gold border frame ── */}
-      <div aria-hidden="true" style={{ position:"absolute", inset:"16px", border:"1.5px solid rgba(180,140,40,0.45)", pointerEvents:"none", zIndex:5 }} />
-      <div aria-hidden="true" style={{ position:"absolute", inset:"20px", border:"0.5px solid rgba(180,140,40,0.25)", pointerEvents:"none", zIndex:5 }} />
-
-      {/* ── Leaf watermark (right side) ── */}
-      <div aria-hidden="true" style={{ position:"absolute", right:48, top:"50%", transform:"translateY(-50%)", zIndex:1 }}>
-        <LeafWatermark />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, width: 176, height: 176, zIndex: 2 }}>
+        <svg viewBox="0 0 160 160" width="100%" height="100%">
+          <polygon points="0,0 160,0 0,160" fill="#141414" />
+          <line x1="0" y1="160" x2="160" y2="0" stroke="#C5A059" strokeWidth="3.5" />
+          <line x1="0" y1="172" x2="172" y2="0" stroke="#B89047" strokeWidth="1.5" />
+        </svg>
+      </div>
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, right: 0, width: 176, height: 176, zIndex: 2, transform: "rotate(180deg)" }}>
+        <svg viewBox="0 0 160 160" width="100%" height="100%">
+          <polygon points="0,0 160,0 0,160" fill="#141414" />
+          <line x1="0" y1="160" x2="160" y2="0" stroke="#C5A059" strokeWidth="3.5" />
+          <line x1="0" y1="172" x2="172" y2="0" stroke="#B89047" strokeWidth="1.5" />
+        </svg>
       </div>
 
-      {/* ── Content ── */}
-      <div style={{ position:"relative", zIndex:6, flex:1, display:"flex", flexDirection:"column", padding:"44px 80px 38px" }}>
+      <div aria-hidden="true" style={{ position: "absolute", inset: 20, zIndex: 1, pointerEvents: "none" }}>
+        <svg viewBox="0 0 1010 702" width="100%" height="100%" preserveAspectRatio="none">
+          <path
+            d="M 150,8 L 995,8 L 995,550 M 860,694 L 30,694 A 22,22 0 0,1 8,672 L 8,150"
+            fill="none"
+            stroke="#C5A059"
+            strokeWidth="1.5"
+            strokeOpacity="0.8"
+          />
+          <path d="M 28,674 A 20,20 0 0,0 8,694" fill="none" stroke="#B89047" strokeWidth="1.2" />
+        </svg>
+      </div>
 
-        {/* HEADER */}
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          {/* Logo */}
-          <div style={{ display:"flex", alignItems:"center", gap:"14px" }}>
-            <div style={{
-              width:52, height:52, borderRadius:"50%",
-              background:"linear-gradient(135deg,#e8c96a,#c9a227)",
-              display:"flex", alignItems:"center", justifyContent:"center",
-              border:"2px solid #1a1a1a",
-              boxShadow:"0 2px 8px rgba(0,0,0,0.25)", color:"#1a1a1a",
-            }}>
-              <CrownIcon />
+      <div style={{ position: "relative", zIndex: 3, flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "46px 64px 32px" }}>
+        <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", minHeight: 76 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, paddingLeft: 52 }}>
+            <div style={{ width: 52, height: 52, borderRadius: "50%", padding: 2, boxSizing: "border-box", background: "linear-gradient(135deg,#9B752F,#DFB76C,#C5A059)", boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
+              <div style={{ width: "100%", height: "100%", borderRadius: "50%", background: "#1e1e1e", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #FFEA9F", boxSizing: "border-box" }}>
+                <CrownMark />
+              </div>
             </div>
-            <div style={{ width:"1.5px", height:"40px", background:"#1a1a1a", opacity:0.3 }} />
+            <div style={{ width: 1.5, height: 42, background: "#C5A059", opacity: 0.8 }} />
             <div>
-              <div style={{ fontSize:"20px", fontWeight:700, color:"#1a1a1a", letterSpacing:"0.03em" }}>
-                EduPlatform
-              </div>
-              <div style={{ fontSize:"9px", fontWeight:600, color:"#b8933f", letterSpacing:"0.18em",
-                textTransform:"uppercase", fontFamily:'"Arial",sans-serif', marginTop:"1px" }}>
-                Academy of Knowledge
+              <div style={{ fontSize: 23, fontWeight: 700, lineHeight: 1.1 }}>EduPlatform</div>
+              <div style={{ marginTop: 6, color: "#A88237", fontFamily: "Arial, sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: "0.24em" }}>
+                ACADEMY OF KNOWLEDGE
               </div>
             </div>
           </div>
-
-          {/* Type label */}
-          <div style={{ fontSize:"9px", fontWeight:700, letterSpacing:"0.22em", textTransform:"uppercase",
-            color:"#b8933f", fontFamily:'"Arial",sans-serif', display:"flex", alignItems:"center", gap:"8px" }}>
-            <span style={{ display:"inline-block", width:30, height:"1px", background:"#b8933f" }} />
-            {isInternship ? "Internship Certificate" : "Course Certificate"}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, paddingRight: 14, color: "#555", fontFamily: "Arial, sans-serif", fontSize: 10, letterSpacing: "0.22em", whiteSpace: "nowrap" }}>
+            <span style={{ width: 36, height: 1, background: gold }} />
+            {isInternship ? "INTERNSHIP CERTIFICATE" : "COURSE CERTIFICATE"}
+            <span style={{ width: 36, height: 1, background: gold }} />
           </div>
-        </div>
+        </header>
 
-        {/* BODY */}
-        <div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center",
-          justifyContent:"center", textAlign:"center" }}>
-
-          {/* CERTIFICATE heading */}
-          <div style={{ fontSize:"60px", fontWeight:900, color:"#1a1a1a", letterSpacing:"0.12em",
-            textTransform:"uppercase", lineHeight:1 }}>
-            Certificate
+        <main style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "16px 40px 20px" }}>
+          <h1 style={{ margin: 0, fontSize: 54, fontWeight: 700, letterSpacing: "0.14em", lineHeight: 1.15 }}>
+            CERTIFICATE
+          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, width: "100%", maxWidth: 500, marginTop: 8 }}>
+            <span style={{ flex: 1, height: 1.5, background: gold }} />
+            <span style={{ color: "#A88237", fontSize: 14, fontWeight: 700, letterSpacing: "0.28em", whiteSpace: "nowrap" }}>
+              {isInternship ? "OF INTERNSHIP" : "OF COURSE COMPLETION"}
+            </span>
+            <span style={{ flex: 1, height: 1.5, background: gold }} />
           </div>
-
-          {/* OF INTERNSHIP / OF COMPLETION */}
-          <div style={{ marginTop:"6px", display:"flex", alignItems:"center", gap:"12px" }}>
-            <div style={{ height:"1px", background:"#c9a227", width:60 }} />
-            <div style={{ fontSize:"13px", fontWeight:700, letterSpacing:"0.28em", textTransform:"uppercase",
-              color:"#c9a227", fontFamily:'"Arial",sans-serif' }}>
-              {isInternship ? "of Internship" : "of Completion"}
-            </div>
-            <div style={{ height:"1px", background:"#c9a227", width:60 }} />
-          </div>
-
-          {/* This is to certify that */}
-          <div style={{ marginTop:"26px", fontSize:"11px", letterSpacing:"0.22em",
-            textTransform:"uppercase", color:"#555", fontFamily:'"Arial",sans-serif' }}>
-            This is to certify that
-          </div>
-
-          {/* Holder name */}
-          <div style={{ marginTop:"10px", fontSize:"44px", fontWeight:700, color:"#1a1a1a", letterSpacing:"0.01em" }}>
+          <p style={{ margin: "20px 0 8px", color: "#555", fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: 500, letterSpacing: "0.32em" }}>
+            THIS IS TO CERTIFY THAT
+          </p>
+          <h2 style={{ maxWidth: 820, overflowWrap: "anywhere", margin: "2px 0 8px", fontSize: 48, fontWeight: 600, lineHeight: 1.2 }}>
             {holderName}
+          </h2>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", maxWidth: 400, margin: "2px 0 8px" }}>
+            <span style={{ flex: 1, height: 1, background: "#C5A059" }} />
+            <span style={{ width: 9, height: 9, background: gold, transform: "rotate(45deg)" }} />
+            <span style={{ flex: 1, height: 1, background: "#C5A059" }} />
           </div>
-
-          {/* Gold divider with diamond */}
-          <div style={{ marginTop:"12px", display:"flex", alignItems:"center", gap:"8px", width:"340px" }}>
-            <div style={{ flex:1, height:"1px", background:"#c9a227" }} />
-            <div style={{ width:"6px", height:"6px", background:"#c9a227", transform:"rotate(45deg)" }} />
-            <div style={{ flex:1, height:"1px", background:"#c9a227" }} />
-          </div>
-
-          {/* Description */}
-          <div style={{ marginTop:"18px", fontSize:"15px", lineHeight:1.7, color:"#333", maxWidth:"600px" }}>
+          <p style={{ maxWidth: 700, margin: "10px 0 0", color: "#333", fontSize: 19, lineHeight: 1.65 }}>
             {isInternship ? (
               <>
                 has successfully completed their internship as{" "}
-                <strong>{internRole} Intern</strong>
-                <br />
-                for the duration of <strong>1 month</strong> from{" "}
-                <strong>{fmt(startDate)}</strong> to <strong>{fmt(endDate)}</strong>.
+                <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{internRole} Intern</strong>
               </>
             ) : (
               <>
-                has successfully completed the course <strong>{title}</strong>
-                <br />
-                demonstrating dedication and commitment to learning. Issued on{" "}
-                <strong>{fmt(endDate)}</strong>.
+                has successfully completed the course{" "}
+                <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{title}</strong>
               </>
             )}
-          </div>
-        </div>
+            <br />
+            for the duration of <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>1 month</strong>{" "}
+            from <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(startDate)}</strong>{" "}
+            to <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(endDate)}</strong>.
+          </p>
+        </main>
 
-        {/* FOOTER */}
-        <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between",
-          borderTop:"1px solid rgba(180,140,40,0.30)", paddingTop:"20px" }}>
-
-          {/* Left: Issued On + Credential ID */}
-          <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+        <footer style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", alignItems: "end", padding: "18px 16px 8px", borderTop: "1px solid rgba(184,144,71,0.35)" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, paddingLeft: 4 }}>
             <div>
-              <div style={{ fontSize:"9px", fontWeight:700, letterSpacing:"0.2em", textTransform:"uppercase",
-                color:"#8a6914", fontFamily:'"Arial",sans-serif' }}>
-                Issued On
-              </div>
-              <div style={{ marginTop:"3px", fontSize:"15px", fontWeight:700, color:"#1a1a1a" }}>
-                {fmt(endDate)}
-              </div>
+              <span style={labelStyle}>ISSUED ON</span>
+              <span style={{ display: "block", marginTop: 4, fontSize: 15, fontWeight: 600 }}>{fmt(new Date(issuedAt))}</span>
             </div>
+            <div style={{ width: 176, height: 1, background: "#C5A059" }} />
             <div>
-              <div style={{ fontSize:"9px", fontWeight:700, letterSpacing:"0.2em", textTransform:"uppercase",
-                color:"#8a6914", fontFamily:'"Arial",sans-serif' }}>
-                Credential ID
-              </div>
-              <div style={{ marginTop:"3px", fontSize:"15px", fontWeight:700, color:"#1a1a1a", letterSpacing:"0.05em" }}>
+              <span style={labelStyle}>CREDENTIAL ID</span>
+              <span style={{ display: "block", marginTop: 4, fontFamily: "monospace", fontSize: 13, fontWeight: 700, letterSpacing: "0.06em" }}>
                 {credentialId}
-              </div>
+              </span>
             </div>
           </div>
-
-          {/* Center: Wax seal */}
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
-            <WaxSeal />
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <OfficialStamp />
           </div>
-
-          {/* Right: Signature */}
-          <div style={{ textAlign:"center" }}>
-            <Signature />
-            <div style={{ marginTop:"6px", fontSize:"13px", fontWeight:700, color:"#1a1a1a",
-              fontFamily:'"Arial",sans-serif' }}>
-              Authorized Signatory
-            </div>
-            <div style={{ fontSize:"11px", color:"#555", fontFamily:'"Arial",sans-serif' }}>
-              EduPlatform Academy
-            </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingRight: 18 }}>
+            <AuthorizedSignature />
+            <span style={{ width: 208, height: 1.5, background: gold }} />
+            <span style={{ marginTop: 7, fontSize: 14, fontWeight: 600 }}>Authorized Signatory</span>
+            <span style={{ marginTop: 2, color: "#555", fontFamily: "Arial, sans-serif", fontSize: 10 }}>EduPlatform Academy</span>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   );

@@ -31,6 +31,7 @@ const newCourses = `  const coursesData = [
       description: "Learn HTML, CSS, and JavaScript from scratch and build your first responsive website.",
       topics: "HTML,CSS,JavaScript,Web",
       internRole: "Frontend Development",
+      category: "Development",
       lessons: ${JSON.stringify(webDevLessons, null, 8)}
     },
     {
@@ -38,6 +39,7 @@ const newCourses = `  const coursesData = [
       description: "Master modern React with hooks, context, and component patterns used in production apps.",
       topics: "React,JavaScript,Frontend",
       internRole: "Frontend Development",
+      category: "Development",
       lessons: []
     },
     {
@@ -45,6 +47,7 @@ const newCourses = `  const coursesData = [
       description: "Use pandas, NumPy, and matplotlib to clean, analyze, and visualize real datasets.",
       topics: "Python,Data,Pandas,Numpy",
       internRole: "Data Science",
+      category: "Data",
       lessons: []
     },
     {
@@ -52,6 +55,7 @@ const newCourses = `  const coursesData = [
       description: "Write efficient queries and design normalized schemas that scale with your application.",
       topics: "SQL,Database,Design",
       internRole: "Backend Development",
+      category: "Data",
       lessons: []
     },
     {
@@ -59,6 +63,7 @@ const newCourses = `  const coursesData = [
       description: "Understand layout, typography, color, and usability to design interfaces people love.",
       topics: "UI,UX,Design",
       internRole: "UI/UX Design",
+      category: "Design",
       lessons: []
     },
     {
@@ -66,6 +71,7 @@ const newCourses = `  const coursesData = [
       description: "A practical introduction to supervised learning, model evaluation, and scikit-learn.",
       topics: "Machine Learning,Python,AI",
       internRole: "Data Science",
+      category: "Data",
       lessons: []
     },
     {
@@ -73,6 +79,7 @@ const newCourses = `  const coursesData = [
       description: "Grow an audience with SEO, content strategy, email funnels, and paid ads that convert.",
       topics: "Marketing,SEO,Ads",
       internRole: "Marketing",
+      category: "Business",
       lessons: []
     },
     {
@@ -80,6 +87,7 @@ const newCourses = `  const coursesData = [
       description: "Write clear emails, run confident meetings, and present your ideas professionally.",
       topics: "English,Business,Communication",
       internRole: "Business",
+      category: "Communication",
       lessons: []
     },
     {
@@ -87,6 +95,7 @@ const newCourses = `  const coursesData = [
       description: "Go from blank canvas to polished design system using Figma's modern workflow.",
       topics: "Figma,Design,Graphics",
       internRole: "Graphic Design",
+      category: "Design",
       lessons: []
     },
     {
@@ -94,6 +103,7 @@ const newCourses = `  const coursesData = [
       description: "Build and ship cross-platform iOS and Android apps from a single codebase.",
       topics: "React Native,Mobile,iOS,Android",
       internRole: "Mobile Development",
+      category: "Development",
       lessons: []
     },
     {
@@ -101,6 +111,7 @@ const newCourses = `  const coursesData = [
       description: "Recognize phishing, secure your accounts, and understand the basics of staying safe online",
       topics: "Security,Cybersecurity",
       internRole: "Security",
+      category: "Security",
       lessons: []
     },
     {
@@ -108,6 +119,7 @@ const newCourses = `  const coursesData = [
       description: "Beat stage fright and deliver talks that hold an audience from first line to last.",
       topics: "Speaking,Communication,Public Speaking",
       internRole: "Communication",
+      category: "Communication",
       lessons: []
     }
   ];`;

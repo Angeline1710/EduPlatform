@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getCourseCategory } from "@/lib/course-categories";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 
@@ -76,8 +77,9 @@ export default async function DepartmentsPage() {
   // Group courses by category
   const grouped: Record<string, typeof allCourses> = {};
   for (const course of allCourses) {
-    const cat = CATEGORIES.some((category) => category.name === course.category)
-      ? course.category
+    const resolvedCategory = getCourseCategory(course);
+    const cat = CATEGORIES.some((category) => category.name === resolvedCategory)
+      ? resolvedCategory
       : "General";
     if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push(course);

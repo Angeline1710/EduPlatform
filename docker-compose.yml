@@ -27,7 +27,6 @@ services:
       - .env
     environment:
       DATABASE_URL: "postgresql://edu_platform:local-development-only@db:5432/edu_platform?schema=public"
-      NEXTAUTH_URL: "http://localhost:3000"
       AUTH_TRUST_HOST: "true"
     volumes:
       - .:/app

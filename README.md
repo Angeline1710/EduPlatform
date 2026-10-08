@@ -94,7 +94,6 @@ Enrollment is created by the webhook on `checkout.session.completed`, not on the
 2. Add these environment variables in Vercel for Production:
 	- `DATABASE_URL`: the managed PostgreSQL connection string
 	- `NEXTAUTH_SECRET`: a unique random secret
-	- `NEXTAUTH_URL`: the deployed HTTPS URL
 	- `STRIPE_SECRET_KEY` and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: production Stripe keys
 	- `STRIPE_WEBHOOK_SECRET`: the signing secret for the webhook endpoint
 3. Set Vercel's Build Command to `npx prisma migrate deploy && npm run build`.
@@ -102,3 +101,9 @@ Enrollment is created by the webhook on `checkout.session.completed`, not on the
 5. Seed the production database once from a trusted terminal with `NODE_ENV=production`, `DATABASE_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, and a strong `ADMIN_PASSWORD` set. Run `npx prisma db seed`; do not use the development demo credentials in production.
 
 The build generates Prisma Client automatically. The initial PostgreSQL migration is in `prisma/migrations-postgresql`; the older SQLite migration history is retained separately and is not used by the current Prisma config. Existing local SQLite data is not copied to the production database.
+
+Leave `AUTH_URL` and `NEXTAUTH_URL` unset for local development. Auth.js detects
+the active request host, and browser auth requests use the relative `/api/auth`
+path, so localhost, `127.0.0.1`, and alternate development ports remain on the
+app that is currently open. Set either URL only when a deployment requires a
+fixed canonical origin, and make sure it matches the hostname users visit.

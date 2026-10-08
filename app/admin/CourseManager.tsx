@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Lesson, Prisma } from "@prisma/client";
+import { getCourseCategory } from "@/lib/course-categories";
 import { addCourse, updateCourse, deleteCourse, removeEnrollment, updateLesson, addLesson } from "./actions";
 import UserDetailsModal from "./UserDetailsModal";
 
@@ -51,7 +52,6 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<CourseFormData>(EMPTY_COURSE_FORM);
   const [lessonFormData, setLessonFormData] = useState({ title: "", description: "", content: "" });
-  const [isAddingLesson, setIsAddingLesson] = useState(false);
   const [isSavingLesson, setIsSavingLesson] = useState(false);
   const [lessonSaveError, setLessonSaveError] = useState("");
   const [isSavingCourse, setIsSavingCourse] = useState(false);
@@ -99,7 +99,6 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
       const lesson = await addLesson(editingCourse.id, lessonFormData);
       setEditingCourse({ ...editingCourse, lessons: [...editingCourse.lessons, lesson] });
       setLessonFormData({ title: "", description: "", content: "" });
-      setIsAddingLesson(false);
     } catch (error) {
       setLessonSaveError(error instanceof Error ? error.message : "Unable to add the lesson.");
     } finally {
@@ -112,7 +111,7 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
     setFormData({
       title: course.title,
       description: course.description,
-      category: course.category ?? "Development",
+      category: getCourseCategory(course),
       price: String(course.price ?? 0),
       thumbnailUrl: course.thumbnailUrl ?? "",
       gifUrl: course.gifUrl ?? "",
@@ -121,7 +120,6 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
       internRole: course.internRole,
     });
     setCourseSaveError("");
-    setIsAddingLesson(false);
     setLessonSaveError("");
     setIsAdding(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -139,7 +137,6 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
     setEditingCourse(null);
     setIsAdding(false);
     setEditingLesson(null);
-    setIsAddingLesson(false);
   };
 
   // 1. ADD / EDIT PANEL
@@ -362,89 +359,80 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
               </div>
             )}
 
-            {editingCourse.lessons.length === 0 && !isAddingLesson && (
-              <div className="rounded-xl border border-dashed border-[#573d70] p-5">
-                <p className="mb-4 text-sm text-gray-400">No lessons have been added to this course yet.</p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLessonSaveError("");
-                    setLessonFormData({ title: "", description: "", content: "" });
-                    setIsAddingLesson(true);
-                  }}
-                  className="rounded-lg bg-[#75428a] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#89529f]"
+            {editingCourse.lessons.length === 0 && (
+              <details id="new-lesson-panel" className="rounded-xl border border-dashed border-[#573d70] p-5">
+                <summary
+                  className="cursor-pointer rounded-lg bg-[#75428a] px-4 py-2 font-semibold text-white marker:text-violet-300 transition hover:bg-[#89529f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300"
                 >
-                  + Add first lesson
-                </button>
-              </div>
-            )}
-
-            {isAddingLesson && (
-              <form
-                onSubmit={handleAddLesson}
-                className="space-y-4 rounded-xl border border-[#573d70] bg-[#301d3d] p-5"
-              >
-                <h5 className="text-lg font-semibold text-white">New lesson</h5>
-                <div className="space-y-2">
-                  <label htmlFor="new-lesson-title" className="block text-sm font-semibold text-gray-200">Lesson title</label>
-                  <input
-                    id="new-lesson-title"
-                    autoFocus
-                    required
-                    placeholder="Enter lesson title"
-                    value={lessonFormData.title}
-                    onChange={(event) => setLessonFormData({ ...lessonFormData, title: event.target.value })}
-                    className="w-full rounded-lg border border-[#49315d] bg-[#241631] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="new-lesson-description" className="block text-sm font-semibold text-gray-200">Description</label>
-                  <input
-                    id="new-lesson-description"
-                    required
-                    placeholder="Summarize what this lesson covers"
-                    value={lessonFormData.description}
-                    onChange={(event) => setLessonFormData({ ...lessonFormData, description: event.target.value })}
-                    className="w-full rounded-lg border border-[#49315d] bg-[#241631] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="new-lesson-content" className="block text-sm font-semibold text-gray-200">Lesson content</label>
-                  <textarea
-                    id="new-lesson-content"
-                    required
-                    rows={6}
-                    placeholder="Enter lesson content"
-                    value={lessonFormData.content}
-                    onChange={(event) => setLessonFormData({ ...lessonFormData, content: event.target.value })}
-                    className="w-full rounded-lg border border-[#49315d] bg-[#241631] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
-                  />
-                </div>
-                {lessonSaveError && (
-                  <p role="alert" className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
-                    {lessonSaveError}
-                  </p>
-                )}
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    disabled={isSavingLesson}
-                    className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-500 disabled:cursor-wait disabled:opacity-60"
-                  >
-                    {isSavingLesson ? "Adding..." : "Save lesson"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAddingLesson(false);
-                      setLessonSaveError("");
-                    }}
-                    className="rounded-lg bg-gray-700 px-4 py-2 text-sm text-white transition hover:bg-gray-600"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+                  Add first lesson
+                </summary>
+                <form
+                  onSubmit={handleAddLesson}
+                  className="mt-5 space-y-4 rounded-xl border border-[#573d70] bg-[#301d3d] p-5"
+                >
+                  <h5 className="text-lg font-semibold text-white">New lesson</h5>
+                  <div className="space-y-2">
+                    <label htmlFor="new-lesson-title" className="block text-sm font-semibold text-gray-200">Lesson title</label>
+                    <input
+                      id="new-lesson-title"
+                      autoFocus
+                      required
+                      placeholder="Enter lesson title"
+                      value={lessonFormData.title}
+                      onChange={(event) => setLessonFormData({ ...lessonFormData, title: event.target.value })}
+                      className="w-full rounded-lg border border-[#49315d] bg-[#241631] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="new-lesson-description" className="block text-sm font-semibold text-gray-200">Description</label>
+                    <input
+                      id="new-lesson-description"
+                      required
+                      placeholder="Summarize what this lesson covers"
+                      value={lessonFormData.description}
+                      onChange={(event) => setLessonFormData({ ...lessonFormData, description: event.target.value })}
+                      className="w-full rounded-lg border border-[#49315d] bg-[#241631] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="new-lesson-content" className="block text-sm font-semibold text-gray-200">Lesson content</label>
+                    <textarea
+                      id="new-lesson-content"
+                      required
+                      rows={6}
+                      placeholder="Enter lesson content"
+                      value={lessonFormData.content}
+                      onChange={(event) => setLessonFormData({ ...lessonFormData, content: event.target.value })}
+                      className="w-full rounded-lg border border-[#49315d] bg-[#241631] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                    />
+                  </div>
+                  {lessonSaveError && (
+                    <p role="alert" className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                      {lessonSaveError}
+                    </p>
+                  )}
+                  <div className="flex gap-2">
+                    <button
+                      type="submit"
+                      disabled={isSavingLesson}
+                      className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-500 disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {isSavingLesson ? "Adding..." : "Save lesson"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLessonSaveError("");
+                        setLessonFormData({ title: "", description: "", content: "" });
+                        document.getElementById("new-lesson-panel")?.removeAttribute("open");
+                      }}
+                      className="rounded-lg bg-gray-700 px-4 py-2 text-sm text-white transition hover:bg-gray-600"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </details>
             )}
           </div>
         )}
@@ -527,7 +515,7 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
           <div key={course.id} className="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 flex flex-col h-full transition hover:scale-[1.02] hover:border-gray-500">
             <div className="flex-grow">
               <div className="mb-3 flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-indigo-900/50 px-2.5 py-1 text-xs text-indigo-200">{course.category}</span>
+                <span className="rounded-full bg-indigo-900/50 px-2.5 py-1 text-xs text-indigo-200">{getCourseCategory(course)}</span>
                 <span className={`rounded-full px-2.5 py-1 text-xs ${course.published ? "bg-green-500/10 text-green-300" : "bg-gray-700 text-gray-300"}`}>
                   {course.published ? "Published" : "Draft"}
                 </span>

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getCourseCategory } from "@/lib/course-categories";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import { notFound } from "next/navigation";
@@ -85,7 +86,7 @@ export default async function CourseDetailPage({
       <section className="px-6 py-12 xl:px-10 text-white">
         <div className="mx-auto max-w-[1000px]">
           <p className="mb-6 inline-flex rounded-full bg-violet-500/15 px-3 py-1 text-sm font-semibold text-violet-200">
-            {course.category}
+            {getCourseCategory(course)}
           </p>
           <div className="mb-10 flex flex-wrap gap-2">
             {course.topics.split(",").filter((topic) => topic.trim()).map((t) => (
@@ -159,6 +160,7 @@ export default async function CourseDetailPage({
             <div className="mt-8">
               <LessonViewer
                 courseId={course.id}
+                courseTitle={course.title}
                 lessons={course.lessons}
                 completedIds={completedIds}
                 canTrackProgress={true}

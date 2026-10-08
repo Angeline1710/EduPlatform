@@ -45,18 +45,19 @@ model DesiredCourse {
 }
 
 model Course {
-  id           String   @id @default(cuid())
-  title        String
-  description  String
-  topics       String   // Tags used to match with User.DesiredCourse (comma separated)
-  internRole   String   @default("Software Development") // e.g. "Frontend Development", "Data Science"
-  category     String   @default("Development")
-  price        Float    @default(0)
-  thumbnailUrl String?
-  gifUrl       String?
-  published    Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  title              String
+  description        String
+  topics             String   // Tags used to match with User.DesiredCourse (comma separated)
+  internRole         String   @default("Software Development") // e.g. "Frontend Development", "Data Science"
+  category           String   @default("Development")
+  categoryCustomized Boolean  @default(false)
+  price              Float    @default(0)
+  thumbnailUrl       String?
+  gifUrl             String?
+  published          Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   lessons      Lesson[]
   enrollments  CourseEnrollment[]
@@ -136,7 +137,9 @@ model Certificate {
   internshipId String?
   internship   Internship? @relation(fields: [internshipId], references: [id], onDelete: Cascade)
 
-  issuedAt     DateTime    @default(now())
+  periodStartDate DateTime?
+  periodEndDate   DateTime?
+  issuedAt        DateTime    @default(now())
 
   @@unique([userId, courseId, type])
   @@unique([userId, internshipId, type])

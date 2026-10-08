@@ -36,12 +36,17 @@ export async function GET(
       data: {
         credentialId: certificate.credentialId,
         issuedAt: certificate.issuedAt,
+        periodStartDate: certificate.periodStartDate,
+        periodEndDate: certificate.periodEndDate,
         recipient: certificate.user.name,
         type: certificate.course ? 'Course' : 'Internship',
         title: certificate.course?.title || certificate.internship?.title,
       },
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Unable to verify certificate." },
+      { status: 500 },
+    );
   }
 }
