@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import PageHeader from "@/components/PageHeader";
+import CourseManager from "./CourseManager";
 
 export const metadata = { title: "Admin Dashboard · EduPlatform" };
 
@@ -22,6 +23,13 @@ export default async function AdminDashboardPage() {
     },
   });
 
+  const courses = await prisma.course.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      enrollments: { include: { user: true } }
+    }
+  });
+
   return (
     <>
       <PageHeader
@@ -32,7 +40,10 @@ export default async function AdminDashboardPage() {
 
       <section className="min-h-[60vh] px-6 py-12 xl:px-10 text-white">
         <div className="mx-auto max-w-[1400px]">
-          <h2 className="mb-6 text-2xl font-bold border-b border-gray-700 pb-2">Registered Users</h2>
+          
+          <CourseManager courses={courses} />
+
+          <h2 className="mb-6 mt-16 text-2xl font-bold border-b border-gray-700 pb-2">Registered Users</h2>
           
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
