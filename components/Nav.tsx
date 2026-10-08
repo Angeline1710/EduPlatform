@@ -11,6 +11,7 @@ import MagicalSearch from "@/components/magic/MagicalSearch";
 
 const LINKS = [
   { href: "/courses", label: "Courses" },
+  { href: "/departments", label: "Departments" },
   { href: "/#why", label: "Why Us" },
   { href: "/verify", label: "Verify" },
 ];

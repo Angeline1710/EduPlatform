@@ -12,7 +12,7 @@ type Item = { href: string; label: string; icon: string };
 const ITEMS: Item[] = [
   { href: "/", label: "Home", icon: "home" },
   { href: "/courses", label: "Courses", icon: "book" },
-  { href: "/categories", label: "Departments", icon: "grid" },
+  { href: "/departments", label: "Departments", icon: "grid" },
   { href: "/why-us", label: "Why Us", icon: "shield" },
   { href: "/verify", label: "Verify", icon: "award" },
   { href: "/support", label: "Support", icon: "headset" },
