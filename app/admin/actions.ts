@@ -25,3 +25,8 @@ export async function removeEnrollment(enrollmentId: string) {
   revalidatePath("/admin/courses");
   revalidatePath("/admin");
 }
+
+export async function updateLesson(id: string, data: { title: string; description: string; content: string }) {
+  await prisma.lesson.update({ where: { id }, data });
+  revalidatePath("/admin");
+}

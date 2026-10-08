@@ -26,7 +26,8 @@ export default async function AdminDashboardPage() {
   const courses = await prisma.course.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      enrollments: { include: { user: true } }
+      enrollments: { include: { user: true } },
+      lessons: true
     }
   });
 
