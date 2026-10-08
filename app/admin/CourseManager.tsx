@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { addCourse, updateCourse, deleteCourse, removeEnrollment } from "../actions";
+import { addCourse, updateCourse, deleteCourse, removeEnrollment } from "./actions";
 
 export default function CourseManager({ courses }: { courses: any[] }) {
   const [editingCourse, setEditingCourse] = useState<any>(null);
