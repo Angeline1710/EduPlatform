@@ -30,3 +30,16 @@ export async function updateLesson(id: string, data: { title: string; descriptio
   await prisma.lesson.update({ where: { id }, data });
   revalidatePath("/admin");
 }
+
+export async function getUserDetails(userId: string) {
+  return await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      courseEnrollments: { include: { course: true } },
+      internshipEnrollments: { include: { internship: true } },
+      certificates: { include: { course: true, internship: true } },
+      lessonProgress: true,
+      loginLogs: { orderBy: { loginAt: 'desc' } }
+    }
+  });
+}

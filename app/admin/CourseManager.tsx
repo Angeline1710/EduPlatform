@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { addCourse, updateCourse, deleteCourse, removeEnrollment, updateLesson } from "./actions";
+import UserDetailsModal from "./UserDetailsModal";
 
 export default function CourseManager({ courses }: { courses: any[] }) {
   const [editingCourse, setEditingCourse] = useState<any>(null);
   const [editingLesson, setEditingLesson] = useState<any>(null);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({ title: "", description: "", topics: "", internRole: "Software Development" });
   const [lessonFormData, setLessonFormData] = useState({ title: "", description: "", content: "" });
@@ -135,7 +137,14 @@ export default function CourseManager({ courses }: { courses: any[] }) {
                   <tbody className="divide-y divide-gray-800">
                     {editingCourse.enrollments.map((enrollment: any) => (
                       <tr key={enrollment.id} className="hover:bg-gray-800/50">
-                        <td className="p-3 text-gray-300">{enrollment.user.title} {enrollment.user.name}</td>
+                        <td className="p-3 text-gray-300">
+                          <button 
+                            onClick={() => setSelectedUserId(enrollment.user.id)}
+                            className="text-indigo-300 hover:text-indigo-200 hover:underline text-left font-medium"
+                          >
+                            {enrollment.user.title} {enrollment.user.name}
+                          </button>
+                        </td>
                         <td className="p-3 text-gray-400">{enrollment.user.email}</td>
                         <td className="p-3 text-right">
                           <button
@@ -159,6 +168,13 @@ export default function CourseManager({ courses }: { courses: any[] }) {
               <p className="text-sm text-gray-500 italic">No students enrolled yet.</p>
             )}
           </div>
+        )}
+
+        {selectedUserId && (
+          <UserDetailsModal 
+            userId={selectedUserId} 
+            onClose={() => setSelectedUserId(null)} 
+          />
         )}
       </div>
     );

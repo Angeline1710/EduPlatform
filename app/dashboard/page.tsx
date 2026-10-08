@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import PageHeader from "@/components/PageHeader";
+import ClaimCertificateButton from "./ClaimCertificateButton";
 
 export const metadata = { title: "My Learning · EduPlatform" };
 
@@ -53,20 +54,44 @@ export default async function DashboardPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {user.courseEnrollments.map(e => (
-                    <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
-                      <span className="text-xs bg-indigo-600 text-white px-2 py-1 rounded">Course</span>
-                      <h3 className="text-lg font-bold mt-2">{e.course.title}</h3>
-                      <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
-                    </div>
-                  ))}
-                  {user.internshipEnrollments.map(e => (
-                    <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
-                      <span className="text-xs bg-emerald-600 text-white px-2 py-1 rounded">Internship</span>
-                      <h3 className="text-lg font-bold mt-2">{e.internship.title}</h3>
-                      <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
-                    </div>
-                  ))}
+                  {user.courseEnrollments.map(e => {
+                    const claimed = user.certificates.some(c => c.courseId === e.courseId);
+                    return (
+                      <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
+                        <span className="text-xs bg-indigo-600 text-white px-2 py-1 rounded">Course</span>
+                        <h3 className="text-lg font-bold mt-2">{e.course.title}</h3>
+                        <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
+                        {!claimed && (
+                          <ClaimCertificateButton 
+                            enrollmentId={e.id} 
+                            type="COURSE" 
+                            title={e.course.title} 
+                            courseId={e.courseId} 
+                          />
+                        )}
+                        {claimed && <p className="mt-4 text-xs text-emerald-400">Certificate Claimed ✓</p>}
+                      </div>
+                    );
+                  })}
+                  {user.internshipEnrollments.map(e => {
+                    const claimed = user.certificates.some(c => c.internshipId === e.internshipId);
+                    return (
+                      <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
+                        <span className="text-xs bg-emerald-600 text-white px-2 py-1 rounded">Internship</span>
+                        <h3 className="text-lg font-bold mt-2">{e.internship.title}</h3>
+                        <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
+                        {!claimed && (
+                          <ClaimCertificateButton 
+                            enrollmentId={e.id} 
+                            type="INTERNSHIP" 
+                            title={e.internship.title} 
+                            internshipId={e.internshipId} 
+                          />
+                        )}
+                        {claimed && <p className="mt-4 text-xs text-emerald-400">Certificate Claimed ✓</p>}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
