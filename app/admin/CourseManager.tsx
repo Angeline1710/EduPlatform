@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Lesson, Prisma } from "@prisma/client";
-import { addCourse, updateCourse, deleteCourse, removeEnrollment, updateLesson } from "./actions";
+import { addCourse, updateCourse, deleteCourse, removeEnrollment, updateLesson, addLesson } from "./actions";
 import UserDetailsModal from "./UserDetailsModal";
 
 type CourseWithDetails = Prisma.CourseGetPayload<{
@@ -50,6 +50,9 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<CourseFormData>(EMPTY_COURSE_FORM);
   const [lessonFormData, setLessonFormData] = useState({ title: "", description: "", content: "" });
+  const [isAddingLesson, setIsAddingLesson] = useState(false);
+  const [isSavingLesson, setIsSavingLesson] = useState(false);
+  const [lessonSaveError, setLessonSaveError] = useState("");
   const [isSavingCourse, setIsSavingCourse] = useState(false);
   const [courseSaveError, setCourseSaveError] = useState("");
 
@@ -85,6 +88,24 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
     }
   };
 
+  const handleAddLesson = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!editingCourse) return;
+
+    setLessonSaveError("");
+    setIsSavingLesson(true);
+    try {
+      const lesson = await addLesson(editingCourse.id, lessonFormData);
+      setEditingCourse({ ...editingCourse, lessons: [...editingCourse.lessons, lesson] });
+      setLessonFormData({ title: "", description: "", content: "" });
+      setIsAddingLesson(false);
+    } catch (error) {
+      setLessonSaveError(error instanceof Error ? error.message : "Unable to add the lesson.");
+    } finally {
+      setIsSavingLesson(false);
+    }
+  };
+
   const handleEditCourse = (course: CourseWithDetails) => {
     setEditingCourse(course);
     setFormData({
@@ -99,6 +120,8 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
       internRole: course.internRole,
     });
     setCourseSaveError("");
+    setIsAddingLesson(false);
+    setLessonSaveError("");
     setIsAdding(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -115,6 +138,7 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
     setEditingCourse(null);
     setIsAdding(false);
     setEditingLesson(null);
+    setIsAddingLesson(false);
   };
 
   // 1. ADD / EDIT PANEL
@@ -336,7 +360,80 @@ export default function CourseManager({ courses }: { courses: CourseWithDetails[
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 italic">No lessons found for this course.</p>
+              <div className="rounded-xl border border-dashed border-[#573d70] p-5">
+                <p className="mb-4 text-sm text-gray-400">No lessons have been added to this course yet.</p>
+                {!isAddingLesson ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLessonSaveError("");
+                      setLessonFormData({ title: "", description: "", content: "" });
+                      setIsAddingLesson(true);
+                    }}
+                    className="rounded-lg bg-[#75428a] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#89529f]"
+                  >
+                    + Add first lesson
+                  </button>
+                ) : (
+                  <form onSubmit={handleAddLesson} className="space-y-4">
+                    <div className="space-y-2">
+                      <label htmlFor="new-lesson-title" className="block text-sm font-semibold text-gray-200">Lesson title</label>
+                      <input
+                        id="new-lesson-title"
+                        required
+                        value={lessonFormData.title}
+                        onChange={(event) => setLessonFormData({ ...lessonFormData, title: event.target.value })}
+                        className="w-full rounded-lg border border-[#49315d] bg-[#301d3d] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="new-lesson-description" className="block text-sm font-semibold text-gray-200">Description</label>
+                      <input
+                        id="new-lesson-description"
+                        required
+                        value={lessonFormData.description}
+                        onChange={(event) => setLessonFormData({ ...lessonFormData, description: event.target.value })}
+                        className="w-full rounded-lg border border-[#49315d] bg-[#301d3d] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="new-lesson-content" className="block text-sm font-semibold text-gray-200">Lesson content</label>
+                      <textarea
+                        id="new-lesson-content"
+                        required
+                        rows={6}
+                        value={lessonFormData.content}
+                        onChange={(event) => setLessonFormData({ ...lessonFormData, content: event.target.value })}
+                        className="w-full rounded-lg border border-[#49315d] bg-[#301d3d] px-3 py-2 text-white outline-none focus:border-[#a56bc3]"
+                      />
+                    </div>
+                    {lessonSaveError && (
+                      <p role="alert" className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                        {lessonSaveError}
+                      </p>
+                    )}
+                    <div className="flex gap-2">
+                      <button
+                        type="submit"
+                        disabled={isSavingLesson}
+                        className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-500 disabled:cursor-wait disabled:opacity-60"
+                      >
+                        {isSavingLesson ? "Adding..." : "Save lesson"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAddingLesson(false);
+                          setLessonSaveError("");
+                        }}
+                        className="rounded-lg bg-gray-700 px-4 py-2 text-sm text-white transition hover:bg-gray-600"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
             )}
           </div>
         )}

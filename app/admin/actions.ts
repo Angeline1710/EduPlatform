@@ -86,6 +86,27 @@ export async function updateLesson(id: string, data: { title: string; descriptio
   revalidatePath("/admin");
 }
 
+export async function addLesson(courseId: string, data: { title: string; description: string; content: string }) {
+  const title = data.title.trim();
+  const description = data.description.trim();
+  const content = data.content.trim();
+  if (!title || !description || !content) {
+    throw new Error("Lesson title, description, and content are required.");
+  }
+
+  const lastLesson = await prisma.lesson.findFirst({
+    where: { courseId },
+    orderBy: { order: "desc" },
+    select: { order: true },
+  });
+  const lesson = await prisma.lesson.create({
+    data: { courseId, title, description, content, order: (lastLesson?.order ?? 0) + 1 },
+  });
+  revalidatePath("/admin");
+  revalidatePath(`/courses/${courseId}`);
+  return lesson;
+}
+
 export async function getUserDetails(userId: string) {
   return await prisma.user.findUnique({
     where: { id: userId },

@@ -62,12 +62,6 @@ export default async function AdminDashboardPage() {
           >
             🌐 View site
           </Link>
-          <Link
-            href="/admin/courses/new"
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-yellow-400 text-black font-bold text-sm hover:bg-yellow-300 transition"
-          >
-            + New course
-          </Link>
         </div>
       </header>
 
