@@ -127,7 +127,7 @@ export default function Nav() {
           {user ? (
             <>
               <Link
-                href={user.role === "ADMIN" ? "/admin" : "/profile"}
+                href={user.role === "ADMIN" ? "/admin" : "/dashboard"}
                 className="hidden text-sm text-[var(--shell-text-muted)] transition hover:text-[var(--gold-bright)] lg:inline"
               >
                 {user.name}

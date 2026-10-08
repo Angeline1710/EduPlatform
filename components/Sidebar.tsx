@@ -59,7 +59,6 @@ export default function Sidebar() {
       : user
         ? [
             { href: "/dashboard", label: "My Learning", icon: "book" },
-            { href: "/profile", label: "My Record", icon: "user" },
           ]
         : []),
   ];

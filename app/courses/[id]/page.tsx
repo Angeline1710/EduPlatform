@@ -84,8 +84,19 @@ export default async function CourseDetailPage({
           {!isEnrolled ? (
             <>
               {course.lessons.length === 0 ? (
-                <div className="rounded border border-dashed border-gray-700 p-8 text-center text-gray-400">
-                  No lessons available yet.
+                <div className="flex flex-col md:flex-row gap-8 mb-10">
+                  <div className="flex-1 rounded border border-dashed border-gray-700 p-8 text-center text-gray-400">
+                    No lessons available yet.
+                  </div>
+                  <div className="w-full md:w-64 shrink-0 flex flex-col items-center md:items-end justify-start pt-4">
+                    {session ? (
+                      <EnrollButton courseId={course.id} />
+                    ) : (
+                      <Link href="/login" className="flex items-center gap-2 bg-[var(--gold)] hover:bg-[var(--gold-bright)] text-black font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(201,162,39,0.3)]">
+                        Sign in to Enroll
+                      </Link>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col md:flex-row gap-8">

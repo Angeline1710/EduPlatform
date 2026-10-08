@@ -30,6 +30,30 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/login");
 
+  const enrolledCourseIds = user.courseEnrollments.map(e => e.courseId);
+  const completedCourses = user.courseEnrollments
+    .filter(e => e.completedAt || user.certificates.some(c => c.courseId === e.courseId))
+    .map(e => e.course);
+  
+  const topics = new Set<string>();
+  completedCourses.forEach(c => {
+    c.topics.split(",").forEach(t => topics.add(t.trim().toLowerCase()));
+  });
+  user.desiredCourses.forEach(d => topics.add(d.topic.trim().toLowerCase()));
+
+  const allOtherCourses = await prisma.course.findMany({
+    where: { id: { notIn: enrolledCourseIds } }
+  });
+
+  const recommendedCourses = allOtherCourses.map(course => {
+    const courseTopics = course.topics.split(",").map(t => t.trim().toLowerCase());
+    const score = courseTopics.reduce((acc, t) => acc + (topics.has(t) ? 1 : 0), 0);
+    return { course, score };
+  })
+  .sort((a, b) => b.score - a.score)
+  .map(c => c.course)
+  .slice(0, 3);
+
   const firstName = session.user.name?.split(" ")[0] ?? "Scholar";
 
   return (
@@ -59,7 +83,9 @@ export default async function DashboardPage() {
                     return (
                       <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
                         <span className="text-xs bg-indigo-600 text-white px-2 py-1 rounded">Course</span>
-                        <h3 className="text-lg font-bold mt-2">{e.course.title}</h3>
+                        <Link href={`/courses/${e.courseId}`} className="hover:underline text-indigo-300">
+                          <h3 className="text-lg font-bold mt-2">{e.course.title}</h3>
+                        </Link>
                         <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
                         {!claimed && (
                           <ClaimCertificateButton 
@@ -78,7 +104,9 @@ export default async function DashboardPage() {
                     return (
                       <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
                         <span className="text-xs bg-emerald-600 text-white px-2 py-1 rounded">Internship</span>
-                        <h3 className="text-lg font-bold mt-2">{e.internship.title}</h3>
+                        <Link href={`/internships/${e.internshipId}`} className="hover:underline text-emerald-300">
+                          <h3 className="text-lg font-bold mt-2">{e.internship.title}</h3>
+                        </Link>
                         <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
                         {!claimed && (
                           <ClaimCertificateButton 
@@ -119,6 +147,27 @@ export default async function DashboardPage() {
           </div>
 
           <aside className="space-y-6">
+            {/* Recommendations */}
+            <div className="bg-gray-800 p-6 rounded border border-gray-700">
+              <h3 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Recommended for You</h3>
+              {recommendedCourses.length === 0 ? (
+                <p className="text-sm text-gray-400 mb-4">Keep learning to get personalized recommendations!</p>
+              ) : (
+                <div className="space-y-4 mb-4">
+                  {recommendedCourses.map(rc => (
+                    <Link key={rc.id} href={`/courses/${rc.id}`} className="block bg-gray-900 p-3 rounded border border-gray-700 hover:border-indigo-500 transition">
+                      <h4 className="font-bold text-sm text-indigo-300">{rc.title}</h4>
+                      <p className="text-xs text-gray-400 mt-1 line-clamp-2">{rc.description}</p>
+                    </Link>
+                  ))}
+                </div>
+              )}
+              
+              <Link href="/courses" className="text-sm text-indigo-400 hover:text-indigo-300 transition">
+                Browse All Courses &rarr;
+              </Link>
+            </div>
+
             {/* Desired Courses */}
             <div className="bg-gray-800 p-6 rounded border border-gray-700">
               <h3 className="text-lg font-bold mb-4">My Desired Topics</h3>
@@ -133,13 +182,8 @@ export default async function DashboardPage() {
                   ))}
                 </ul>
               )}
-              
-              <Link href="/courses" className="text-sm text-indigo-400 hover:text-indigo-300 transition">
-                Browse Recommendations &rarr;
-              </Link>
             </div>
           </aside>
-
         </div>
       </section>
     </>
