@@ -1,5 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { parseDateOnly } from "@/lib/certificate-dates";
 import { revalidatePath } from "next/cache";
 
 const COURSE_CATEGORIES = ["Development", "Data", "Design", "Business", "Security", "Communication", "General"];
@@ -143,4 +145,113 @@ export async function promoteToAdmin(userId: string) {
   await prisma.user.update({ where: { id: userId }, data: { role: "ADMIN" } });
   revalidatePath("/admin/users");
   revalidatePath("/admin");
+}
+
+export async function updateProgramDates({
+  userId,
+  enrollmentId,
+  type,
+  startDate: startDateValue,
+  completionDate: completionDateValue,
+}: {
+  userId: string;
+  enrollmentId: string;
+  type: "COURSE" | "INTERNSHIP";
+  startDate: string;
+  completionDate: string;
+}) {
+  if (type !== "COURSE" && type !== "INTERNSHIP") {
+    throw new Error("Choose a valid program type.");
+  }
+
+  const session = await auth();
+  if (!session?.user?.email || session.user.role !== "ADMIN") {
+    throw new Error("Only admins can edit program dates.");
+  }
+
+  const admin = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { role: true },
+  });
+  if (admin?.role !== "ADMIN") {
+    throw new Error("Only admins can edit program dates.");
+  }
+
+  const startDate = parseDateOnly(startDateValue);
+  const completionDate = completionDateValue
+    ? parseDateOnly(completionDateValue)
+    : null;
+  if (completionDate && completionDate < startDate) {
+    throw new Error("Completion date must be on or after the start date.");
+  }
+
+  let courseId: string | undefined;
+  let certificateId: string | undefined;
+  let credentialId: string | undefined;
+  if (type === "COURSE") {
+    const enrollment = await prisma.courseEnrollment.findFirst({
+      where: { id: enrollmentId, userId },
+      select: { courseId: true },
+    });
+    if (!enrollment) throw new Error("The selected program enrollment was not found.");
+    courseId = enrollment.courseId;
+    const certificate = await prisma.certificate.findUnique({
+      where: { userId_courseId_type: { userId, courseId, type } },
+      select: { id: true, credentialId: true },
+    });
+    certificateId = certificate?.id;
+    credentialId = certificate?.credentialId;
+  } else {
+    const enrollment = await prisma.internshipEnrollment.findFirst({
+      where: { id: enrollmentId, userId },
+      select: { internshipId: true },
+    });
+    if (!enrollment) throw new Error("The selected program enrollment was not found.");
+    const certificate = await prisma.certificate.findUnique({
+      where: {
+        userId_internshipId_type: {
+          userId,
+          internshipId: enrollment.internshipId,
+          type,
+        },
+      },
+      select: { id: true, credentialId: true },
+    });
+    certificateId = certificate?.id;
+    credentialId = certificate?.credentialId;
+  }
+
+  if (certificateId && !completionDate) {
+    throw new Error("A completion date is required for a program with an issued certificate.");
+  }
+
+  await prisma.$transaction(async (transaction) => {
+    if (type === "COURSE") {
+      await transaction.courseEnrollment.update({
+        where: { id: enrollmentId },
+        data: { enrolledAt: startDate, completedAt: completionDate },
+      });
+    } else {
+      await transaction.internshipEnrollment.update({
+        where: { id: enrollmentId },
+        data: { enrolledAt: startDate, completedAt: completionDate },
+      });
+    }
+
+    if (certificateId && completionDate) {
+      await transaction.certificate.update({
+        where: { id: certificateId },
+        data: {
+          periodStartDate: startDate,
+          periodEndDate: completionDate,
+          issuedAt: completionDate,
+        },
+      });
+    }
+  });
+
+  revalidatePath(`/admin/users/${userId}`);
+  revalidatePath("/dashboard");
+  if (credentialId) revalidatePath(`/verify/${credentialId}`);
+  if (courseId) revalidatePath(`/courses/${courseId}`);
 }

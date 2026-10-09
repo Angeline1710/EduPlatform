@@ -3,21 +3,16 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { parseOneMonthPeriod } from "@/lib/certificate-dates";
 import { generateCredentialId } from "@/lib/credentials";
 
 export async function claimCertificate({
   type,
   courseId,
   internshipId,
-  periodStartDate,
-  periodEndDate,
 }: {
   type: "COURSE" | "INTERNSHIP";
   courseId?: string;
   internshipId?: string;
-  periodStartDate?: string;
-  periodEndDate?: string;
 }) {
   const session = await auth();
   if (!session?.user?.email) throw new Error("Unauthorized");
@@ -34,12 +29,8 @@ export async function claimCertificate({
     throw new Error("Choose exactly one valid certificate type and program.");
   }
 
-  if (!periodStartDate || !periodEndDate) {
-    throw new Error("Choose both the start and completion dates.");
-  }
-  const completionPeriod = parseOneMonthPeriod(periodStartDate, periodEndDate);
-  const completionDate = completionPeriod.endDate;
-
+  let startDate: Date | null = null;
+  let completionDate: Date | null = null;
   if (type === "COURSE" && courseId) {
     const enrollment = await prisma.courseEnrollment.findUnique({
       where: { userId_courseId: { userId: user.id, courseId } },
@@ -48,6 +39,8 @@ export async function claimCertificate({
       },
     });
     if (!enrollment) throw new Error("You must be enrolled in this course to claim its certificate.");
+    startDate = enrollment.enrolledAt;
+    completionDate = enrollment.completedAt ?? new Date();
 
     const lessonCount = enrollment.course.lessons.length;
     if (lessonCount === 0) throw new Error("This course has no lessons to complete.");
@@ -65,11 +58,17 @@ export async function claimCertificate({
   if (type === "INTERNSHIP" && internshipId) {
     const enrollment = await prisma.internshipEnrollment.findUnique({
       where: { userId_internshipId: { userId: user.id, internshipId } },
-      select: { id: true },
+      select: { enrolledAt: true, completedAt: true },
     });
     if (!enrollment) {
       throw new Error("You must be enrolled in this internship to claim its certificate.");
     }
+    startDate = enrollment.enrolledAt;
+    completionDate = enrollment.completedAt ?? new Date();
+  }
+
+  if (!startDate || !completionDate || startDate > completionDate) {
+    throw new Error("The program start date must be on or before its completion date. Ask an admin to update the dates.");
   }
 
   // Check if certificate already exists
@@ -88,16 +87,30 @@ export async function claimCertificate({
 
   const credentialId = generateCredentialId();
 
-  await prisma.certificate.create({
-    data: {
-      userId: user.id,
-      type,
-      courseId: courseId || null,
-      internshipId: internshipId || null,
-      issuedAt: completionDate,
-      periodStartDate: completionPeriod?.startDate ?? null,
-      periodEndDate: completionPeriod?.endDate ?? null,
-      credentialId,
+  await prisma.$transaction(async (transaction) => {
+    await transaction.certificate.create({
+      data: {
+        userId: user.id,
+        type,
+        courseId: courseId || null,
+        internshipId: internshipId || null,
+        issuedAt: completionDate,
+        periodStartDate: startDate,
+        periodEndDate: completionDate,
+        credentialId,
+      }
+    });
+
+    if (type === "COURSE" && courseId) {
+      await transaction.courseEnrollment.update({
+        where: { userId_courseId: { userId: user.id, courseId } },
+        data: { completedAt: completionDate },
+      });
+    } else if (type === "INTERNSHIP" && internshipId) {
+      await transaction.internshipEnrollment.update({
+        where: { userId_internshipId: { userId: user.id, internshipId } },
+        data: { completedAt: completionDate },
+      });
     }
   });
 

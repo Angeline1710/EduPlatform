@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { randomBytes } from "node:crypto";
-import { parseOneMonthPeriod } from "@/lib/certificate-dates";
 
 const credentialIdPattern = /^EDU-[A-Z0-9]+(?:-[A-Z0-9]+)*$/;
 
@@ -47,14 +46,13 @@ export function hasConsistentCredentialRelations(
   }
 
   if (certificate.periodStartDate && certificate.periodEndDate) {
-    try {
-      const start = certificate.periodStartDate.toISOString().slice(0, 10);
-      const end = certificate.periodEndDate.toISOString().slice(0, 10);
-      const period = parseOneMonthPeriod(start, end);
-      if (period.endDate.toISOString().slice(0, 10) !== certificate.issuedAt.toISOString().slice(0, 10)) {
-        return false;
-      }
-    } catch {
+    if (certificate.periodStartDate > certificate.periodEndDate) {
+      return false;
+    }
+    if (
+      certificate.periodEndDate.toISOString().slice(0, 10) !==
+      certificate.issuedAt.toISOString().slice(0, 10)
+    ) {
       return false;
     }
   }

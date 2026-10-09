@@ -14,6 +14,15 @@ function greeting(d: Date) {
   return "Good evening";
 }
 
+function formatProgramDate(date: Date) {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
 export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user?.email) redirect("/login");
@@ -79,44 +88,62 @@ export default async function DashboardPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {user.courseEnrollments.map(e => {
-                    const claimed = user.certificates.some(c => c.courseId === e.courseId);
+                    const certificate = user.certificates.find(c => c.courseId === e.courseId);
                     return (
                       <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
                         <span className="text-xs bg-indigo-600 text-white px-2 py-1 rounded">Course</span>
                         <Link href={`/courses/${e.courseId}`} className="hover:underline text-indigo-300">
                           <h3 className="text-lg font-bold mt-2">{e.course.title}</h3>
                         </Link>
-                        <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
-                        {!claimed && (
+                        <p className="text-sm text-gray-400 mt-1">Enrolled: {formatProgramDate(e.enrolledAt)}</p>
+                        {e.completedAt && (
+                          <p className="text-sm text-gray-400 mt-1">Completed: {formatProgramDate(e.completedAt)}</p>
+                        )}
+                        {!certificate && (
                           <ClaimCertificateButton 
-                            enrollmentId={e.id} 
                             type="COURSE" 
                             title={e.course.title} 
                             courseId={e.courseId} 
                           />
                         )}
-                        {claimed && <p className="mt-4 text-xs text-emerald-400">Certificate Claimed ✓</p>}
+                        {certificate && (
+                          <Link
+                            href={`/verify/${certificate.credentialId}`}
+                            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300"
+                          >
+                            View Credential <span aria-hidden="true">→</span>
+                          </Link>
+                        )}
                       </div>
                     );
                   })}
                   {user.internshipEnrollments.map(e => {
-                    const claimed = user.certificates.some(c => c.internshipId === e.internshipId);
+                    const certificate = user.certificates.find(c => c.internshipId === e.internshipId);
                     return (
                       <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
                         <span className="text-xs bg-emerald-600 text-white px-2 py-1 rounded">Internship</span>
                         <Link href={`/internships/${e.internshipId}`} className="hover:underline text-emerald-300">
                           <h3 className="text-lg font-bold mt-2">{e.internship.title}</h3>
                         </Link>
-                        <p className="text-sm text-gray-400 mt-1">Enrolled: {new Date(e.enrolledAt).toLocaleDateString()}</p>
-                        {!claimed && (
+                        <p className="text-sm text-gray-400 mt-1">Enrolled: {formatProgramDate(e.enrolledAt)}</p>
+                        {e.completedAt && (
+                          <p className="text-sm text-gray-400 mt-1">Completed: {formatProgramDate(e.completedAt)}</p>
+                        )}
+                        {!certificate && (
                           <ClaimCertificateButton 
-                            enrollmentId={e.id} 
                             type="INTERNSHIP" 
                             title={e.internship.title} 
                             internshipId={e.internshipId} 
                           />
                         )}
-                        {claimed && <p className="mt-4 text-xs text-emerald-400">Certificate Claimed ✓</p>}
+                        {certificate && (
+                          <Link
+                            href={`/verify/${certificate.credentialId}`}
+                            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300"
+                          >
+                            View Credential <span aria-hidden="true">→</span>
+                          </Link>
+                        )}
                       </div>
                     );
                   })}
@@ -138,7 +165,7 @@ export default async function DashboardPage() {
                     <Link key={c.id} href={`/verify/${c.credentialId}`} className="block bg-gray-800 p-4 rounded border border-gray-700 hover:border-indigo-500 transition">
                       <h3 className="text-lg font-bold">{c.course?.title || c.internship?.title}</h3>
                       <p className="text-xs text-indigo-400 font-mono mt-1">{c.credentialId}</p>
-                      <p className="text-sm text-gray-400 mt-2">Issued: {new Date(c.issuedAt).toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-400 mt-2">Issued: {formatProgramDate(c.issuedAt)}</p>
                     </Link>
                   ))}
                 </div>

@@ -195,8 +195,6 @@ export default function LessonViewer({
                 type="COURSE"
                 title={courseTitle}
                 courseId={courseId}
-                autoOpen
-                showTrigger={false}
                 onClaimed={(credentialId) => {
                   setCertCode(credentialId);
                   setJustEarned(true);
@@ -225,7 +223,7 @@ export default function LessonViewer({
                 </p>
               </div>
               <Link
-                href={`/certificates/${certCode}`}
+                href={`/verify/${certCode}`}
                 className="rune-edge press inline-flex items-center gap-2 rounded-md border border-[var(--gold-bright)] bg-[var(--surface-2)] px-5 py-2.5 font-semibold text-[var(--gold)] transition hover:brightness-110"
               >
                 View Credential

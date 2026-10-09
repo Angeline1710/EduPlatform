@@ -14,7 +14,7 @@ const FAQS = [
   },
   {
     q: "How do I earn a credential?",
-    a: "Complete at least 85% of a course's lessons, then claim your credential from the course or dashboard. You'll choose the one-month completion period before it is issued.",
+    a: "Complete at least 85% of a course's lessons, then claim your credential from the course or dashboard. An admin manages the program dates shown on your certificate.",
   },
   {
     q: "Can someone verify my credential?",

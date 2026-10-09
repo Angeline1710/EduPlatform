@@ -23,21 +23,17 @@ export default function DownloadCertificate({
       const certEl =
         certRef.current.querySelector<HTMLElement>("#certificate") ??
         certRef.current;
-      const width = certEl.offsetWidth;
-      const height = certEl.offsetHeight;
 
       const dataUrl = await toPng(certEl, {
         quality: 1,
         pixelRatio: 2,
-        width,
-        height,
-        canvasWidth: width * 2,
-        canvasHeight: height * 2,
         backgroundColor: "#F7F1E5",
+        cacheBust: true,
         style: {
-          transform: "scale(1)",
+          transform: "none",
           transformOrigin: "top left",
           overflow: "hidden",
+          margin: "0",
         },
       });
 

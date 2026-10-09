@@ -217,8 +217,6 @@ export default function Certificate({
             <br />
             {hasCompletionPeriod && startDate && endDate ? (
               <>
-                for the duration of{" "}
-                <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>1 month</strong>{" "}
                 from <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(startDate)}</strong>{" "}
                 to <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{fmt(endDate)}</strong>.
               </>
