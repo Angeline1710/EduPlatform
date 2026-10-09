@@ -67,7 +67,7 @@ export async function ensureCourseInternshipCertificate(
     );
   }
 
-  return prisma.certificate.upsert({
+  const existing = await prisma.certificate.findUnique({
     where: {
       userId_courseId_type: {
         userId: courseCertificate.userId,
@@ -75,16 +75,103 @@ export async function ensureCourseInternshipCertificate(
         type: "INTERNSHIP",
       },
     },
-    create: {
+    select: {
+      id: true,
+      credentialId: true,
+      periodStartDate: true,
+      periodEndDate: true,
+    },
+  });
+
+  const periodStartDate = existing?.periodStartDate ?? startDate;
+  const periodEndDate = existing?.periodEndDate ?? endDate;
+  if (periodStartDate > periodEndDate) {
+    throw new Error(
+      `Cannot issue the internship certificate for ${courseCertificate.credentialId}: the start date is after the completion date.`,
+    );
+  }
+
+  if (existing) {
+    if (!existing.periodStartDate || !existing.periodEndDate) {
+      return prisma.certificate.update({
+        where: { id: existing.id },
+        data: {
+          issuedAt: periodEndDate,
+          periodStartDate,
+          periodEndDate,
+        },
+      });
+    }
+    return existing;
+  }
+
+  return prisma.certificate.create({
+    data: {
       userId: courseCertificate.userId,
       courseId: courseCertificate.courseId,
       type: "INTERNSHIP",
-      issuedAt: endDate,
-      periodStartDate: startDate,
-      periodEndDate: endDate,
+      issuedAt: periodEndDate,
+      periodStartDate,
+      periodEndDate,
       credentialId: generateCredentialId(),
     },
-    update: {},
+  });
+}
+
+export async function ensureCredentialDuration(certificate: CredentialRecord) {
+  if (
+    certificate.type !== "INTERNSHIP" ||
+    (certificate.periodStartDate && certificate.periodEndDate)
+  ) {
+    return certificate;
+  }
+
+  const enrollment = certificate.internshipId
+    ? await prisma.internshipEnrollment.findUnique({
+        where: {
+          userId_internshipId: {
+            userId: certificate.userId,
+            internshipId: certificate.internshipId,
+          },
+        },
+        select: { enrolledAt: true, completedAt: true },
+      })
+    : certificate.courseId
+      ? await prisma.courseEnrollment.findUnique({
+          where: {
+            userId_courseId: {
+              userId: certificate.userId,
+              courseId: certificate.courseId,
+            },
+          },
+          select: { enrolledAt: true, completedAt: true },
+        })
+      : null;
+
+  const periodStartDate =
+    certificate.periodStartDate ?? enrollment?.enrolledAt ?? certificate.issuedAt;
+  const periodEndDate =
+    certificate.periodEndDate ??
+    enrollment?.completedAt ??
+    certificate.issuedAt;
+  if (periodStartDate > periodEndDate) {
+    throw new Error(
+      `Cannot display the duration for internship credential ${certificate.credentialId}: the start date is after the completion date.`,
+    );
+  }
+
+  return prisma.certificate.update({
+    where: { id: certificate.id },
+    data: {
+      periodStartDate,
+      periodEndDate,
+      issuedAt: periodEndDate,
+    },
+    include: {
+      user: { select: { name: true, title: true } },
+      course: { select: { title: true, internRole: true } },
+      internship: { select: { title: true } },
+    },
   });
 }
 
@@ -99,7 +186,7 @@ export function getCredentialProgramTitle(certificate: {
     return certificate.course?.title ?? null;
   }
   if (certificate.type === "INTERNSHIP") {
-    return certificate.internship?.title ?? certificate.course?.title ?? null;
+    return certificate.internship?.title ?? "Internship program";
   }
   return null;
 }

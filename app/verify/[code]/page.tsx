@@ -8,6 +8,7 @@ import {
   findCredential,
   findUserCredentials,
   ensureCourseInternshipCertificate,
+  ensureCredentialDuration,
   getCredentialInternRole,
   getCredentialProgramTitle,
   hasConsistentCredentialRelations,
@@ -23,22 +24,33 @@ export default async function VerifyResultPage({
 }) {
   const { code } = await params;
   const normalized = normalizeCredentialId(code);
-  const record = normalized ? await findCredential(normalized) : null;
+  let record = normalized ? await findCredential(normalized) : null;
+  const session = record ? await auth() : null;
+  if (record && session?.user?.id === record.userId) {
+    if (record.type === "COURSE") {
+      await ensureCourseInternshipCertificate(record);
+    } else if (record.type === "INTERNSHIP") {
+      await ensureCredentialDuration(record);
+    }
+    record = await findCredential(record.credentialId);
+  }
+
+  let certificates = record
+    ? await findUserCredentials(record.userId)
+    : [];
+  if (record && session?.user?.id === record.userId) {
+    await Promise.all(
+      certificates
+        .filter((issuedCertificate) => issuedCertificate.type === "INTERNSHIP")
+        .map(ensureCredentialDuration),
+    );
+    certificates = await findUserCredentials(record.userId);
+  }
+
   const valid = Boolean(record && hasConsistentCredentialRelations(record));
   const certificate = valid ? record : null;
   const foundButInconsistent = Boolean(record && !valid);
-  const session = certificate?.type === "COURSE" ? await auth() : null;
-  if (
-    certificate?.type === "COURSE" &&
-    session?.user?.id === certificate.userId
-  ) {
-    await ensureCourseInternshipCertificate(certificate);
-  }
-  const certificates = certificate
-    ? (await findUserCredentials(certificate.userId)).filter(
-        hasConsistentCredentialRelations,
-      )
-    : [];
+  certificates = certificates.filter(hasConsistentCredentialRelations);
 
   return (
     <div className="mx-auto max-w-[1200px] px-6 py-12">

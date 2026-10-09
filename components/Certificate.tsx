@@ -212,13 +212,10 @@ export default function Certificate({
                   <>
                     {" "}as an intern in{" "}
                     <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{internRole}</strong>
-                    {" "}for the course{" "}
-                    <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{title}</strong>
                   </>
                 ) : (
                   <>
-                    {" "}in the program{" "}
-                    <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{title}</strong>
+                    {" "}program.
                   </>
                 )}
               </>
