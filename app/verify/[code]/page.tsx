@@ -5,9 +5,12 @@ import VerifyForm from "@/components/VerifyForm";
 import Icon from "@/components/Icon";
 import {
   findCredential,
+  getCredentialProgramTitle,
   hasConsistentCredentialRelations,
   normalizeCredentialId,
 } from "@/lib/credentials";
+
+export const dynamic = "force-dynamic";
 
 export default async function VerifyResultPage({
   params,
@@ -85,10 +88,10 @@ export default async function VerifyResultPage({
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-faint)]">
-                {certificate.type === "COURSE" ? "Course" : "Internship"}
+                {certificate.type === "COURSE" ? "Course certificate" : "Internship certificate"}
               </p>
               <p className="mt-1 font-semibold text-[var(--text)]">
-                {certificate.course?.title ?? certificate.internship!.title}
+                {getCredentialProgramTitle(certificate)}
               </p>
             </div>
             <div>
@@ -137,7 +140,10 @@ function CertificateView({
   certificate: NonNullable<Awaited<ReturnType<typeof findCredential>>>;
 }) {
   const type = certificate.type === "COURSE" ? "Course" : "Internship";
-  const title = certificate.course?.title ?? certificate.internship!.title;
+  const title = getCredentialProgramTitle(certificate);
+  if (!title) {
+    throw new Error(`Credential ${code} has no associated program title.`);
+  }
 
   return (
     <DownloadCertificate filename={`${code}-${type}`}>

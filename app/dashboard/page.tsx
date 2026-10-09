@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import PageHeader from "@/components/PageHeader";
 import ClaimCertificateButton from "./ClaimCertificateButton";
+import { getCredentialProgramTitle } from "@/lib/credentials";
 
 export const metadata = { title: "My Learning · EduPlatform" };
 
@@ -163,7 +164,10 @@ export default async function DashboardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {user.certificates.map(c => (
                     <Link key={c.id} href={`/verify/${c.credentialId}`} className="block bg-gray-800 p-4 rounded border border-gray-700 hover:border-indigo-500 transition">
-                      <h3 className="text-lg font-bold">{c.course?.title || c.internship?.title}</h3>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-indigo-300">
+                        {c.type === "COURSE" ? "Course certificate" : "Internship certificate"}
+                      </p>
+                      <h3 className="mt-1 text-lg font-bold">{getCredentialProgramTitle(c) ?? "Program certificate"}</h3>
                       <p className="text-xs text-indigo-400 font-mono mt-1">{c.credentialId}</p>
                       <p className="text-sm text-gray-400 mt-2">Issued: {formatProgramDate(c.issuedAt)}</p>
                     </Link>

@@ -24,8 +24,24 @@ export async function findCredential(credentialId: string) {
   });
 }
 
+type CredentialRecord = NonNullable<Awaited<ReturnType<typeof findCredential>>>;
+
+export function getCredentialProgramTitle(certificate: {
+  type: string;
+  course: { title: string } | null;
+  internship: { title: string } | null;
+}): string | null {
+  if (certificate.type === "COURSE") {
+    return certificate.course?.title ?? null;
+  }
+  if (certificate.type === "INTERNSHIP") {
+    return certificate.internship?.title ?? certificate.course?.title ?? null;
+  }
+  return null;
+}
+
 export function hasConsistentCredentialRelations(
-  certificate: NonNullable<Awaited<ReturnType<typeof findCredential>>>,
+  certificate: CredentialRecord,
 ): boolean {
   if (!certificate.user.name.trim()) return false;
 
