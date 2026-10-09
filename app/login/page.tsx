@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthShell from "@/components/AuthShell";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,18 +16,24 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-    setLoading(false);
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (res?.error) {
-      setError("Invalid email or password.");
-      return;
+      if (!res?.ok || res.error) {
+        setError("Invalid email or password.");
+        setLoading(false);
+        return;
+      }
+
+      window.location.assign("/dashboard");
+    } catch {
+      setError("Unable to sign in. Please try again.");
+      setLoading(false);
     }
-    router.replace("/dashboard");
   }
 
   return (

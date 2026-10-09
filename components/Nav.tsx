@@ -56,7 +56,8 @@ export default function Nav() {
     setIsSigningOut(true);
     try {
       await signOut({ redirect: false, callbackUrl: "/" });
-      router.replace("/");
+      setIsSigningOut(false);
+      window.location.assign("/");
     } catch (error) {
       setIsSigningOut(false);
       console.error("Unable to sign out.", error);
