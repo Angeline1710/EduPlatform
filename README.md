@@ -102,6 +102,12 @@ Enrollment is created by the webhook on `checkout.session.completed`, not on the
 
 The build generates Prisma Client automatically. The PostgreSQL migrations are in `prisma/migrations-postgresql`; the older SQLite migration history is retained separately and is not used by the current Prisma config. Existing local SQLite data is not copied to the production database. Database-backed pages are rendered at request time so builds do not need a live database connection.
 
+To import the DSA Using Python curriculum without reseeding or deleting other
+courses, set `DATABASE_URL` to the intended database and run
+`npm run import:dsa-course`. Use `npm run import:dsa-course -- --dry-run` to
+validate the lesson source before writing. The importer updates existing lessons
+in order and preserves extra lessons to avoid deleting learner progress.
+
 Leave `AUTH_URL` and `NEXTAUTH_URL` unset for local development. Auth.js detects
 the active request host, and browser auth requests use the relative `/api/auth`
 path, so localhost, `127.0.0.1`, and alternate development ports remain on the

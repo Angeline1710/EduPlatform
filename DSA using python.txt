@@ -1,0 +1,867 @@
+# Data Structures and Algorithms Using Python
+
+This beginner-friendly course builds from Python collections to core data structures and algorithms. Each lesson includes an explanation, a runnable example, expected output, complexity where useful, and practice prompts.
+
+# MODULE 1: PYTHON FOUNDATIONS FOR DSA
+
+## Lesson 01: Introduction to Data Structures and Algorithms
+
+**Data structures** organize information so it can be accessed and changed. **Algorithms** are the steps used to solve a problem with that information.
+
+For a library catalog, a list can hold book titles and a search algorithm can find a requested title. The same task can use different structures and algorithms, with different trade-offs.
+
+```python
+books = ["Python", "Java", "C++", "DSA"]
+target = "DSA"
+
+for book in books:
+    if book == target:
+        print("Book found:", book)
+        break
+```
+
+Output:
+
+```text
+Book found: DSA
+```
+
+The loop checks each title until it finds the target. This is a linear search and takes O(n) time in the worst case.
+
+Practice:
+- Give one real-world example of a data structure and the algorithm used with it.
+- What happens if the target is not in the list?
+
+## Lesson 02: Python Collections Used in DSA
+
+Python's built-in collections are useful building blocks:
+
+- `list`: ordered, changeable sequence; good for indexed data.
+- `tuple`: ordered, immutable sequence; useful for fixed records such as coordinates.
+- `set`: collection of unique values; useful for membership checks and removing duplicates.
+- `dict`: key-value mapping; useful for looking up a value by an identifier.
+
+```python
+student = {
+    "name": "Arun",
+    "age": 20,
+    "department": "CSE",
+}
+
+print(student["name"])
+print(student["department"])
+```
+
+Output:
+
+```text
+Arun
+CSE
+```
+
+Dictionary keys should be unique. Accessing a key is O(1) on average. Accessing a missing key with square brackets raises `KeyError`; use `student.get("email")` when a key may be absent.
+
+Practice: Store three product records in a dictionary and retrieve one by its product ID.
+
+## Lesson 03: A Reliable Problem-Solving Process
+
+Use a repeatable process before writing code:
+
+1. Restate the problem in your own words.
+2. Identify inputs, outputs, constraints, and edge cases.
+3. Work through a small example by hand.
+4. Describe the algorithm in plain language.
+5. Implement it and test typical and boundary cases.
+6. Analyze time and auxiliary space.
+
+Example: add all inventory quantities.
+
+```python
+stock = [10, 20, 15, 5]
+total = 0
+
+for quantity in stock:
+    total += quantity
+
+print("Total stock:", total)
+```
+
+Output:
+
+```text
+Total stock: 50
+```
+
+The input is a list of integers and the output is one integer. The loop visits each item once, so it takes O(n) time and O(1) extra space.
+
+Practice: Write the input, output, and two edge cases for a function that finds the largest number in a list.
+
+# MODULE 2: COMPLEXITY ANALYSIS
+
+## Lesson 04: Time and Space Complexity
+
+Complexity describes how resource use grows with input size `n`; it is not a measurement in seconds. Time complexity counts the growth of operations. Auxiliary space counts extra memory used by the algorithm, excluding the input.
+
+| Complexity | Name | Typical example |
+| --- | --- | --- |
+| O(1) | Constant | Read `items[0]` |
+| O(log n) | Logarithmic | Binary search |
+| O(n) | Linear | Visit every list item |
+| O(n log n) | Linearithmic | Merge sort |
+| O(n^2) | Quadratic | Compare every pair |
+| O(2^n) | Exponential | Generate all subsets |
+| O(n!) | Factorial | Generate all permutations |
+
+```python
+numbers = [10, 20, 30, 40]
+
+for number in numbers:
+    print(number)
+```
+
+This loop performs work proportional to the list length: O(n) time. It uses O(1) auxiliary space.
+
+Practice: Estimate the number of iterations in a loop that halves `n` each time.
+
+## Lesson 05: Big-O, Big-Omega, Big-Theta, and Cases
+
+- **Big-O, O(g(n))** is an asymptotic upper bound.
+- **Big-Omega, Omega(g(n))** is an asymptotic lower bound.
+- **Big-Theta, Theta(g(n))** is a tight asymptotic bound when both bounds match.
+
+For linear search, the best case is Theta(1): the first item matches. The worst case is Theta(n): the last item matches or the target is absent. Its average case is O(n) when targets are distributed through an unsorted list.
+
+When simplifying a complexity, ignore constant factors and lower-order terms. For example, `3n^2 + 4n + 7` is O(n^2).
+
+Practice: Give the best and worst cases for searching a sorted list with binary search. State its required input condition.
+
+# MODULE 3: ARRAYS AND LISTS
+
+## Lesson 06: Array Basics and Python Lists
+
+An array stores elements in an ordered sequence. Python lists provide a flexible array-like structure. Indexing starts at zero, so the first item is at index 0 and the last item is at index `len(items) - 1`.
+
+```python
+marks = [85, 90, 78, 92]
+
+print(marks[0])
+print(marks[2])
+print(marks[-1])
+```
+
+Output:
+
+```text
+85
+78
+92
+```
+
+Reading an item by index takes O(1) time. Accessing an index outside the list raises `IndexError`.
+
+Practice: Print the first, middle, and last items of a list, handling an empty list safely.
+
+## Lesson 07: List Insertion, Deletion, Minimum, Maximum, and Sum
+
+`append` adds to the end; `insert` places an item at an index; `remove` deletes the first matching value. Inserting or deleting near the front can take O(n), because later elements shift.
+
+```python
+numbers = [10, 20, 30, 40]
+numbers.append(50)
+numbers.insert(1, 15)
+print("Updated:", numbers)
+
+numbers.remove(30)
+print("After deletion:", numbers)
+print("Minimum:", min(numbers))
+print("Maximum:", max(numbers))
+print("Sum:", sum(numbers))
+```
+
+Output:
+
+```text
+Updated: [10, 15, 20, 30, 40, 50]
+After deletion: [10, 15, 20, 40, 50]
+Minimum: 10
+Maximum: 50
+Sum: 135
+```
+
+`min`, `max`, and `sum` each scan the list and take O(n) time. They require a non-empty list for `min` and `max`.
+
+Practice: Calculate the average without using `sum`, and decide what your function should return for an empty list.
+
+## Lesson 08: Common Array Problems
+
+Reversing a list with slicing creates a new list. To find the second-largest **distinct** value, remove duplicates before sorting.
+
+```python
+numbers = [10, 20, 40, 30, 40]
+print("Reversed:", numbers[::-1])
+
+unique_numbers = sorted(set(numbers))
+if len(unique_numbers) >= 2:
+    print("Second largest:", unique_numbers[-2])
+else:
+    print("No second-largest element")
+```
+
+Output:
+
+```text
+Reversed: [40, 30, 40, 20, 10]
+Second largest: 30
+```
+
+The sorting solution takes O(n log n) time. Further practice: find duplicates, find a missing value, rotate a list, count frequencies, move zeros to the end, and find two values with a target sum.
+
+Challenge: Solve “move zeros to the end” without changing the order of non-zero values.
+
+## Lesson 09: Two-Dimensional Lists and Matrices
+
+A matrix is represented as a list of rows. For a rectangular matrix, `matrix[row][column]` accesses one value. Nested loops visit every value in O(rows * columns) time.
+
+```python
+matrix = [
+    [1, 2],
+    [3, 4],
+]
+
+for row in matrix:
+    print(*row)
+
+transpose = [
+    [matrix[row][column] for row in range(2)]
+    for column in range(2)
+]
+print("Transpose:", transpose)
+```
+
+Output:
+
+```text
+1 2
+3 4
+Transpose: [[1, 3], [2, 4]]
+```
+
+Practice: Implement matrix addition, row sums, column sums, and the main diagonal sum. Check that dimensions match before adding matrices.
+
+# MODULE 4: STRINGS
+
+## Lesson 10: String Fundamentals
+
+A string is an immutable sequence of characters. You can index and slice it, but changing one character requires building a new string.
+
+```python
+text = "Python Programming"
+
+print(text.upper())
+print(text.lower())
+print(len(text))
+print(text[0:6])
+```
+
+Output:
+
+```text
+PYTHON PROGRAMMING
+python programming
+18
+Python
+```
+
+Indexing is O(1); creating a slice takes time proportional to the slice length.
+
+Practice: Reverse a string and count how many times a chosen character appears.
+
+## Lesson 11: Palindromes, Character Frequencies, and Anagrams
+
+A palindrome reads the same forward and backward. A frequency dictionary counts each character in one pass.
+
+```python
+text = "madam"
+print("Palindrome" if text == text[::-1] else "Not a palindrome")
+
+word = "banana"
+frequency = {}
+for char in word:
+    frequency[char] = frequency.get(char, 0) + 1
+print(frequency)
+```
+
+Output:
+
+```text
+Palindrome
+{'b': 1, 'a': 3, 'n': 2}
+```
+
+Both checks take O(n) time. For anagram checks, normalize case and spaces before comparing character frequencies.
+
+Practice: Check two strings for anagrams, remove duplicate characters while preserving order, and find the first non-repeating character.
+
+# MODULE 5: SEARCHING ALGORITHMS
+
+## Lesson 12: Linear Search
+
+Linear search compares the target with each item from left to right. Return the index of the first match, or -1 if no item matches.
+
+```python
+def linear_search(items, target):
+    for index, item in enumerate(items):
+        if item == target:
+            return index
+    return -1
+
+
+print(linear_search([8, 3, 6, 2], 6))
+print(linear_search([8, 3, 6, 2], 9))
+```
+
+Output:
+
+```text
+2
+-1
+```
+
+Best-case time is O(1); worst-case time is O(n). Auxiliary space is O(1). It works on sorted and unsorted data.
+
+Practice: Return every index where the target appears.
+
+## Lesson 13: Binary Search
+
+Binary search repeatedly halves the search interval. The input **must be sorted**. This iterative implementation uses O(log n) time and O(1) auxiliary space.
+
+```python
+def binary_search(items, target):
+    low, high = 0, len(items) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        if items[mid] == target:
+            return mid
+        if items[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return -1
+
+
+print(binary_search([2, 5, 8, 12, 16, 23], 16))
+```
+
+Output:
+
+```text
+4
+```
+
+`low` and `high` bound the active range. If the middle value is smaller than the target, discard the left half; otherwise discard the right half.
+
+Practice: Find the first and last occurrence of a duplicate value, the insertion position, and the integer square root using binary search.
+
+# MODULE 6: SORTING ALGORITHMS
+
+## Lesson 14: Bubble Sort
+
+Bubble sort compares neighboring values and swaps an out-of-order pair. After each pass, the largest remaining value reaches the end. An early-stop flag avoids extra passes on already-sorted data.
+
+```python
+def bubble_sort(items):
+    items = items[:]
+    for end in range(len(items) - 1, 0, -1):
+        swapped = False
+        for index in range(end):
+            if items[index] > items[index + 1]:
+                items[index], items[index + 1] = items[index + 1], items[index]
+                swapped = True
+        if not swapped:
+            break
+    return items
+
+
+print(bubble_sort([5, 1, 4, 2]))
+```
+
+Output:
+
+```text
+[1, 2, 4, 5]
+```
+
+Worst-case time is O(n^2); best case with early stopping is O(n). Auxiliary space is O(n) here because a copy is returned; sorting the input in place uses O(1) extra space.
+
+## Lesson 15: Selection Sort
+
+Selection sort finds the smallest value in the unsorted suffix and swaps it into the next final position.
+
+```python
+def selection_sort(items):
+    items = items[:]
+    for start in range(len(items)):
+        smallest = start
+        for index in range(start + 1, len(items)):
+            if items[index] < items[smallest]:
+                smallest = index
+        items[start], items[smallest] = items[smallest], items[start]
+    return items
+
+
+print(selection_sort([29, 10, 14, 37, 13]))
+```
+
+Output:
+
+```text
+[10, 13, 14, 29, 37]
+```
+
+Selection sort takes O(n^2) time in best, average, and worst cases. It performs O(1) extra work space in place, or O(n) in this copy-returning example.
+
+## Lesson 16: Insertion Sort
+
+Insertion sort grows a sorted prefix. It takes the next value, shifts larger prefix values right, and inserts the value into the open position. It is effective for small or nearly sorted inputs.
+
+```python
+def insertion_sort(items):
+    items = items[:]
+    for index in range(1, len(items)):
+        value = items[index]
+        position = index - 1
+        while position >= 0 and items[position] > value:
+            items[position + 1] = items[position]
+            position -= 1
+        items[position + 1] = value
+    return items
+
+
+print(insertion_sort([7, 4, 5, 2]))
+```
+
+Output:
+
+```text
+[2, 4, 5, 7]
+```
+
+Best-case time is O(n); average and worst-case time are O(n^2).
+
+## Lesson 17: Merge Sort
+
+Merge sort uses divide and conquer: split the list, recursively sort each half, then merge the sorted halves. Its time complexity is O(n log n), and array-based merging uses O(n) auxiliary space.
+
+```python
+def merge_sort(items):
+    if len(items) <= 1:
+        return items
+
+    middle = len(items) // 2
+    left = merge_sort(items[:middle])
+    right = merge_sort(items[middle:])
+    merged = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            merged.append(left[i])
+            i += 1
+        else:
+            merged.append(right[j])
+            j += 1
+
+    return merged + left[i:] + right[j:]
+
+
+print(merge_sort([38, 27, 43, 3, 9, 82, 10]))
+```
+
+Output:
+
+```text
+[3, 9, 10, 27, 38, 43, 82]
+```
+
+Practice: Trace the splits and merges for `[6, 2, 5, 1]`.
+
+## Lesson 18: Quick Sort and Comparing Sorts
+
+Quick sort chooses a pivot, partitions values, and sorts the partitions. This clear teaching version creates new lists; average time is O(n log n), worst-case time is O(n^2), and auxiliary space depends on partitioning and recursion.
+
+```python
+def quick_sort(items):
+    if len(items) <= 1:
+        return items
+    pivot = items[len(items) // 2]
+    smaller = [value for value in items if value < pivot]
+    equal = [value for value in items if value == pivot]
+    larger = [value for value in items if value > pivot]
+    return quick_sort(smaller) + equal + quick_sort(larger)
+
+
+print(quick_sort([8, 3, 1, 7, 0, 10, 2]))
+```
+
+Output:
+
+```text
+[0, 1, 2, 3, 7, 8, 10]
+```
+
+| Algorithm | Best | Average | Worst |
+| --- | --- | --- | --- |
+| Bubble sort (early stop) | O(n) | O(n^2) | O(n^2) |
+| Selection sort | O(n^2) | O(n^2) | O(n^2) |
+| Insertion sort | O(n) | O(n^2) | O(n^2) |
+| Merge sort | O(n log n) | O(n log n) | O(n log n) |
+| Quick sort | O(n log n) | O(n log n) | O(n^2) |
+
+Practice: Choose a sorting algorithm for a tiny nearly-sorted list and explain your choice.
+
+# MODULE 7: RECURSION AND BACKTRACKING
+
+## Lesson 19: Recursion and Factorial
+
+Recursion solves a problem by calling the same function on a smaller input. Every recursive solution needs a base case and progress toward that base case.
+
+Factorial is defined by `n! = n * (n - 1)!`, with `0! = 1`.
+
+```python
+def factorial(n):
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+
+
+print(factorial(5))
+```
+
+Output:
+
+```text
+120
+```
+
+This takes O(n) time and O(n) call-stack space. Very deep recursion can exceed Python's recursion limit.
+
+## Lesson 20: Fibonacci Numbers
+
+In the Fibonacci sequence, each value is the sum of the previous two: `0, 1, 1, 2, 3, 5, ...`. A simple recursive version repeats work; this iterative version is O(n) time and O(1) auxiliary space.
+
+```python
+def fibonacci(count):
+    values = []
+    previous, current = 0, 1
+    for _ in range(count):
+        values.append(previous)
+        previous, current = current, previous + current
+    return values
+
+
+print(fibonacci(8))
+```
+
+Output:
+
+```text
+[0, 1, 1, 2, 3, 5, 8, 13]
+```
+
+Practice: Implement a recursive sum of the first `n` natural numbers, then compare it with a loop.
+
+## Lesson 21: Backtracking and Subsets
+
+Backtracking explores choices, recurses, then undoes a choice before trying another. It is useful for subsets, permutations, mazes, Sudoku, and N-Queens.
+
+```python
+def subsets(values):
+    result = []
+
+    def build(index, chosen):
+        if index == len(values):
+            result.append(chosen[:])
+            return
+        build(index + 1, chosen)
+        chosen.append(values[index])
+        build(index + 1, chosen)
+        chosen.pop()
+
+    build(0, [])
+    return result
+
+
+print(subsets([1, 2]))
+```
+
+Output:
+
+```text
+[[], [2], [1], [1, 2]]
+```
+
+There are 2^n subsets, so producing them takes at least O(2^n) time. The recursion depth is O(n).
+
+# MODULE 8: LINKED LISTS
+
+## Lesson 22: Linked List Nodes
+
+A singly linked list is a chain of nodes. Each node stores a value and a reference to the next node. The head points to the first node; the final node points to `None`.
+
+```python
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+
+head = Node(10)
+head.next = Node(20)
+head.next.next = Node(30)
+
+current = head
+while current:
+    print(current.value)
+    current = current.next
+```
+
+Output:
+
+```text
+10
+20
+30
+```
+
+Accessing a node by position takes O(n), unlike O(1) indexing in a Python list.
+
+## Lesson 23: Insert and Delete Nodes
+
+When the head reference is available, inserting or deleting the first node takes O(1) time.
+
+```python
+class Node:
+    def __init__(self, value, next_node=None):
+        self.value = value
+        self.next = next_node
+
+
+head = Node(20, Node(30))
+head = Node(10, head)  # Insert at the beginning.
+head = head.next       # Delete the first node.
+
+print(head.value)
+```
+
+Output:
+
+```text
+20
+```
+
+Before deleting, check whether the list is empty. To insert or delete elsewhere, first traverse to the required node.
+
+## Lesson 24: Reverse a Linked List
+
+Reverse links one at a time using `previous`, `current`, and `following`. This iterative approach takes O(n) time and O(1) auxiliary space.
+
+```python
+class Node:
+    def __init__(self, value, next_node=None):
+        self.value = value
+        self.next = next_node
+
+
+def reverse(head):
+    previous = None
+    current = head
+    while current:
+        following = current.next
+        current.next = previous
+        previous = current
+        current = following
+    return previous
+
+
+head = Node(1, Node(2, Node(3)))
+head = reverse(head)
+while head:
+    print(head.value)
+    head = head.next
+```
+
+Output:
+
+```text
+3
+2
+1
+```
+
+Practice: Find the middle node with slow and fast pointers, detect a cycle, and merge two sorted linked lists.
+
+# MODULE 9: STACKS AND QUEUES
+
+## Lesson 25: Stack
+
+A stack follows LIFO: last in, first out. `append` pushes and `pop` removes the top item from a Python list. Both are O(1) amortized.
+
+```python
+stack = []
+stack.append("page 1")
+stack.append("page 2")
+print("Top:", stack[-1])
+print("Removed:", stack.pop())
+print("Remaining:", stack)
+```
+
+Output:
+
+```text
+Top: page 2
+Removed: page 2
+Remaining: ['page 1']
+```
+
+Check that a stack is non-empty before reading its top or popping. Common uses include undo history, expression evaluation, and depth-first search.
+
+## Lesson 26: Balanced Parentheses
+
+A stack checks that each closing bracket matches the most recent unmatched opening bracket.
+
+```python
+def is_balanced(text):
+    pairs = {")": "(", "]": "[", "}": "{"}
+    stack = []
+
+    for char in text:
+        if char in "([{":
+            stack.append(char)
+        elif char in pairs:
+            if not stack or stack.pop() != pairs[char]:
+                return False
+    return not stack
+
+
+print(is_balanced("{[()]}"))
+print(is_balanced("{[(])}"))
+```
+
+Output:
+
+```text
+True
+False
+```
+
+The algorithm takes O(n) time and O(n) worst-case auxiliary space.
+
+## Lesson 27: Queue
+
+A queue follows FIFO: first in, first out. Use `collections.deque`; removing the first item from a Python list shifts remaining elements.
+
+```python
+from collections import deque
+
+queue = deque(["Asha", "Ben"])
+queue.append("Chen")
+print("Next:", queue.popleft())
+print("Waiting:", list(queue))
+```
+
+Output:
+
+```text
+Next: Asha
+Waiting: ['Ben', 'Chen']
+```
+
+Enqueue and dequeue at opposite ends of a deque take O(1) time. Practice: implement a circular queue, a deque workflow, or a queue using two stacks.
+
+# MODULE 10: HASHING
+
+## Lesson 28: Hash Tables, Dictionaries, and Sets
+
+Hashing maps keys to positions that support fast lookup. Python dictionaries map keys to values; sets store unique values. Lookup, insertion, and deletion are O(1) on average and can be O(n) in the worst case.
+
+```python
+scores = {"Mina": 92, "Omar": 85}
+scores["Luca"] = 88
+
+print(scores.get("Mina"))
+print("Omar" in scores)
+print(sorted(set([3, 1, 3, 2])))
+```
+
+Output:
+
+```text
+92
+True
+[1, 2, 3]
+```
+
+Practice: Count each word in a sentence and report the most frequent word.
+
+## Lesson 29: Two Sum
+
+Given a list and a target, return indices of two different values whose sum is the target. Store previously seen values in a dictionary to avoid checking every pair.
+
+```python
+def two_sum(numbers, target):
+    seen = {}
+    for index, value in enumerate(numbers):
+        needed = target - value
+        if needed in seen:
+            return [seen[needed], index]
+        seen[value] = index
+    return []
+
+
+print(two_sum([2, 7, 11, 15], 9))
+```
+
+Output:
+
+```text
+[0, 1]
+```
+
+The result contains indices, not the values. Average time is O(n), with O(n) auxiliary space.
+
+Practice: Find duplicates, group anagrams, count frequencies, and find the longest consecutive sequence.
+
+# MODULE 11: TREES AND BINARY SEARCH TREES
+
+## Lesson 30: Tree and Binary Search Tree Basics
+
+A tree is a hierarchy of nodes connected by edges. The **root** is the top node; a **parent** has children; a **leaf** has no children. A node's depth counts edges from the root; its height is the longest downward path to a leaf.
+
+A binary search tree (BST) stores values so that values smaller than a node go left and larger values go right. This ordering supports search, insertion, and deletion.
+
+```python
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+
+root = Node("A")
+root.left = Node("B")
+root.right = Node("C")
+root.left.left = Node("D")
+root.left.right = Node("E")
+print(root.value, root.left.value, root.right.value)
+```
+
+Output:
+
+```text
+A B C
+```
+
+In a balanced BST, search is O(log n); in a skewed BST, it can be O(n). Practice: implement in-order traversal and BST search, then explain why in-order traversal of a BST is sorted.
