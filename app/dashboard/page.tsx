@@ -110,13 +110,13 @@ export default async function DashboardPage() {
                           />
                         )}
                         {certificate && (
-                          <Link
+                          <a
                             href={`/verify/${certificate.credentialId}`}
                             className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300"
                           >
                             View {certificate.type === "INTERNSHIP" ? "Internship" : "Course"} Credential
                             <span aria-hidden="true">→</span>
-                          </Link>
+                          </a>
                         )}
                       </div>
                     );
@@ -148,12 +148,12 @@ export default async function DashboardPage() {
                           />
                         )}
                         {certificate && (
-                          <Link
+                          <a
                             href={`/verify/${certificate.credentialId}`}
                             className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300"
                           >
                             View Internship Credential <span aria-hidden="true">→</span>
-                          </Link>
+                          </a>
                         )}
                       </div>
                     );
@@ -173,14 +173,14 @@ export default async function DashboardPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {user.certificates.map(c => (
-                    <Link key={c.id} href={`/verify/${c.credentialId}`} className="block bg-gray-800 p-4 rounded border border-gray-700 hover:border-indigo-500 transition">
+                    <a key={c.id} href={`/verify/${c.credentialId}`} className="block bg-gray-800 p-4 rounded border border-gray-700 hover:border-indigo-500 transition">
                       <p className="text-xs font-semibold uppercase tracking-wide text-indigo-300">
                         {c.type === "COURSE" ? "Course certificate" : "Internship certificate"}
                       </p>
                       <h3 className="mt-1 text-lg font-bold">{getCredentialProgramTitle(c) ?? "Program certificate"}</h3>
                       <p className="text-xs text-indigo-400 font-mono mt-1">{c.credentialId}</p>
                       <p className="text-sm text-gray-400 mt-2">Issued: {formatProgramDate(c.issuedAt)}</p>
-                    </Link>
+                    </a>
                   ))}
                 </div>
               )}
