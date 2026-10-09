@@ -112,14 +112,22 @@ export default async function DashboardPage() {
                             href={`/verify/${certificate.credentialId}`}
                             className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300"
                           >
-                            View Credential <span aria-hidden="true">→</span>
+                            View {certificate.type === "INTERNSHIP" ? "Internship" : "Course"} Credential
+                            <span aria-hidden="true">→</span>
                           </Link>
                         )}
                       </div>
                     );
                   })}
                   {user.internshipEnrollments.map(e => {
-                    const certificate = user.certificates.find(c => c.internshipId === e.internshipId);
+                    const certificate = user.certificates.find(
+                      c => c.internshipId === e.internshipId,
+                    ) ?? user.certificates.find(
+                      c =>
+                        c.type === "INTERNSHIP" &&
+                        c.courseId !== null &&
+                        c.course?.title === e.internship.title,
+                    );
                     return (
                       <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
                         <span className="text-xs bg-emerald-600 text-white px-2 py-1 rounded">Internship</span>
@@ -142,7 +150,7 @@ export default async function DashboardPage() {
                             href={`/verify/${certificate.credentialId}`}
                             className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300"
                           >
-                            View Credential <span aria-hidden="true">→</span>
+                            View Internship Credential <span aria-hidden="true">→</span>
                           </Link>
                         )}
                       </div>
