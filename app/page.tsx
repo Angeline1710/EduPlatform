@@ -7,6 +7,8 @@ import { Diamond } from "@/components/Ornament";
 import { AcademyCrest } from "@/components/Crests";
 import LivingInk from "@/components/magic/LivingInk";
 
+export const dynamic = "force-dynamic";
+
 const FEATURES = [
   {
     icon: "crown",

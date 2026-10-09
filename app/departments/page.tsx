@@ -9,6 +9,8 @@ export const metadata = {
   description: "Browse courses organized by department.",
 };
 
+export const dynamic = "force-dynamic";
+
 const CATEGORIES = [
   {
     name: "Development",

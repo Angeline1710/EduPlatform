@@ -7,6 +7,8 @@ export const metadata = {
   description: "Browse internship opportunities offered by EduPlatform.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function InternshipsPage() {
   const internships = await prisma.internship.findMany({
     orderBy: { createdAt: "desc" },

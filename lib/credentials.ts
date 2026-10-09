@@ -24,6 +24,18 @@ export async function findCredential(credentialId: string) {
   });
 }
 
+export async function findUserCredentials(userId: string) {
+  return prisma.certificate.findMany({
+    where: { userId },
+    include: {
+      user: { select: { name: true, title: true } },
+      course: { select: { title: true, internRole: true } },
+      internship: { select: { title: true } },
+    },
+    orderBy: [{ type: "asc" }, { issuedAt: "desc" }],
+  });
+}
+
 type CredentialRecord = NonNullable<Awaited<ReturnType<typeof findCredential>>>;
 
 export function getCredentialProgramTitle(certificate: {

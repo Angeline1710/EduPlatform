@@ -2,12 +2,13 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
-import Icon from "@/components/Icon";
 
 export const metadata = {
   title: "Courses · EduPlatform",
   description: "Browse all courses.",
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function CoursesPage() {
   const allCourses = await prisma.course.findMany({

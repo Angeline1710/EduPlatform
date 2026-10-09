@@ -96,11 +96,11 @@ Enrollment is created by the webhook on `checkout.session.completed`, not on the
 	- `NEXTAUTH_SECRET`: a unique random secret
 	- `STRIPE_SECRET_KEY` and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: production Stripe keys
 	- `STRIPE_WEBHOOK_SECRET`: the signing secret for the webhook endpoint
-3. Set Vercel's Build Command to `npx prisma migrate deploy && npm run build`.
+3. Use `npm run build` as Vercel's Build Command. The build generates Prisma Client but does not connect to or modify the production database. Apply schema migrations separately, from a runner that can reach the database, with `npx prisma migrate deploy` before deploying schema changes.
 4. Register `https://<your-domain>/api/webhooks/stripe` in Stripe and subscribe to `checkout.session.completed`.
 5. Seed the production database once from a trusted terminal with `NODE_ENV=production`, `DATABASE_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, and a strong `ADMIN_PASSWORD` set. Run `npx prisma db seed`; do not use the development demo credentials in production.
 
-The build generates Prisma Client automatically. The initial PostgreSQL migration is in `prisma/migrations-postgresql`; the older SQLite migration history is retained separately and is not used by the current Prisma config. Existing local SQLite data is not copied to the production database.
+The build generates Prisma Client automatically. The PostgreSQL migrations are in `prisma/migrations-postgresql`; the older SQLite migration history is retained separately and is not used by the current Prisma config. Existing local SQLite data is not copied to the production database. Database-backed pages are rendered at request time so builds do not need a live database connection.
 
 Leave `AUTH_URL` and `NEXTAUTH_URL` unset for local development. Auth.js detects
 the active request host, and browser auth requests use the relative `/api/auth`

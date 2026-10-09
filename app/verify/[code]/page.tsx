@@ -5,6 +5,7 @@ import VerifyForm from "@/components/VerifyForm";
 import Icon from "@/components/Icon";
 import {
   findCredential,
+  findUserCredentials,
   getCredentialProgramTitle,
   hasConsistentCredentialRelations,
   normalizeCredentialId,
@@ -23,6 +24,11 @@ export default async function VerifyResultPage({
   const valid = Boolean(record && hasConsistentCredentialRelations(record));
   const certificate = valid ? record : null;
   const foundButInconsistent = Boolean(record && !valid);
+  const certificates = certificate
+    ? (await findUserCredentials(certificate.userId)).filter(
+        hasConsistentCredentialRelations,
+      )
+    : [];
 
   return (
     <div className="mx-auto max-w-[1200px] px-6 py-12">
@@ -116,7 +122,17 @@ export default async function VerifyResultPage({
               </p>
             </div>
           </section>
-          <CertificateView code={normalized} certificate={certificate} />
+          <section aria-label="Course and internship certificates" className="space-y-8">
+            <h2 className="font-serif text-2xl font-bold text-[var(--text)]">
+              Course and internship certificates
+            </h2>
+            {certificates.map((issuedCertificate) => (
+              <CertificateView
+                key={issuedCertificate.id}
+                certificate={issuedCertificate}
+              />
+            ))}
+          </section>
         </div>
       ) : (
         <div className="card p-8 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
@@ -133,12 +149,11 @@ export default async function VerifyResultPage({
 }
 
 function CertificateView({
-  code,
   certificate,
 }: {
-  code: string;
   certificate: NonNullable<Awaited<ReturnType<typeof findCredential>>>;
 }) {
+  const code = certificate.credentialId;
   const type = certificate.type === "COURSE" ? "Course" : "Internship";
   const title = getCredentialProgramTitle(certificate);
   if (!title) {
