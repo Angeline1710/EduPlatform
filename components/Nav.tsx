@@ -23,6 +23,7 @@ export default function Nav() {
   const pathname = usePathname();
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   // Seed the field from the URL so a shared /?q=… link shows its term. Read
   // from location rather than useSearchParams: that hook forces the whole nav
@@ -49,6 +50,17 @@ export default function Nav() {
   function onSearch(e: React.FormEvent) {
     e.preventDefault();
     router.push(query.trim() ? `/?q=${encodeURIComponent(query.trim())}` : "/");
+  }
+
+  async function onSignOut() {
+    setIsSigningOut(true);
+    try {
+      await signOut({ redirect: false, callbackUrl: "/" });
+      router.replace("/");
+    } catch (error) {
+      setIsSigningOut(false);
+      console.error("Unable to sign out.", error);
+    }
   }
 
   return (
@@ -134,10 +146,12 @@ export default function Nav() {
                 {user.name}
               </Link>
               <button
-                onClick={() => signOut({ callbackUrl: "/" })}
+                type="button"
+                onClick={onSignOut}
+                disabled={isSigningOut}
                 className="rounded-full px-3 py-2 text-sm text-[var(--shell-text)] transition hover:text-[var(--gold-bright)]"
               >
-                Sign out
+                {isSigningOut ? "Signing out…" : "Sign out"}
               </button>
             </>
           ) : (
