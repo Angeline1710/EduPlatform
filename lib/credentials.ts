@@ -36,6 +36,58 @@ export async function findUserCredentials(userId: string) {
   });
 }
 
+export async function ensureCourseInternshipCertificate(
+  courseCertificate: CredentialRecord,
+) {
+  if (
+    courseCertificate.type !== "COURSE" ||
+    !courseCertificate.courseId
+  ) {
+    return null;
+  }
+
+  const enrollment = await prisma.courseEnrollment.findUnique({
+    where: {
+      userId_courseId: {
+        userId: courseCertificate.userId,
+        courseId: courseCertificate.courseId,
+      },
+    },
+    select: { enrolledAt: true },
+  });
+  const startDate =
+    courseCertificate.periodStartDate ??
+    enrollment?.enrolledAt ??
+    courseCertificate.issuedAt;
+  const endDate =
+    courseCertificate.periodEndDate ?? courseCertificate.issuedAt;
+  if (startDate > endDate) {
+    throw new Error(
+      `Cannot issue the internship certificate for ${courseCertificate.credentialId}: the start date is after the completion date.`,
+    );
+  }
+
+  return prisma.certificate.upsert({
+    where: {
+      userId_courseId_type: {
+        userId: courseCertificate.userId,
+        courseId: courseCertificate.courseId,
+        type: "INTERNSHIP",
+      },
+    },
+    create: {
+      userId: courseCertificate.userId,
+      courseId: courseCertificate.courseId,
+      type: "INTERNSHIP",
+      issuedAt: endDate,
+      periodStartDate: startDate,
+      periodEndDate: endDate,
+      credentialId: generateCredentialId(),
+    },
+    update: {},
+  });
+}
+
 type CredentialRecord = NonNullable<Awaited<ReturnType<typeof findCredential>>>;
 
 export function getCredentialProgramTitle(certificate: {
@@ -50,6 +102,15 @@ export function getCredentialProgramTitle(certificate: {
     return certificate.internship?.title ?? certificate.course?.title ?? null;
   }
   return null;
+}
+
+export function getCredentialInternRole(certificate: {
+  type: string;
+  course: { internRole: string } | null;
+}): string | null {
+  return certificate.type === "INTERNSHIP"
+    ? certificate.course?.internRole ?? null
+    : null;
 }
 
 export function hasConsistentCredentialRelations(

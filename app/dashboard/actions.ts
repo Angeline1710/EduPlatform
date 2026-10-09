@@ -71,50 +71,113 @@ export async function claimCertificate({
     throw new Error("The program start date must be on or before its completion date. Ask an admin to update the dates.");
   }
 
-  // Check if certificate already exists
-  const existing = await prisma.certificate.findFirst({
-    where: {
-      userId: user.id,
-      type,
-      courseId: courseId || null,
-      internshipId: internshipId || null,
-    }
-  });
-
-  if (existing) {
-    throw new Error("Certificate already claimed for this program.");
-  }
-
   const credentialId = generateCredentialId();
 
-  await prisma.$transaction(async (transaction) => {
-    await transaction.certificate.create({
-      data: {
-        userId: user.id,
-        type,
-        courseId: courseId || null,
-        internshipId: internshipId || null,
-        issuedAt: completionDate,
-        periodStartDate: startDate,
-        periodEndDate: completionDate,
-        credentialId,
-      }
-    });
-
+  const issuedCredentialId = await prisma.$transaction(async (transaction) => {
     if (type === "COURSE" && courseId) {
+      const existingCourseCertificate = await transaction.certificate.findUnique({
+        where: {
+          userId_courseId_type: { userId: user.id, courseId, type: "COURSE" },
+        },
+        select: {
+          credentialId: true,
+          issuedAt: true,
+          periodStartDate: true,
+          periodEndDate: true,
+        },
+      });
+
+      const courseStartDate =
+        existingCourseCertificate?.periodStartDate ?? startDate;
+      const courseCompletionDate =
+        existingCourseCertificate?.periodEndDate ??
+        existingCourseCertificate?.issuedAt ??
+        completionDate;
+      const courseIssuedAt =
+        existingCourseCertificate?.issuedAt ?? courseCompletionDate;
+
+      if (!existingCourseCertificate) {
+        await transaction.certificate.create({
+          data: {
+            userId: user.id,
+            type: "COURSE",
+            courseId,
+            issuedAt: courseIssuedAt,
+            periodStartDate: courseStartDate,
+            periodEndDate: courseCompletionDate,
+            credentialId,
+          },
+        });
+      }
+
+      const existingInternshipCertificate = await transaction.certificate.findFirst({
+        where: {
+          userId: user.id,
+          type: "INTERNSHIP",
+          courseId,
+          internshipId: null,
+        },
+        select: { id: true },
+      });
+      if (!existingInternshipCertificate) {
+        await transaction.certificate.create({
+          data: {
+            userId: user.id,
+            type: "INTERNSHIP",
+            courseId,
+            issuedAt: courseIssuedAt,
+            periodStartDate: courseStartDate,
+            periodEndDate: courseCompletionDate,
+            credentialId: generateCredentialId(),
+          },
+        });
+      }
+
       await transaction.courseEnrollment.update({
         where: { userId_courseId: { userId: user.id, courseId } },
-        data: { completedAt: completionDate },
+        data: { completedAt: courseCompletionDate },
       });
-    } else if (type === "INTERNSHIP" && internshipId) {
+
+      return existingCourseCertificate?.credentialId ?? credentialId;
+    }
+
+    if (type === "INTERNSHIP" && internshipId) {
+      const existingInternshipCertificate = await transaction.certificate.findUnique({
+        where: {
+          userId_internshipId_type: {
+            userId: user.id,
+            internshipId,
+            type: "INTERNSHIP",
+          },
+        },
+        select: { credentialId: true },
+      });
+      if (existingInternshipCertificate) {
+        throw new Error("Certificate already claimed for this program.");
+      }
+
+      await transaction.certificate.create({
+        data: {
+          userId: user.id,
+          type: "INTERNSHIP",
+          internshipId,
+          issuedAt: completionDate,
+          periodStartDate: startDate,
+          periodEndDate: completionDate,
+          credentialId,
+        },
+      });
+
       await transaction.internshipEnrollment.update({
         where: { userId_internshipId: { userId: user.id, internshipId } },
         data: { completedAt: completionDate },
       });
     }
+
+    return credentialId;
   });
 
   revalidatePath("/dashboard");
   if (courseId) revalidatePath(`/courses/${courseId}`);
-  return credentialId;
+  return issuedCredentialId;
 }

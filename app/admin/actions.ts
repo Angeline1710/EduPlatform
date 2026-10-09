@@ -186,8 +186,8 @@ export async function updateProgramDates({
   }
 
   let courseId: string | undefined;
-  let certificateId: string | undefined;
-  let credentialId: string | undefined;
+  let certificateIds: string[] = [];
+  let credentialIds: string[] = [];
   if (type === "COURSE") {
     const enrollment = await prisma.courseEnrollment.findFirst({
       where: { id: enrollmentId, userId },
@@ -195,12 +195,12 @@ export async function updateProgramDates({
     });
     if (!enrollment) throw new Error("The selected program enrollment was not found.");
     courseId = enrollment.courseId;
-    const certificate = await prisma.certificate.findUnique({
-      where: { userId_courseId_type: { userId, courseId, type } },
+    const certificates = await prisma.certificate.findMany({
+      where: { userId, courseId },
       select: { id: true, credentialId: true },
     });
-    certificateId = certificate?.id;
-    credentialId = certificate?.credentialId;
+    certificateIds = certificates.map((certificate) => certificate.id);
+    credentialIds = certificates.map((certificate) => certificate.credentialId);
   } else {
     const enrollment = await prisma.internshipEnrollment.findFirst({
       where: { id: enrollmentId, userId },
@@ -217,11 +217,13 @@ export async function updateProgramDates({
       },
       select: { id: true, credentialId: true },
     });
-    certificateId = certificate?.id;
-    credentialId = certificate?.credentialId;
+    if (certificate) {
+      certificateIds = [certificate.id];
+      credentialIds = [certificate.credentialId];
+    }
   }
 
-  if (certificateId && !completionDate) {
+  if (certificateIds.length > 0 && !completionDate) {
     throw new Error("A completion date is required for a program with an issued certificate.");
   }
 
@@ -238,9 +240,9 @@ export async function updateProgramDates({
       });
     }
 
-    if (certificateId && completionDate) {
-      await transaction.certificate.update({
-        where: { id: certificateId },
+    if (certificateIds.length > 0 && completionDate) {
+      await transaction.certificate.updateMany({
+        where: { id: { in: certificateIds } },
         data: {
           periodStartDate: startDate,
           periodEndDate: completionDate,
@@ -252,6 +254,6 @@ export async function updateProgramDates({
 
   revalidatePath(`/admin/users/${userId}`);
   revalidatePath("/dashboard");
-  if (credentialId) revalidatePath(`/verify/${credentialId}`);
+  credentialIds.forEach((credentialId) => revalidatePath(`/verify/${credentialId}`));
   if (courseId) revalidatePath(`/courses/${courseId}`);
 }

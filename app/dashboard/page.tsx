@@ -89,7 +89,9 @@ export default async function DashboardPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {user.courseEnrollments.map(e => {
-                    const certificate = user.certificates.find(c => c.courseId === e.courseId);
+                    const certificate = user.certificates.find(
+                      c => c.courseId === e.courseId && c.type === "COURSE",
+                    );
                     return (
                       <div key={e.id} className="bg-gray-800 p-4 rounded border border-gray-700">
                         <span className="text-xs bg-indigo-600 text-white px-2 py-1 rounded">Course</span>

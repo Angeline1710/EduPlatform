@@ -4,6 +4,7 @@ type CertificateProps = {
   type: "Course" | "Internship";
   credentialId: string;
   issuedAt: Date;
+  internRole?: string | null;
   periodStartDate?: Date | null;
   periodEndDate?: Date | null;
 }
@@ -93,6 +94,7 @@ export default function Certificate({
   type,
   credentialId,
   issuedAt,
+  internRole,
   periodStartDate,
   periodEndDate,
 }: CertificateProps) {
@@ -205,8 +207,20 @@ export default function Certificate({
           <p style={{ maxWidth: 700, margin: "10px 0 0", color: "#333", fontSize: 19, lineHeight: 1.65 }}>
             {isInternship ? (
               <>
-                has successfully completed the internship program{" "}
-                <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{title}</strong>
+                has successfully completed an internship
+                {internRole ? (
+                  <>
+                    {" "}as an intern in{" "}
+                    <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{internRole}</strong>
+                    {" "}for the course{" "}
+                    <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{title}</strong>
+                  </>
+                ) : (
+                  <>
+                    {" "}in the program{" "}
+                    <strong style={{ color: "#171717", fontFamily: "Arial, sans-serif", fontSize: 17 }}>{title}</strong>
+                  </>
+                )}
               </>
             ) : (
               <>

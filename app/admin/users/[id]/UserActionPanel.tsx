@@ -30,6 +30,7 @@ type UserActionPanelUser = {
   certificates: Array<{
     id: string;
     credentialId: string;
+    type: string;
     courseId: string | null;
     internshipId: string | null;
     periodStartDate: Date | null;
@@ -235,7 +236,9 @@ export default function UserActionPanel({
           </p>
           {user.courseEnrollments.map((enrollment) => {
             const certificate = user.certificates.find(
-              (item) => item.courseId === enrollment.courseId,
+              (item) =>
+                item.courseId === enrollment.courseId &&
+                item.type === "COURSE",
             );
             return (
               <ProgramDateEditor

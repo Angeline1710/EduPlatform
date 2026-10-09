@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { auth } from "@/lib/auth";
 import Certificate from "@/components/Certificate";
 import DownloadCertificate from "@/components/DownloadCertificate";
 import VerifyForm from "@/components/VerifyForm";
@@ -6,6 +7,8 @@ import Icon from "@/components/Icon";
 import {
   findCredential,
   findUserCredentials,
+  ensureCourseInternshipCertificate,
+  getCredentialInternRole,
   getCredentialProgramTitle,
   hasConsistentCredentialRelations,
   normalizeCredentialId,
@@ -24,6 +27,13 @@ export default async function VerifyResultPage({
   const valid = Boolean(record && hasConsistentCredentialRelations(record));
   const certificate = valid ? record : null;
   const foundButInconsistent = Boolean(record && !valid);
+  const session = certificate?.type === "COURSE" ? await auth() : null;
+  if (
+    certificate?.type === "COURSE" &&
+    session?.user?.id === certificate.userId
+  ) {
+    await ensureCourseInternshipCertificate(certificate);
+  }
   const certificates = certificate
     ? (await findUserCredentials(certificate.userId)).filter(
         hasConsistentCredentialRelations,
@@ -168,6 +178,7 @@ function CertificateView({
         type={type as "Course" | "Internship"}
         credentialId={code}
         issuedAt={certificate.issuedAt}
+        internRole={getCredentialInternRole(certificate)}
         periodStartDate={certificate.periodStartDate}
         periodEndDate={certificate.periodEndDate}
       />
